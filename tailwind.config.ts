@@ -26,11 +26,11 @@ const config = {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: "hsl(215, 60%, 25%)", // Deep navy blue
+          DEFAULT: "#FF5C8D", // Vibrant pink for neo-brutalism
           foreground: "hsl(0, 0%, 98%)",
         },
         secondary: {
-          DEFAULT: "hsl(35, 92%, 52%)", // Muted gold/amber
+          DEFAULT: "#58CCDC", // Bright turquoise
           foreground: "hsl(240, 4%, 16%)",
         },
         destructive: {
@@ -42,8 +42,8 @@ const config = {
           foreground: "hsl(215, 16%, 47%)",
         },
         accent: {
-          DEFAULT: "hsl(210, 20%, 98%)",
-          foreground: "hsl(215, 60%, 25%)",
+          DEFAULT: "#FFD166", // Bright yellow-gold
+          foreground: "#000000",
         },
         popover: {
           DEFAULT: "hsl(0, 0%, 100%)",
@@ -53,6 +53,8 @@ const config = {
           DEFAULT: "hsl(0, 0%, 100%)",
           foreground: "hsl(215, 25%, 27%)",
         },
+        sky: "#87CEEB", // Sky blue for backgrounds
+        grass: "#7CFC00", // Bright green
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -79,4 +81,3 @@ const config = {
 } satisfies Config
 
 export default config
-

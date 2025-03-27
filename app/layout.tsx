@@ -1,22 +1,22 @@
-import React from "react"
+import type React from "react"
 import type { Metadata } from "next"
-import { Inter } from "next/font/google"
+import { Bangers } from "next/font/google"
 import "./globals.css"
-import { SpeedInsights } from "@vercel/speed-insights/next"
 
-import { SiteHeader } from "../components/site-header"
-import { ThemeProvider } from "../components/theme-provider"
-import { ClientWrapper } from "../components/client-wrapper"
-import { NewsletterPopup } from "../components/newsletter-popup"
-import { Fence } from "lucide-react"
+import { SiteHeader } from "@/components/site-header"
+import { ThemeProvider } from "@/components/theme-provider"
+import { FenceLogo } from "@/components/fence-logo"
 
-const inter = Inter({ subsets: ["latin"] })
+const bangers = Bangers({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-bangers",
+})
 
 export const metadata: Metadata = {
-  title: "We Market Fence | Premium Marketing for Fencing Companies",
+  title: "We Market Fence! | Retro Marketing for Fencing Companies",
   description:
-    "Specialized marketing and website design for modern fencing companies. Elevate your brand with our premium digital solutions.",
-    generator: 'v0.dev'
+    "Boost your fencing business with our retro-inspired marketing services! Websites that attract customers and grow your business.",
 }
 
 export default function RootLayout({
@@ -26,130 +26,122 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={`${bangers.variable} font-sans`}>
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
-          <ClientWrapper>
-            <SiteHeader />
-            {children}
-            <footer className="py-16 bg-black border-t border-emerald-900/50">
-              <div className="container">
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
-                  <div>
-                    <div className="flex items-center gap-2 mb-4">
-                      <Fence className="h-6 w-6 text-emerald-400" strokeWidth={2.5} />
-                      <span className="font-bold text-lg text-white">We Market Fence</span>
-                    </div>
-                    <p className="text-emerald-200/90 mb-6">
-                      Premium marketing solutions for modern fencing companies.
-                    </p>
-                    <div className="flex space-x-4">
-                      <a href="#" className="text-emerald-400 hover:text-white transition-colors">
-                        Twitter
-                      </a>
-                      <a href="#" className="text-emerald-400 hover:text-white transition-colors">
-                        LinkedIn
-                      </a>
-                      <a href="#" className="text-emerald-400 hover:text-white transition-colors">
-                        Instagram
-                      </a>
-                    </div>
+          <SiteHeader />
+          {children}
+          <footer className="bg-secondary border-t-2 border-black py-10 sm:py-12 md:py-16">
+            <div className="container px-4 sm:px-6">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 md:gap-10">
+                <div className="col-span-2 md:col-span-1">
+                  <div className="flex items-center gap-2 mb-3 sm:mb-4">
+                    <FenceLogo size="sm" withCircle />
+                    <span className="font-extrabold text-base sm:text-lg md:text-xl text-primary retro-text">WE MARKET FENCE!</span>
                   </div>
-
-                  <div>
-                    <h4 className="font-bold mb-4 text-white">Services</h4>
-                    <ul className="space-y-3">
-                      <li>
-                        <a href="#" className="text-emerald-200 hover:text-white transition-colors">
-                          Website Design
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#" className="text-emerald-200 hover:text-white transition-colors">
-                          Brand Identity
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#" className="text-emerald-200 hover:text-white transition-colors">
-                          SEO Strategy
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#" className="text-emerald-200 hover:text-white transition-colors">
-                          Content Creation
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#" className="text-emerald-200 hover:text-white transition-colors">
-                          Lead Generation
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-
-                  <div>
-                    <h4 className="font-bold mb-4 text-white">Company</h4>
-                    <ul className="space-y-3">
-                      <li>
-                        <a href="#" className="text-emerald-200 hover:text-white transition-colors">
-                          About
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#" className="text-emerald-200 hover:text-white transition-colors">
-                          Work
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#" className="text-emerald-200 hover:text-white transition-colors">
-                          Process
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#" className="text-emerald-200 hover:text-white transition-colors">
-                          Blog
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#" className="text-emerald-200 hover:text-white transition-colors">
-                          Contact
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-
-                  <div>
-                    <h4 className="font-bold mb-4 text-white">Contact</h4>
-                    <ul className="space-y-3">
-                      <li className="text-emerald-200">hello@wemarketfence.com</li>
-                      <li className="text-emerald-200">(555) 123-4567</li>
-                      <li className="text-emerald-200">
-                        123 Design Street
-                        <br />
-                        San Francisco, CA 94107
-                      </li>
-                    </ul>
+                  <p className="font-bold mb-4 sm:mb-6 text-sm sm:text-base">Boosting fence companies with awesome marketing!</p>
+                  <div className="flex space-x-4">
+                    <a href="#" className="font-bold hover:text-primary transition-colors text-sm sm:text-base">
+                      Twitter
+                    </a>
+                    <a href="#" className="font-bold hover:text-primary transition-colors text-sm sm:text-base">
+                      Facebook
+                    </a>
+                    <a href="#" className="font-bold hover:text-primary transition-colors text-sm sm:text-base">
+                      Instagram
+                    </a>
                   </div>
                 </div>
 
-                <div className="border-t border-emerald-900/50 mt-16 pt-8 flex flex-col md:flex-row justify-between items-center">
-                  <p className="text-sm text-emerald-400/70">
-                    {new Date().getFullYear()} We Market Fence. All rights reserved.
-                  </p>
-                  <div className="flex space-x-6 mt-4 md:mt-0">
-                    <a href="#" className="text-sm text-emerald-400/70 hover:text-white transition-colors">
-                      Privacy Policy
-                    </a>
-                    <a href="#" className="text-sm text-emerald-400/70 hover:text-white transition-colors">
-                      Terms of Service
-                    </a>
-                  </div>
+                <div>
+                  <h4 className="font-extrabold text-base sm:text-lg mb-3 sm:mb-4">Services</h4>
+                  <ul className="space-y-2 sm:space-y-3">
+                    <li>
+                      <a href="#" className="font-bold hover:text-primary transition-colors text-sm sm:text-base">
+                        Website Design
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#" className="font-bold hover:text-primary transition-colors text-sm sm:text-base">
+                        Brand Identity
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#" className="font-bold hover:text-primary transition-colors text-sm sm:text-base">
+                        SEO Strategy
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#" className="font-bold hover:text-primary transition-colors text-sm sm:text-base">
+                        Social Media
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#" className="font-bold hover:text-primary transition-colors text-sm sm:text-base">
+                        Lead Generation
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h4 className="font-extrabold text-base sm:text-lg mb-3 sm:mb-4">Company</h4>
+                  <ul className="space-y-2 sm:space-y-3">
+                    <li>
+                      <a href="#" className="font-bold hover:text-primary transition-colors text-sm sm:text-base">
+                        About
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#" className="font-bold hover:text-primary transition-colors text-sm sm:text-base">
+                        Work
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#" className="font-bold hover:text-primary transition-colors text-sm sm:text-base">
+                        Process
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#" className="font-bold hover:text-primary transition-colors text-sm sm:text-base">
+                        Blog
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#" className="font-bold hover:text-primary transition-colors text-sm sm:text-base">
+                        Contact
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h4 className="font-extrabold text-base sm:text-lg mb-3 sm:mb-4">Contact</h4>
+                  <ul className="space-y-2 sm:space-y-3">
+                    <li className="font-bold text-sm sm:text-base">jonny@wemarketfence.com</li>
+                    <li className="font-bold text-sm sm:text-base">(615) 561-0502</li>
+                    <li className="font-bold text-sm sm:text-base">
+                      Proudly serving fence companies
+                      <br />
+                      across the United States!
+                    </li>
+                  </ul>
                 </div>
               </div>
-            </footer>
-            <NewsletterPopup />
-          </ClientWrapper>
+
+              <div className="border-t-2 border-black mt-8 sm:mt-12 md:mt-16 pt-6 sm:pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p className="font-bold text-sm sm:text-base"> {new Date().getFullYear()} We Market Fence! All rights reserved.</p>
+                <div className="flex space-x-4 sm:space-x-6 mt-4 md:mt-0">
+                  <a href="#" className="font-bold hover:text-primary transition-colors text-sm sm:text-base">
+                    Privacy Policy
+                  </a>
+                  <a href="#" className="font-bold hover:text-primary transition-colors text-sm sm:text-base">
+                    Terms of Service
+                  </a>
+                </div>
+              </div>
+            </div>
+          </footer>
         </ThemeProvider>
-        <SpeedInsights />
       </body>
     </html>
   )
