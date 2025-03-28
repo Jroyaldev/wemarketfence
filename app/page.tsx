@@ -1,14 +1,19 @@
 "use client"
-import React from "react"
+import React, { useState } from "react"
 import { motion } from "framer-motion"
 import { ArrowRight, CheckCircle, Monitor, Palette, Search, MessageCircle } from "lucide-react"
+import Link from "next/link"
 
 import { RetroButton } from "../components/retro-button"
 import { RetroCard } from "../components/retro-card"
 import { RetroSection } from "../components/retro-section"
 import { FenceLogo } from "../components/fence-logo"
+import { ContactForm } from "../components/contact-form"
+import { QuickLeadModal } from "../components/quick-lead-modal"
 
 export default function Home() {
+  const [isQuickLeadModalOpen, setIsQuickLeadModalOpen] = useState(false)
+
   const services = [
     {
       title: "Website Design",
@@ -48,21 +53,21 @@ export default function Home() {
   const testimonials = [
     {
       quote: "Our phone started ringing off the hook after our new website launched!",
-      name: "Sarah Johnson",
+      name: "Robert Chen",
       company: "Elite Fence Designs",
-      image: "/placeholder.svg?height=100&width=100",
+      image: "/images/testimonials/robert-chen.png",
     },
     {
       quote: "We've doubled our business since working with We Market Fence. Best investment ever!",
       name: "Mike Brown",
       company: "Brown's Custom Fencing",
-      image: "/placeholder.svg?height=100&width=100",
+      image: "/images/testimonials/mike-brown.png",
     },
     {
       quote: "They understand the fencing business and know exactly how to market our services.",
-      name: "Jennifer Smith",
+      name: "Thomas Anderson",
       company: "Smith's Fencing Solutions",
-      image: "/placeholder.svg?height=100&width=100",
+      image: "/images/testimonials/thomas-anderson.png",
     },
   ]
 
@@ -105,12 +110,14 @@ export default function Home() {
               transition={{ duration: 0.8, delay: 0.4 }}
               className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
             >
-              <RetroButton size="lg" className="bg-yellow-500 border-4 border-black text-black font-extrabold hover:bg-yellow-400 transition-colors py-3 px-5 text-lg shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+              <RetroButton size="lg" className="bg-yellow-500 border-4 border-black text-black font-extrabold hover:bg-yellow-400 transition-colors py-3 px-5 text-lg shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]" onClick={() => setIsQuickLeadModalOpen(true)}>
                 Boost Your Business!
               </RetroButton>
-              <RetroButton size="lg" className="bg-[#58CCDC] border-4 border-black text-black font-extrabold hover:bg-[#58CCDC]/90 transition-colors py-3 px-5 text-lg shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-                See Our Work <ArrowRight className="ml-2 h-5 w-5" />
-              </RetroButton>
+              <Link href="/our-work">
+                <RetroButton size="lg" className="bg-[#58CCDC] border-4 border-black text-black font-extrabold hover:bg-[#58CCDC]/90 transition-colors py-3 px-5 text-lg shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                  See Our Work <ArrowRight className="ml-2 h-5 w-5" />
+                </RetroButton>
+              </Link>
             </motion.div>
           </div>
 
@@ -221,8 +228,8 @@ export default function Home() {
                   className="bg-white border-4 border-black p-5"
                 >
                   <div className="flex flex-col sm:flex-row items-center gap-4">
-                    <div className="bg-sky p-1 border-3 border-black w-16 h-16 flex-shrink-0">
-                      <img src={testimonial.image} alt={testimonial.name} className="w-full h-full object-cover" />
+                    <div className="bg-sky p-2 border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] w-24 h-24 sm:w-28 sm:h-28 flex-shrink-0 mx-auto sm:mx-0">
+                      <img src={testimonial.image} alt={testimonial.name} className="w-full h-full object-cover object-center" />
                     </div>
                     <div>
                       <p className="font-bold mb-2 text-base sm:text-lg">"{testimonial.quote}"</p>
@@ -239,23 +246,51 @@ export default function Home() {
         </div>
       </RetroSection>
 
-      {/* CTA Section */}
-      <RetroSection id="contact" className="bg-white py-12 sm:py-16 md:py-20">
-        <div className="text-center px-4 max-w-3xl mx-auto">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-6 relative inline-block">
-            <span className="neo-heading">Ready To Grow?</span>
-          </h2>
-          <p className="text-lg sm:text-xl font-bold mb-8">
-            Join dozens of successful fence companies who are growing their business with our help! 
-            <span className="bg-[#58CCDC] px-2 mx-1 font-extrabold border-3 border-black">Start today!</span>
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <RetroButton size="lg" className="bg-yellow-500 border-4 border-black text-black font-extrabold hover:bg-yellow-400 transition-colors py-3 px-5 text-lg">
-              Get Your Free Consultation!
-            </RetroButton>
+      {/* Call to Action Section */}
+      <section className="container mx-auto px-4 py-16 md:py-24">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+            <div className="order-2 md:order-1">
+              <ContactForm />
+            </div>
+            <div className="order-1 md:order-2">
+              <h2 className="text-4xl md:text-5xl font-extrabold mb-6 text-black [text-shadow:4px_4px_0px_#FCD34D]">
+                Ready to Grow Your Fence Business?
+              </h2>
+              <div className="mb-8 border-l-8 border-[#58CCDC] pl-4">
+                <p className="text-lg md:text-xl mb-4">
+                  Our proven marketing strategies have helped fence companies like yours:
+                </p>
+                <ul className="space-y-3">
+                  <li className="flex items-start">
+                    <span className="text-yellow-500 mr-2 text-xl">✓</span>
+                    <span className="font-bold">Increase leads by 300%</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-yellow-500 mr-2 text-xl">✓</span>
+                    <span className="font-bold">Dominate local search results</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-yellow-500 mr-2 text-xl">✓</span>
+                    <span className="font-bold">Book more high-value installations</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-yellow-500 mr-2 text-xl">✓</span>
+                    <span className="font-bold">Build a consistent lead pipeline</span>
+                  </li>
+                </ul>
+              </div>
+              <div className="bg-black text-white p-4 inline-block transform rotate-2 font-bold text-lg md:text-xl">
+                Limited Free Consultations Available!
+              </div>
+            </div>
           </div>
         </div>
-      </RetroSection>
+      </section>
+      <QuickLeadModal 
+        isOpen={isQuickLeadModalOpen}
+        onClose={() => setIsQuickLeadModalOpen(false)}
+      />
     </main>
   )
 }

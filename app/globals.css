@@ -268,3 +268,39 @@
   );
   animation: spin-slow 60s linear infinite;
 }
+
+/* Retro pattern background */
+.retro-pattern {
+  position: relative;
+}
+
+.retro-pattern::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(rgba(0, 0, 0, 0.07) 1px, transparent 1px),
+    radial-gradient(rgba(0, 0, 0, 0.07) 1px, transparent 1px);
+  background-size: 20px 20px;
+  background-position: 0 0, 10px 10px;
+  opacity: 0.5;
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Back to top button animation */
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+.back-to-top-btn:hover {
+  animation: bounce 1s infinite;
+}
