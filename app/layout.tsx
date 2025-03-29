@@ -181,14 +181,11 @@ export default function RootLayout({
                 <BackToTopButton />
               </div>
 
-              <div className="border-t-2 border-black mt-8 sm:mt-12 md:mt-16 pt-6 sm:pt-8 flex flex-col md:flex-row justify-between items-center">
+              <div className="mt-10 border-t-2 border-black pt-6 flex flex-col sm:flex-row justify-between items-center">
                 <FooterCopyright />
-                <div className="flex space-x-4 sm:space-x-6 mt-4 md:mt-0">
-                  <a href="#" className="font-bold hover:text-primary transition-colors text-sm sm:text-base">
+                <div className="mt-4 sm:mt-0">
+                  <a href="/privacy-policy" className="font-bold hover:text-primary transition-colors text-sm sm:text-base">
                     Privacy Policy
-                  </a>
-                  <a href="#" className="font-bold hover:text-primary transition-colors text-sm sm:text-base">
-                    Terms of Service
                   </a>
                 </div>
               </div>
