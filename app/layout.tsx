@@ -9,6 +9,7 @@ import { ThemeProvider } from "../components/theme-provider"
 import { FenceLogo } from "../components/fence-logo"
 import { BackToTopButton } from "../components/back-to-top-button"
 import { FooterCopyright } from "../components/footer-copyright"
+import MetaPixel from "../components/meta-pixel"
 
 const bangers = Bangers({
   weight: "400",
@@ -31,6 +32,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${bangers.variable} font-sans`}>
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
+          <MetaPixel />
           <SiteHeader />
           {children}
           <footer className="bg-[#E6F2FF] border-t-4 border-black py-10 sm:py-12 md:py-16 retro-pattern">

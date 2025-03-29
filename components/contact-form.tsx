@@ -54,6 +54,14 @@ export function ContactForm({ quickMode = false, onSubmitSuccess }: ContactFormP
         "VzrPaSgxUjIM0hI3n" // Your EmailJS Public Key
       )
 
+      // Track form submission with Meta Pixel
+      if (typeof window !== 'undefined' && window.fbq) {
+        window.fbq('track', 'Lead', {
+          content_name: quickMode ? 'Quick Lead Form' : 'Contact Form',
+          content_category: 'Fence Marketing Lead',
+        });
+      }
+
       setIsSubmitted(true)
       reset()
       if (onSubmitSuccess) {
