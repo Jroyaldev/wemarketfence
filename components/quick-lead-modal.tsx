@@ -1,5 +1,6 @@
 "use client"
-import React, { useState, useEffect } from "react"
+
+import React, { useState } from "react"
 import { X } from "lucide-react"
 import { ContactForm } from "./contact-form"
 
@@ -9,61 +10,77 @@ interface QuickLeadModalProps {
 }
 
 export function QuickLeadModal({ isOpen, onClose }: QuickLeadModalProps) {
-  const [animateIn, setAnimateIn] = useState(false)
+  const [step, setStep] = useState(1)
+  const totalSteps = 2
   
-  // Handle escape key press
-  useEffect(() => {
-    const handleEscKey = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        onClose()
-      }
-    }
-    
-    if (isOpen) {
-      document.addEventListener("keydown", handleEscKey)
-      // Delay animation slightly for effect
-      setTimeout(() => setAnimateIn(true), 50)
-    } else {
-      setAnimateIn(false)
-    }
-    
-    return () => {
-      document.removeEventListener("keydown", handleEscKey)
-    }
-  }, [isOpen, onClose])
+  const handleSubmitSuccess = () => {
+    // Reset step when form is closed
+    setTimeout(() => {
+      setStep(1)
+    }, 1000)
+  }
   
   if (!isOpen) return null
-  
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-70">
+    <div className="fixed inset-0 z-50 flex items-center justify-center px-4 bg-black/60 backdrop-blur-sm animate-fade-in">
       <div 
-        className={`bg-white border-4 border-black max-w-md w-full shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] relative transition-all duration-300 ${
-          animateIn ? "opacity-100 scale-100" : "opacity-0 scale-95"
-        }`}
+        className="bg-white border-4 border-neutral-dark shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] 
+        w-full max-w-md relative max-h-[90vh] overflow-auto"
+        onClick={(e) => e.stopPropagation()}
       >
-        {/* Quick close button */}
+        {/* Progress indicator */}
+        <div className="absolute top-0 left-0 right-0 h-2 bg-neutral-light">
+          <div 
+            className="h-full bg-accent-red transition-all duration-300"
+            style={{ width: `${(step / totalSteps) * 100}%` }}
+          ></div>
+        </div>
+        
+        {/* Close button */}
         <button 
           onClick={onClose}
-          className="absolute top-2 right-2 z-10 bg-red-500 p-1 rounded-full border-2 border-black"
-          aria-label="Close popup"
+          className="absolute top-4 right-4 bg-white border-2 border-neutral-dark p-1
+          hover:bg-accent-red hover:text-white transition-colors z-10"
+          aria-label="Close modal"
         >
-          <X size={20} className="text-white" />
+          <X className="h-5 w-5" />
         </button>
         
-        {/* Decorative elements */}
-        <div className="absolute -top-6 -left-6 bg-yellow-500 p-3 rounded-full border-4 border-black transform -rotate-12 z-10 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-          <p className="text-black font-extrabold text-sm md:text-base">FAST!</p>
-        </div>
-        
-        {/* Header */}
-        <div className="p-6 bg-[#58CCDC] border-b-4 border-black">
-          <h3 className="text-2xl font-extrabold text-center">QUICK LEAD FORM</h3>
-          <p className="text-center font-bold text-sm mt-1">30-Second Growth Strategy</p>
-        </div>
-        
-        {/* Streamlined form */}
-        <div className="p-6">
-          <ContactForm {...{ quickMode: true, onSubmitSuccess: onClose }} />
+        {/* Modal content */}
+        <div className="p-6 pt-10">
+          <div className="relative inline-block mb-6">
+            <h2 className="text-3xl font-extrabold text-neutral-dark uppercase relative z-10">
+              GET YOUR FREE QUOTE
+            </h2>
+            <div className="absolute -bottom-2 -left-2 w-full h-4 bg-accent-yellow z-0"></div>
+          </div>
+          
+          <p className="text-lg mb-6 text-neutral-near-black">
+            Complete this quick form to get your <span className="font-bold text-accent-red">FREE marketing consultation</span> and see how we can boost your fence business!
+          </p>
+          
+          <div className="flex items-center mb-6 justify-between">
+            <div className="flex">
+              {Array.from({ length: totalSteps }).map((_, index) => (
+                <div 
+                  key={index}
+                  className={`w-4 h-4 rounded-full mr-2 border-2 border-neutral-dark ${
+                    index + 1 <= step ? 'bg-accent-yellow' : 'bg-white'
+                  }`}
+                />
+              ))}
+            </div>
+            <span className="text-sm font-bold text-neutral-dark">Step {step} of {totalSteps}</span>
+          </div>
+          
+          <ContactForm 
+            quickMode={true} 
+            onSubmitSuccess={() => {
+              handleSubmitSuccess()
+              onClose()
+            }} 
+          />
         </div>
       </div>
     </div>

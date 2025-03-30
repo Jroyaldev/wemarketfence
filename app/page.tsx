@@ -356,8 +356,8 @@ export default function Home() {
                     </div>
                     <div>
                       <h4 className="font-bold text-neutral-dark">Phone</h4>
-                      <a href="tel:5595558726" className="text-lg text-neutral-near-black hover:text-accent-red transition-colors">
-                        (559) 555-8726
+                      <a href="tel:6155610502" className="text-lg text-neutral-near-black hover:text-accent-red transition-colors">
+                        (615) 561-0502
                       </a>
                     </div>
                   </div>
@@ -372,7 +372,7 @@ export default function Home() {
                     <div>
                       <h4 className="font-bold text-neutral-dark">Address</h4>
                       <p className="text-lg text-neutral-near-black">
-                        Fresno, CA 93710
+                        U.S. Nationwide
                       </p>
                     </div>
                   </div>
@@ -386,7 +386,7 @@ export default function Home() {
                     </div>
                     <div className="w-full">
                       <h4 className="font-bold text-neutral-dark">Email</h4>
-                      <a href="mailto:jonny@wemarketfence.com" className="text-base sm:text-lg text-neutral-near-black hover:text-accent-red transition-colors whitespace-nowrap overflow-x-auto inline-block">
+                      <a href="mailto:jonny@wemarketfence.com" className="text-base sm:text-lg text-neutral-near-black hover:text-accent-red transition-colors">
                         jonny@wemarketfence.com
                       </a>
                     </div>

@@ -26,13 +26,33 @@ export function ContactForm({ quickMode = false, onSubmitSuccess }: ContactFormP
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [formStep, setFormStep] = useState(1)
   
   const {
     register,
     handleSubmit,
     reset,
-    formState: { errors },
-  } = useForm<FormData>()
+    watch,
+    formState: { errors, isValid },
+  } = useForm<FormData>({
+    mode: "onChange",
+  })
+
+  const emailValue = watch("email")
+  const nameValue = watch("name")
+  const phoneValue = watch("phone")
+
+  const goToNextStep = () => {
+    if (formStep === 1 && nameValue && emailValue && !errors.email) {
+      setFormStep(2)
+    }
+  }
+
+  const goToPreviousStep = () => {
+    if (formStep === 2) {
+      setFormStep(1)
+    }
+  }
 
   const onSubmit = async (data: FormData) => {
     setIsSubmitting(true)
@@ -78,9 +98,9 @@ export function ContactForm({ quickMode = false, onSubmitSuccess }: ContactFormP
   return (
     <div className={`bg-white border-4 border-neutral-dark p-6 md:p-8 w-full ${!quickMode ? 'max-w-lg mx-auto' : ''} shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 relative`}>
       {/* Enhanced decorative elements */}
-      {!quickMode && (
+      {!quickMode && formStep === 1 && !isSubmitted && (
         <>
-          <div className="absolute -top-6 -right-6 bg-accent-red p-3 border-4 border-neutral-dark transform rotate-12 z-10 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+          <div className="absolute -top-6 -right-6 bg-accent-red p-3 border-4 border-neutral-dark transform rotate-12 z-10 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] animate-subtle-pulse">
             <p className="text-white font-extrabold text-sm md:text-base uppercase">FREE QUOTE!</p>
           </div>
           <div className="absolute -top-6 -left-6 bg-white p-2 border-4 border-neutral-dark transform -rotate-12 z-10 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
@@ -96,6 +116,30 @@ export function ContactForm({ quickMode = false, onSubmitSuccess }: ContactFormP
           </div>
           <h3 className="text-2xl font-bold mb-4 text-neutral-dark uppercase">Thanks for reaching out!</h3>
           <p className="font-bold mb-6 text-neutral-near-black">We'll get back to you within 24 hours.</p>
+          
+          {/* Social sharing buttons */}
+          <div className="mb-6">
+            <p className="text-neutral-dark font-bold mb-3">Know a fence contractor who needs help with marketing?</p>
+            <div className="flex justify-center space-x-3">
+              <a 
+                href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent('https://wemarketfence.com')}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-[#3b5998] text-white p-2 border-2 border-neutral-dark hover:brightness-110"
+              >
+                Share on Facebook
+              </a>
+              <a 
+                href={`https://twitter.com/intent/tweet?text=${encodeURIComponent('I just found an awesome marketing service for fence contractors! Check them out:')}&url=${encodeURIComponent('https://wemarketfence.com')}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-[#1da1f2] text-white p-2 border-2 border-neutral-dark hover:brightness-110"
+              >
+                Share on Twitter
+              </a>
+            </div>
+          </div>
+          
           {!quickMode && (
             <div className="mb-8 w-full max-w-xs mx-auto">
               <img 
@@ -130,119 +174,213 @@ export function ContactForm({ quickMode = false, onSubmitSuccess }: ContactFormP
               <p className="font-bold">{error}</p>
             </div>
           )}
-          
-          <div className="space-y-4">
-            <div>
-              <label htmlFor="name" className="block text-neutral-dark font-bold mb-2 flex items-center">
-                <User className="h-4 w-4 mr-2 inline" />
-                Name *
-              </label>
-              <input
-                id="name"
-                type="text"
-                className="w-full border-4 border-neutral-dark p-3 bg-white text-neutral-dark focus:border-accent-yellow focus:ring-1 focus:ring-accent-yellow focus:outline-none transition-all duration-200"
-                placeholder="Your name"
-                {...register("name", { required: "Name is required" })}
-              />
-              {errors.name && (
-                <p className="text-accent-red font-medium mt-1">{errors.name.message}</p>
-              )}
-            </div>
-            
-            <div>
-              <label htmlFor="email" className="block text-neutral-dark font-bold mb-2 flex items-center">
-                <Mail className="h-4 w-4 mr-2 inline" />
-                Email *
-              </label>
-              <input
-                id="email"
-                type="email"
-                className="w-full border-4 border-neutral-dark p-3 bg-white text-neutral-dark focus:border-accent-yellow focus:ring-1 focus:ring-accent-yellow focus:outline-none transition-all duration-200"
-                placeholder="your@email.com"
-                {...register("email", { 
-                  required: "Email is required",
-                  pattern: {
-                    value: /\S+@\S+\.\S+/,
-                    message: "Please enter a valid email"
-                  }
-                })}
-              />
-              {errors.email && (
-                <p className="text-accent-red font-medium mt-1">{errors.email.message}</p>
-              )}
-            </div>
-            
-            <div>
-              <label htmlFor="phone" className="block text-neutral-dark font-bold mb-2 flex items-center">
-                <Phone className="h-4 w-4 mr-2 inline" />
-                Phone *
-              </label>
-              <input
-                id="phone"
-                type="tel"
-                className="w-full border-4 border-neutral-dark p-3 bg-white text-neutral-dark focus:border-accent-yellow focus:ring-1 focus:ring-accent-yellow focus:outline-none transition-all duration-200"
-                placeholder="(555) 123-4567"
-                {...register("phone", { required: "Phone number is required" })}
-              />
-              {errors.phone && (
-                <p className="text-accent-red font-medium mt-1">{errors.phone.message}</p>
-              )}
-            </div>
-            
-            <div>
-              <label htmlFor="companyName" className="block text-neutral-dark font-bold mb-2 flex items-center">
-                <Building className="h-4 w-4 mr-2 inline" />
-                Company Name
-              </label>
-              <input
-                id="companyName"
-                type="text"
-                className="w-full border-4 border-neutral-dark p-3 bg-white text-neutral-dark focus:border-accent-yellow focus:ring-1 focus:ring-accent-yellow focus:outline-none transition-all duration-200"
-                placeholder="Your fence company"
-                {...register("companyName")}
-              />
-            </div>
-            
-            {!quickMode && (
-              <div>
-                <label htmlFor="message" className="block text-neutral-dark font-bold mb-2">
-                  Message
-                </label>
-                <textarea
-                  id="message"
-                  className="w-full border-4 border-neutral-dark p-3 bg-white text-neutral-dark focus:border-accent-yellow focus:ring-1 focus:ring-accent-yellow focus:outline-none transition-all duration-200 min-h-[120px]"
-                  placeholder="Tell us about your marketing needs..."
-                  {...register("message")}
-                ></textarea>
+
+          {/* Step indicator for multi-step form */}
+          {!quickMode && (
+            <div className="flex items-center mb-4 justify-center">
+              <div className="flex items-center">
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center border-2 border-neutral-dark ${formStep === 1 ? 'bg-accent-yellow text-neutral-dark' : 'bg-neutral-light'} font-bold`}>1</div>
+                <div className={`w-16 h-1 ${formStep === 2 ? 'bg-accent-yellow' : 'bg-neutral-light'}`}></div>
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center border-2 border-neutral-dark ${formStep === 2 ? 'bg-accent-yellow text-neutral-dark' : 'bg-neutral-light'} font-bold`}>2</div>
               </div>
-            )}
-          </div>
-          
-          <div className="pt-4">
-            <div className="bg-neutral-light border-4 border-neutral-dark p-3 mb-6">
-              <p className="text-sm font-medium text-neutral-dark text-center">
-                <span className="font-bold">✓</span> By submitting, you'll get a FREE marketing analysis for your fence business!
-              </p>
             </div>
-            
-            <RetroButton
-              type="submit"
-              variant="primary"
-              disabled={isSubmitting}
-              className="w-full shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 hover:-translate-y-2 flex items-center justify-center gap-2"
-            >
-              {isSubmitting ? (
-                <>
-                  <Loader2 className="h-5 w-5 animate-spin" />
-                  <span>Sending...</span>
-                </>
+          )}
+          
+          {formStep === 1 && (
+            <div className="space-y-4">
+              <div>
+                <label htmlFor="name" className="block text-neutral-dark font-bold mb-2 flex items-center">
+                  <User className="h-4 w-4 mr-2 inline" />
+                  Name *
+                </label>
+                <input
+                  id="name"
+                  type="text"
+                  className="w-full border-4 border-neutral-dark p-3 bg-white text-neutral-dark focus:border-accent-yellow focus:ring-1 focus:ring-accent-yellow focus:outline-none transition-all duration-200"
+                  placeholder="Your name"
+                  {...register("name", { required: "Name is required" })}
+                />
+                {errors.name && (
+                  <p className="text-accent-red font-medium mt-1">{errors.name.message}</p>
+                )}
+              </div>
+              
+              <div>
+                <label htmlFor="email" className="block text-neutral-dark font-bold mb-2 flex items-center">
+                  <Mail className="h-4 w-4 mr-2 inline" />
+                  Email *
+                </label>
+                <input
+                  id="email"
+                  type="email"
+                  className="w-full border-4 border-neutral-dark p-3 bg-white text-neutral-dark focus:border-accent-yellow focus:ring-1 focus:ring-accent-yellow focus:outline-none transition-all duration-200"
+                  placeholder="your@email.com"
+                  {...register("email", { 
+                    required: "Email is required",
+                    pattern: {
+                      value: /\S+@\S+\.\S+/,
+                      message: "Please enter a valid email"
+                    }
+                  })}
+                />
+                {errors.email && (
+                  <p className="text-accent-red font-medium mt-1">{errors.email.message}</p>
+                )}
+              </div>
+
+              {/* Social proof element */}
+              <div className="bg-neutral-light border-2 border-neutral-dark p-3 text-sm">
+                <p className="font-medium text-neutral-dark flex items-center">
+                  <CheckCircle className="h-4 w-4 text-accent-yellow mr-2" />
+                  <span>Join <strong>150+ fence contractors</strong> who grew their business with our help</span>
+                </p>
+              </div>
+              
+              {!quickMode ? (
+                <div className="pt-4">
+                  <RetroButton
+                    type="button"
+                    onClick={goToNextStep}
+                    disabled={!nameValue || !emailValue || !!errors.email}
+                    variant="primary"
+                    className="w-full shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] disabled:opacity-50"
+                  >
+                    Continue →
+                  </RetroButton>
+                </div>
               ) : (
                 <>
-                  <Send className="h-5 w-5" />
-                  <span className="uppercase font-bold">{quickMode ? 'Get Started Now' : 'Send Message'}</span>
+                  <div>
+                    <label htmlFor="phone" className="block text-neutral-dark font-bold mb-2 flex items-center">
+                      <Phone className="h-4 w-4 mr-2 inline" />
+                      Phone *
+                    </label>
+                    <input
+                      id="phone"
+                      type="tel"
+                      className="w-full border-4 border-neutral-dark p-3 bg-white text-neutral-dark focus:border-accent-yellow focus:ring-1 focus:ring-accent-yellow focus:outline-none transition-all duration-200"
+                      placeholder="(555) 123-4567"
+                      {...register("phone", { required: "Phone number is required" })}
+                    />
+                    {errors.phone && (
+                      <p className="text-accent-red font-medium mt-1">{errors.phone.message}</p>
+                    )}
+                  </div>
+                
+                  <div className="pt-4">
+                    <RetroButton
+                      type="submit"
+                      disabled={isSubmitting}
+                      variant="primary"
+                      className="w-full shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
+                    >
+                      {isSubmitting ? (
+                        <Loader2 className="h-4 w-4 animate-spin mx-auto" />
+                      ) : (
+                        <>Get Your Free Quote</>
+                      )}
+                    </RetroButton>
+                  </div>
                 </>
               )}
-            </RetroButton>
+            </div>
+          )}
+          
+          {formStep === 2 && (
+            <div className="space-y-4">
+              <div>
+                <label htmlFor="phone" className="block text-neutral-dark font-bold mb-2 flex items-center">
+                  <Phone className="h-4 w-4 mr-2 inline" />
+                  Phone *
+                </label>
+                <input
+                  id="phone"
+                  type="tel"
+                  className="w-full border-4 border-neutral-dark p-3 bg-white text-neutral-dark focus:border-accent-yellow focus:ring-1 focus:ring-accent-yellow focus:outline-none transition-all duration-200"
+                  placeholder="(555) 123-4567"
+                  {...register("phone", { required: "Phone number is required" })}
+                />
+                {errors.phone && (
+                  <p className="text-accent-red font-medium mt-1">{errors.phone.message}</p>
+                )}
+              </div>
+              
+              <div>
+                <label htmlFor="companyName" className="block text-neutral-dark font-bold mb-2 flex items-center">
+                  <Building className="h-4 w-4 mr-2 inline" />
+                  Company Name
+                </label>
+                <input
+                  id="companyName"
+                  type="text"
+                  className="w-full border-4 border-neutral-dark p-3 bg-white text-neutral-dark focus:border-accent-yellow focus:ring-1 focus:ring-accent-yellow focus:outline-none transition-all duration-200"
+                  placeholder="Your fence company"
+                  {...register("companyName")}
+                />
+              </div>
+              
+              <div>
+                <label htmlFor="message" className="block text-neutral-dark font-bold mb-2 flex items-center">
+                  <span>Tell us about your goals</span>
+                </label>
+                <select
+                  id="message"
+                  className="w-full border-4 border-neutral-dark p-3 bg-white text-neutral-dark focus:border-accent-yellow focus:ring-1 focus:ring-accent-yellow focus:outline-none transition-all duration-200"
+                  {...register("message")}
+                >
+                  <option value="">Select your primary goal...</option>
+                  <option value="I need more leads for my fence business">I need more leads for my fence business</option>
+                  <option value="I need a new website for my fence company">I need a new website for my fence company</option>
+                  <option value="I want to improve my online presence">I want to improve my online presence</option>
+                  <option value="I need help with social media marketing">I need help with social media marketing</option>
+                  <option value="I'm just exploring options">I'm just exploring options</option>
+                </select>
+              </div>
+              
+              {/* Trust indicators */}
+              <div className="bg-neutral-light border-2 border-neutral-dark p-3 mb-4">
+                <div className="flex items-center mb-2">
+                  <CheckCircle className="h-4 w-4 text-accent-yellow mr-2" />
+                  <span className="text-neutral-dark font-medium text-sm">Your information is secure and never shared</span>
+                </div>
+                <div className="flex items-center">
+                  <CheckCircle className="h-4 w-4 text-accent-yellow mr-2" />
+                  <span className="text-neutral-dark font-medium text-sm">No obligation, 100% free consultation</span>
+                </div>
+              </div>
+              
+              <div className="flex gap-4 pt-4">
+                <RetroButton
+                  type="button"
+                  onClick={goToPreviousStep}
+                  variant="secondary"
+                  className="flex-1 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
+                >
+                  ← Back
+                </RetroButton>
+                <RetroButton
+                  type="submit"
+                  disabled={isSubmitting}
+                  variant="primary"
+                  className="flex-1 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
+                >
+                  {isSubmitting ? (
+                    <Loader2 className="h-4 w-4 animate-spin mx-auto" />
+                  ) : (
+                    <div className="flex items-center justify-center">
+                      <Send className="h-4 w-4 mr-2" />
+                      <span>Submit</span>
+                    </div>
+                  )}
+                </RetroButton>
+              </div>
+            </div>
+          )}
+          
+          {/* Privacy policy note */}
+          <div className="text-xs text-center mt-4 text-neutral-near-black">
+            By submitting this form, you agree to our{" "}
+            <a href="/privacy-policy" className="underline hover:text-accent-red">Privacy Policy</a>.
           </div>
         </form>
       )}

@@ -8,6 +8,10 @@ import { SiteHeader } from "../components/site-header"
 import { ThemeProvider } from "../components/theme-provider"
 import { BackToTopButton } from "../components/back-to-top-button"
 import MetaPixel from "../components/meta-pixel"
+import { StickyCTA } from "../components/sticky-cta"
+import { ExitIntentPopup } from "../components/exit-intent-popup"
+import { SocialProofPopups } from "../components/social-proof-popups"
+import { ScrollTriggerCTA } from "../components/scroll-trigger-cta"
 
 export const metadata: Metadata = {
   title: "We Market Fence! | Marketing for Fencing Companies",
@@ -211,16 +215,11 @@ export default function RootLayout({
               </div>
             </footer>
           </div>
-          
-          {/* Sticky CTA Button - Mobile Only */}
-          <div className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t-4 border-neutral-dark md:hidden z-40">
-            <a 
-              href="#contact" 
-              className="block w-full bg-accent-red hover:bg-accent-yellow border-4 border-neutral-dark text-white hover:text-neutral-dark font-bold text-center p-3 uppercase tracking-wider transition-colors shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
-            >
-              ↓ Get Your Free Quote Today! ↓
-            </a>
-          </div>
+          <BackToTopButton />
+          <StickyCTA />
+          <ExitIntentPopup />
+          <SocialProofPopups />
+          <ScrollTriggerCTA />
         </ThemeProvider>
       </body>
     </html>

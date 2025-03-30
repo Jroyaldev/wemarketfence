@@ -63,6 +63,8 @@ const config = {
         'neutral-light': '#F5F5F5',
         'accent-red': '#FF6347',
         'accent-green': '#39FF14',
+        'accent-yellow': '#FFD166',
+        'accent-orange': '#FF9F1C',
       },
       borderRadius: {
         none: '0',
