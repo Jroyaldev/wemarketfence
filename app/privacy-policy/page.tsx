@@ -80,7 +80,7 @@ export default function PrivacyPolicy() {
             </p>
             <p>
               We Market Fence!<br />
-              Email: <a href="mailto:jonny@wemarketfence.com" className="text-primary hover:underline">jonny@wemarketfence.com</a><br />
+              Email: <a href="mailto:jonny@wemarketfence.com" className="text-primary hover:underline whitespace-nowrap overflow-x-auto inline-block">jonny@wemarketfence.com</a><br />
               Phone: (615) 561-0502
             </p>
 

@@ -1,10 +1,9 @@
 "use client"
 
 import React from "react"
-import { motion, HTMLMotionProps } from "framer-motion"
 import { cn } from "../lib/utils"
 
-interface RetroButtonProps extends Omit<HTMLMotionProps<"button">, "children" | "className"> {
+interface RetroButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "children" | "className"> {
   variant?: "primary" | "secondary" | "accent"
   size?: "sm" | "md" | "lg"
   children: React.ReactNode
@@ -20,35 +19,36 @@ export function RetroButton({
   icon,
   ...props
 }: RetroButtonProps) {
+  const baseStyle = "bg-neutral-dark text-neutral-light border-2 border-neutral-dark uppercase font-bold tracking-wide";
+  const hoverStyle = "hover:bg-neutral-light hover:text-neutral-dark";
   const variantClasses = {
-    primary: "bg-yellow-500 text-black hover:bg-yellow-400",
-    secondary: "bg-secondary text-black hover:bg-secondary/90",
-    accent: "bg-accent text-black hover:bg-accent/90",
+    primary: "bg-accent-red text-neutral-dark hover:bg-neutral-dark hover:text-accent-red",
+    secondary: "bg-neutral-dark text-neutral-light hover:bg-neutral-light hover:text-neutral-dark",
+    accent: "bg-accent-green text-neutral-dark hover:bg-neutral-dark hover:text-accent-green",
   }
 
   const sizeClasses = {
-    sm: "text-sm px-4 py-2",
-    md: "text-base px-6 py-3",
-    lg: "text-lg px-8 py-4",
+    sm: "text-xs px-4 py-2",
+    md: "text-sm px-6 py-3",
+    lg: "text-base px-8 py-4",
   }
 
   return (
-    <motion.button
+    <button
       className={cn(
-        "font-bold rounded-none border-4 border-black retro-button relative",
+        "inline-flex items-center justify-center gap-2",
+        baseStyle,
+        hoverStyle,
         variantClasses[variant],
         sizeClasses[size],
         "min-h-[44px]",
+        "transition-colors duration-150 ease-in-out",
         className,
       )}
-      whileHover={{ scale: 1.02 }}
-      whileTap={{ scale: 0.98 }}
       {...props}
     >
-      <div className="flex items-center justify-center gap-2">
-        {icon && <span>{icon}</span>}
-        {children}
-      </div>
-    </motion.button>
+      {icon && <span>{icon}</span>}
+      <span>{children}</span>
+    </button>
   )
 }

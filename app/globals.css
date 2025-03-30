@@ -1,4 +1,5 @@
-/* tailwind directives */
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -6,58 +7,58 @@
 @layer base {
   :root {
     --background: 0 0% 100%;
-    --foreground: 0 0% 0%;
+    --foreground: 224 71.4% 4.1%;
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 0%;
+    --card-foreground: 224 71.4% 4.1%;
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 0%;
-    --primary: 45 97% 54%;
-    --primary-foreground: 0 0% 0%;
-    --secondary: 174 62% 47%;
-    --secondary-foreground: 0 0% 0%;
-    --accent: 74 56% 65%;
-    --accent-foreground: 0 0% 0%;
-    --destructive: 0 84% 60%;
+    --popover-foreground: 224 71.4% 4.1%;
+    --primary: 340 88% 65%; /* Match primary color if changed */
+    --primary-foreground: 355.7 100% 97.3%;
+    --secondary: 189 88% 60%; /* Match secondary color if changed */
+    --secondary-foreground: 220.9 39.3% 11%;
+    --muted: 220 14.3% 95.9%;
+    --muted-foreground: 220 8.9% 46.1%;
+    --accent: 41 100% 70%; /* Match accent color if changed */
+    --accent-foreground: 220.9 39.3% 11%;
+    --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-    --muted: 174 62% 47%;
-    --muted-foreground: 174 62% 27%;
-    --border: 0 0% 90%;
-    --input: 0 0% 90%;
-    --ring: 45 97% 54%;
-    --radius: 1rem;
+    --border: 215 20.2% 65.1%;
+    --input: 215 20.2% 65.1%;
+    --ring: 224 71.4% 4.1%;
+    --radius: 0.375rem; /* Adjust default radius if changed in config */
   }
 
   .dark {
-    --background: 174 62% 27%;
-    --foreground: 0 0% 98%;
-    --card: 174 62% 27%;
-    --card-foreground: 0 0% 98%;
-    --popover: 174 62% 27%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 45 97% 54%;
-    --primary-foreground: 0 0% 0%;
-    --secondary: 174 62% 47%;
-    --secondary-foreground: 0 0% 0%;
-    --accent: 74 56% 65%;
-    --accent-foreground: 0 0% 0%;
-    --destructive: 0 84% 60%;
+    --background: 224 71.4% 4.1%;
+    --foreground: 210 20% 98%;
+    --card: 224 71.4% 4.1%;
+    --card-foreground: 210 20% 98%;
+    --popover: 224 71.4% 4.1%;
+    --popover-foreground: 210 20% 98%;
+    --primary: 340 88% 65%; /* Match primary color if changed */
+    --primary-foreground: 355.7 100% 97.3%;
+    --secondary: 189 88% 60%; /* Match secondary color if changed */
+    --secondary-foreground: 210 20% 98%;
+    --muted: 215 27.9% 16.9%;
+    --muted-foreground: 217.9 10.6% 64.9%;
+    --accent: 41 100% 70%; /* Match accent color if changed */
+    --accent-foreground: 210 20% 98%;
+    --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
-    --muted: 174 62% 37%;
-    --muted-foreground: 174 62% 87%;
-    --border: 174 62% 37%;
-    --input: 174 62% 37%;
-    --ring: 45 97% 54%;
+    --border: 215 27.9% 16.9%;
+    --input: 215 27.9% 16.9%;
+    --ring: 216 12.2% 83.9%;
   }
 }
 
 @layer base {
   * {
-    border-color: hsl(var(--border));
+    @apply border-border;
   }
   body {
-    background-color: hsl(var(--background));
-    color: hsl(var(--foreground));
+    @apply bg-neutral-light text-neutral-dark; /* Updated base background and text color */
     font-feature-settings: "rlig" 1, "calt" 1;
+    font-family: 'Space Grotesk', sans-serif;
   }
 }
 
@@ -73,7 +74,7 @@
 }
 
 .retro-text {
-  text-shadow: 3px 3px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+  text-shadow: 2px 2px 0px #000;
 }
 
 .retro-box {
@@ -303,4 +304,23 @@
 
 .back-to-top-btn:hover {
   animation: bounce 1s infinite;
+}
+
+.retro-pattern {
+  /* Keep or update this pattern based on the new aesthetic */
+  /* Example: replace with a subtle dot grid or remove */
+  /* background-image: radial-gradient(black 1px, transparent 0);
+  background-size: 10px 10px; */
+  /* Or keep the existing one if desired */
+   background-image: url("data:image/svg+xml,%3Csvg width='6' height='6' viewBox='0 0 6 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23000000' fill-opacity='0.1' fill-rule='evenodd'%3E%3Cpath d='M5 0h1L0 6V5zM6 5v1H5z'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+.retro-text {
+  /* Keep or update this text effect */
+  text-shadow: 2px 2px 0px #000;
+}
+
+/* Ensure buttons and interactive elements have sufficient touch target size */
+.mobile-touch-target {
+  @apply min-h-[44px] min-w-[44px] flex items-center justify-center;
 }

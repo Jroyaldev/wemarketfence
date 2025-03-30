@@ -1,157 +1,149 @@
 "use client"
 
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect } from 'react'
 import Link from "next/link"
-import { Menu } from "lucide-react"
-import { FenceLogo } from "./fence-logo"
-import { RetroButton } from "./retro-button"
-import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet"
-import { Button } from "./ui/button"
-import { cn } from "../lib/utils"
+import { Menu, Phone } from "lucide-react"
+import Image from "next/image"
+
+import { cn } from "../lib/utils" 
+import { RetroButton } from "./retro-button" 
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+} from "./ui/sheet" 
+
+// Define nav items directly here since siteConfig is missing
+const navItems = [
+  { title: "Services", href: "/#services" },
+  { title: "Our Work", href: "/our-work" }, 
+  { title: "About", href: "/#about" },
+  { title: "Contact", href: "/#contact" },
+]
 
 export function SiteHeader() {
-  const [isScrolled, setIsScrolled] = useState(false)
-  const [isOpen, setIsOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10)
-    }
+      const offset = window.scrollY;
+      if (offset > 50) {
+        setScrolled(true);
+      } else {
+        setScrolled(false);
+      }
+    };
 
-    window.addEventListener("scroll", handleScroll)
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
-
-  // Prevent body scroll when mobile menu is open
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = "hidden"
-    } else {
-      document.body.style.overflow = "unset"
-    }
-
+    window.addEventListener('scroll', handleScroll);
     return () => {
-      document.body.style.overflow = "unset"
-    }
-  }, [isOpen])
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   return (
-    <header className={cn(
-      "sticky top-0 z-50 w-full transition-all duration-300 retro-pattern",
-      isScrolled 
-        ? "bg-white border-b-4 border-black shadow-md" 
-        : "bg-sky border-b-4 border-black"
-    )}>
-      <div className="container flex h-16 sm:h-16 md:h-20 items-center justify-between px-4 sm:px-6">
-        <Link href="/" className="flex items-center gap-1 sm:gap-2">
-          <div className="relative flex items-center group">
-            <FenceLogo size="sm" animated withCircle className="w-10 h-10 sm:w-10 sm:h-10 md:w-12 md:h-12 transition-transform duration-300 transform group-hover:scale-110" />
-          </div>
-          <span className="font-bold text-lg sm:text-lg md:text-2xl text-black bg-yellow-500 px-2 border-2 border-black">WE MARKET FENCE!</span>
+    <header className={`sticky top-0 z-50 w-full border-b-4 border-neutral-dark bg-white transition-all duration-300 ${scrolled ? 'shadow-[0px_4px_0px_0px_rgba(0,0,0,1)]' : ''}`}>
+      <div className="container flex h-16 items-center sm:h-20 px-4 sm:px-6">
+        {/* Logo */}
+        <Link href="/" className="mr-6 flex items-center space-x-2">
+          <Image 
+            src="/images/wmf.png" 
+            alt="We Market Fence Logo" 
+            width={180} 
+            height={72} 
+            className="h-14 w-auto" 
+          />
         </Link>
-        <div className="flex items-center">
+
+        {/* Desktop Navigation */}
+        <nav className="hidden md:flex flex-1 items-center space-x-8 text-sm font-medium">
+          {navItems.map((item, index) => (
+            <Link
+              key={index}
+              href={item.href}
+              className="flex items-center text-lg font-semibold text-neutral-dark transition-colors hover:text-accent-red relative group"
+            >
+              {item.title}
+              <span className="absolute -bottom-1 left-0 w-0 h-1 bg-accent-red transition-all duration-300 group-hover:w-full"></span>
+            </Link>
+          ))}
+        </nav>
+
+        {/* Header Actions (Desktop) */}
+        <div className="hidden md:flex flex-1 items-center justify-end space-x-6">
           {/* Phone number for desktop */}
-          <a href="tel:6155610502" className="hidden md:flex items-center mr-6 group">
-            <div className="bg-yellow-500 p-1.5 border-2 border-black mr-2 transition-transform duration-300 transform group-hover:scale-110">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-phone">
-                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
-              </svg>
+          <a href="tel:6155610502" className="flex items-center text-neutral-dark hover:text-accent-red transition-colors">
+            <div className="bg-accent-yellow p-1 border-2 border-neutral-dark rounded-full mr-2 flex-shrink-0">
+              <Phone className="h-4 w-4 text-neutral-dark" />
             </div>
-            <span className="font-bold text-black transition-colors duration-300 group-hover:text-yellow-500">(615) 561-0502</span>
+            <span className="font-semibold">(615) 561-0502</span>
           </a>
           
-          <nav className="ml-auto hidden md:flex gap-8 mr-6">
-            <Link href="/#services" className="font-medium text-black hover:text-yellow-500 transition-colors relative after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-0 after:bg-yellow-500 after:transition-all hover:after:w-full">
-              Services
-            </Link>
-            <Link href="/our-work" className="font-medium text-black hover:text-yellow-500 transition-colors relative after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-0 after:bg-yellow-500 after:transition-all hover:after:w-full">
-              Our Work
-            </Link>
-            <Link href="/#about" className="font-medium text-black hover:text-yellow-500 transition-colors relative after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-0 after:bg-yellow-500 after:transition-all hover:after:w-full">
-              About
-            </Link>
-            <Link href="/process" className="font-medium text-black hover:text-yellow-500 transition-colors relative after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-0 after:bg-yellow-500 after:transition-all hover:after:w-full">
-              Process
-            </Link>
-            <Link href="/#contact" className="font-medium text-black hover:text-yellow-500 transition-colors relative after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-0 after:bg-yellow-500 after:transition-all hover:after:w-full">
-              Contact
-            </Link>
-          </nav>
-          <div className="flex items-center">
-            <RetroButton className="hidden sm:flex bg-yellow-500 hover:bg-yellow-400 text-black border-3 border-black font-bold text-sm py-2 px-4">
-              <Link href="/#contact">Get Started!</Link>
+          <Link href="/#contact" legacyBehavior passHref>
+            <RetroButton
+              size="sm"
+              variant="primary"
+              className="shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-[2px] hover:-translate-y-[2px] transition-all duration-200"
+            >
+              [ FREE QUOTE ]
             </RetroButton>
-            
-            <Sheet open={isOpen} onOpenChange={setIsOpen}>
-              <SheetTrigger asChild>
-                <Button size="icon" variant="ghost" className="md:hidden border-3 border-black hover:bg-yellow-500 bg-yellow-500 rounded-none p-2 mobile-touch-target">
-                  <Menu className="h-5 w-5" />
-                  <span className="sr-only">Toggle menu</span>
-                </Button>
-              </SheetTrigger>
-              <SheetContent side="right" className="bg-white border-l-4 border-black p-0 w-full sm:w-[320px] max-w-full">
-                <div className="flex flex-col h-full">
-                  <div className="p-6 border-b-4 border-black">
-                    <FenceLogo size="md" animated withCircle />
-                  </div>
-                  <nav className="flex flex-col p-6 gap-6">
-                    <Link 
-                      href="/#services" 
-                      className="font-medium text-black hover:text-yellow-500 transition-colors text-lg py-2 border-b-2 border-black mobile-touch-target"
-                      onClick={() => setIsOpen(false)}
+          </Link>
+        </div>
+
+        {/* Mobile Menu Trigger */}
+        <div className="flex md:hidden flex-1 justify-end">
+          <Sheet>
+            <SheetTrigger asChild>
+              <button className="p-2 text-neutral-dark hover:text-accent-red border-2 border-neutral-dark hover:border-accent-red rounded-none transition-colors">
+                <Menu className="h-8 w-8" />
+                <span className="sr-only">Open menu</span>
+              </button>
+            </SheetTrigger>
+            <SheetContent side="right" className="w-full max-w-xs bg-neutral-light border-l-4 border-neutral-dark p-6">
+              <div className="mb-8">
+                <Link href="/" className="flex items-center">
+                  <Image 
+                    src="/images/wmf.png" 
+                    alt="We Market Fence Logo" 
+                    width={220} 
+                    height={88} 
+                    className="h-18 w-auto" 
+                  />
+                </Link>
+              </div>
+              <nav className="flex flex-col space-y-5">
+                {navItems.map((item, index) => (
+                  <Link
+                    key={index}
+                    href={item.href}
+                    className="text-lg font-semibold text-neutral-dark hover:text-accent-red uppercase group flex items-center"
+                  >
+                    <span className="opacity-0 group-hover:opacity-100 mr-1 transition-opacity">→</span>
+                    {item.title}
+                  </Link>
+                ))}
+                
+                <div className="pt-4 border-t-2 border-dashed border-neutral-dark mt-2">
+                  <a 
+                    href="tel:6155610502" 
+                    className="flex items-center text-neutral-dark hover:text-accent-red transition-colors my-4"
+                  >
+                    <Phone className="h-5 w-5 mr-2 text-accent-red" />
+                    <span className="font-bold">(615) 561-0502</span>
+                  </a>
+                  
+                  <Link href="/#contact" legacyBehavior passHref>
+                    <RetroButton
+                      size="md"
+                      variant="primary"
+                      className="mt-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-[2px] hover:-translate-y-[2px] transition-all duration-200 w-full"
                     >
-                      Services
-                    </Link>
-                    <Link 
-                      href="/our-work" 
-                      className="font-medium text-black hover:text-yellow-500 transition-colors text-lg py-2 border-b-2 border-black mobile-touch-target"
-                      onClick={() => setIsOpen(false)}
-                    >
-                      Our Work
-                    </Link>
-                    <Link 
-                      href="/#about" 
-                      className="font-medium text-black hover:text-yellow-500 transition-colors text-lg py-2 border-b-2 border-black mobile-touch-target"
-                      onClick={() => setIsOpen(false)}
-                    >
-                      About
-                    </Link>
-                    <Link 
-                      href="/process" 
-                      className="font-medium text-black hover:text-yellow-500 transition-colors text-lg py-2 border-b-2 border-black mobile-touch-target"
-                      onClick={() => setIsOpen(false)}
-                    >
-                      Process
-                    </Link>
-                    <Link 
-                      href="/#contact" 
-                      className="font-medium text-black hover:text-yellow-500 transition-colors text-lg py-2 border-b-2 border-black mobile-touch-target"
-                      onClick={() => setIsOpen(false)}
-                    >
-                      Contact
-                    </Link>
-                    <a 
-                      href="tel:6155610502" 
-                      className="flex items-center py-2 border-b-2 border-black mobile-touch-target"
-                      onClick={() => setIsOpen(false)}
-                    >
-                      <div className="bg-yellow-500 p-1.5 border-2 border-black mr-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-phone">
-                          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
-                        </svg>
-                      </div>
-                      <span className="font-bold">(615) 561-0502</span>
-                    </a>
-                  </nav>
-                  <div className="mt-auto p-6 border-t-4 border-black">
-                    <RetroButton className="w-full bg-yellow-500 hover:bg-yellow-400 text-black border-4 border-black font-bold py-3">
-                      <Link href="/#contact">Get Started!</Link>
+                      GET FREE QUOTE
                     </RetroButton>
-                  </div>
+                  </Link>
                 </div>
-              </SheetContent>
-            </Sheet>
-          </div>
+              </nav>
+            </SheetContent>
+          </Sheet>
         </div>
       </div>
     </header>

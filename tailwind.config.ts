@@ -19,6 +19,9 @@ const config = {
       },
     },
     extend: {
+      fontFamily: {
+        sans: ["Space Grotesk", "sans-serif"],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -26,11 +29,11 @@ const config = {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: "#FF5C8D", // Vibrant pink for neo-brutalism
+          DEFAULT: "#FF5C8D",
           foreground: "hsl(0, 0%, 98%)",
         },
         secondary: {
-          DEFAULT: "#58CCDC", // Bright turquoise
+          DEFAULT: "#58CCDC",
           foreground: "hsl(240, 4%, 16%)",
         },
         destructive: {
@@ -42,7 +45,7 @@ const config = {
           foreground: "hsl(215, 16%, 47%)",
         },
         accent: {
-          DEFAULT: "#FFD166", // Bright yellow-gold
+          DEFAULT: "#FFD166",
           foreground: "#000000",
         },
         popover: {
@@ -53,13 +56,19 @@ const config = {
           DEFAULT: "hsl(0, 0%, 100%)",
           foreground: "hsl(215, 25%, 27%)",
         },
-        sky: "#87CEEB", // Sky blue for backgrounds
-        grass: "#7CFC00", // Bright green
+        sky: "#87CEEB",
+        grass: "#7CFC00",
+        'neutral-dark': '#000000',
+        'neutral-near-black': '#111111',
+        'neutral-light': '#F5F5F5',
+        'accent-red': '#FF6347',
+        'accent-green': '#39FF14',
       },
       borderRadius: {
-        lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
+        none: '0',
+        sm: '0.125rem',
+        md: '0.25rem',
+        lg: '0.375rem',
       },
       keyframes: {
         "accordion-down": {
