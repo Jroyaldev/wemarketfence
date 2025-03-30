@@ -8,6 +8,7 @@ import { SiteHeader } from "../components/site-header"
 import { ThemeProvider } from "../components/theme-provider"
 import { BackToTopButton } from "../components/back-to-top-button"
 import MetaPixel from "../components/meta-pixel"
+import GoogleTag from "../components/google-tag"
 import { StickyCTA } from "../components/sticky-cta"
 import { ExitIntentPopup } from "../components/exit-intent-popup"
 import { SocialProofPopups } from "../components/social-proof-popups"
@@ -45,6 +46,7 @@ export default function RootLayout({
       <body className={`font-sans antialiased`}>
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
           <MetaPixel />
+          <GoogleTag />
           <SiteHeader />
           <div className="flex flex-col min-h-screen">
             <main className="flex-grow">{children}</main>
