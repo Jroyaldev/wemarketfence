@@ -81,10 +81,47 @@ const config = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
+        "pulse-grow": {
+          "0%, 100%": { transform: "scale(1)" },
+          "50%": { transform: "scale(1.05)" },
+        },
+        "attention-shake": {
+          "0%, 100%": { transform: "translateX(0)" },
+          "10%, 30%, 50%, 70%, 90%": { transform: "translateX(-2px)" },
+          "20%, 40%, 60%, 80%": { transform: "translateX(2px)" },
+        },
+        "glow-pulse": {
+          "0%, 100%": { 
+            boxShadow: "0 0 5px rgba(255, 99, 71, 0.7), 0 0 10px rgba(255, 99, 71, 0.5), 0 0 15px rgba(255, 99, 71, 0.3)",
+            filter: "brightness(1)"
+          },
+          "50%": { 
+            boxShadow: "0 0 10px rgba(255, 99, 71, 0.8), 0 0 20px rgba(255, 99, 71, 0.6), 0 0 30px rgba(255, 99, 71, 0.4)",
+            filter: "brightness(1.1)"
+          },
+        },
+        "bounce-subtle": {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-5px)" },
+        },
+        "spin-slow": {
+          "0%": { transform: "rotate(0deg)" },
+          "100%": { transform: "rotate(360deg)" },
+        },
+        "pulse-slow": {
+          "0%, 100%": { opacity: "0.7" },
+          "50%": { opacity: "0.4" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "pulse-grow": "pulse-grow 2s ease-in-out infinite",
+        "attention-shake": "attention-shake 1.5s cubic-bezier(.36,.07,.19,.97) infinite",
+        "glow-pulse": "glow-pulse 2s infinite",
+        "bounce-subtle": "bounce-subtle 2s infinite ease-in-out",
+        "spin-slow": "spin-slow 12s linear infinite",
+        "pulse-slow": "pulse-slow 4s ease-in-out infinite",
       },
     },
   },

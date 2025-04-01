@@ -12,7 +12,7 @@ import GoogleTag from "../components/google-tag"
 import { StickyCTA } from "../components/sticky-cta"
 import { ExitIntentPopup } from "../components/exit-intent-popup"
 import { SocialProofPopups } from "../components/social-proof-popups"
-import { ScrollTriggerCTA } from "../components/scroll-trigger-cta"
+import { GuaranteedMobileCTA } from "../components/guaranteed-mobile-cta"
 
 export const metadata: Metadata = {
   title: "We Market Fence! | Marketing for Fencing Companies",
@@ -197,10 +197,8 @@ export default function RootLayout({
                   </div>
                 </div>
 
-                {/* Back to top button */}
-                <div className="flex justify-center mt-8 md:mt-10">
-                  <BackToTopButton />
-                </div>
+                {/* Spacer to maintain layout */}
+                <div className="mt-8 md:mt-10"></div>
 
                 <div className="mt-10 border-t-2 border-neutral-light pt-6 flex flex-col sm:flex-row justify-between items-center">
                   <div className="text-neutral-light">
@@ -217,11 +215,11 @@ export default function RootLayout({
               </div>
             </footer>
           </div>
-          <BackToTopButton />
           <StickyCTA />
           <ExitIntentPopup />
           <SocialProofPopups />
-          <ScrollTriggerCTA />
+          <GuaranteedMobileCTA />
+          <BackToTopButton />
         </ThemeProvider>
       </body>
     </html>

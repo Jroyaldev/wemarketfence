@@ -1,9 +1,10 @@
 "use client"
 
 import React, { useState, useEffect } from 'react'
-import { CheckCircle } from 'lucide-react'
+import { CheckCircle, X } from 'lucide-react'
+import { cn } from '../lib/utils'
 
-// Simulated recent conversions data
+// Simulated recent conversions data - updated to seem more authentic
 const recentActions = [
   { name: 'Mike D.', location: 'Florida', action: 'requested a quote', time: '2 minutes ago' },
   { name: 'James T.', location: 'Texas', action: 'signed up', time: '4 minutes ago' },
@@ -28,60 +29,126 @@ const recentActions = [
 export function SocialProofPopups() {
   const [currentPopup, setCurrentPopup] = useState<number | null>(null)
   const [isVisible, setIsVisible] = useState(false)
+  const [isDismissed, setIsDismissed] = useState(false)
 
   useEffect(() => {
-    // Check if the user has been on the site for at least 10 seconds
+    // Show first popup after 15 seconds (give user time to engage with site first)
     const timer = setTimeout(() => {
-      showRandomPopup()
-    }, 10000)
+      if (!isDismissed) showRandomPopup()
+    }, 15000)
 
     return () => clearTimeout(timer)
-  }, [])
+  }, [isDismissed])
 
   useEffect(() => {
-    if (currentPopup !== null) {
+    if (currentPopup !== null && !isDismissed) {
       // Show the popup
       setIsVisible(true)
       
-      // Hide after 5 seconds
+      // Hide after 6 seconds
       const hideTimer = setTimeout(() => {
         setIsVisible(false)
         
-        // Schedule the next popup after hiding (random time between 20-40 seconds)
+        // Schedule the next popup after hiding (random time between 30-60 seconds)
         const nextPopupTimer = setTimeout(() => {
-          showRandomPopup()
-        }, Math.random() * 20000 + 20000)
+          if (!isDismissed) showRandomPopup()
+        }, Math.random() * 30000 + 30000)
         
         return () => clearTimeout(nextPopupTimer)
-      }, 5000)
+      }, 6000)
       
       return () => clearTimeout(hideTimer)
     }
-  }, [currentPopup])
+  }, [currentPopup, isDismissed])
 
   const showRandomPopup = () => {
     // Choose a random action
     const randomIndex = Math.floor(Math.random() * recentActions.length)
     setCurrentPopup(randomIndex)
   }
+  
+  const handleDismiss = () => {
+    setIsVisible(false)
+    setIsDismissed(true)
+    
+    // Store in session storage to prevent showing up again in this session
+    sessionStorage.setItem('socialProofDismissed', 'true')
+  }
 
-  if (!isVisible || currentPopup === null) return null
+  // Check session storage on client side
+  useEffect(() => {
+    const dismissed = sessionStorage.getItem('socialProofDismissed')
+    if (dismissed === 'true') {
+      setIsDismissed(true)
+    }
+  }, [])
+
+  if (!isVisible || currentPopup === null || isDismissed) return null
 
   const action = recentActions[currentPopup]
 
+  // Determine which color to use based on the current popup index
+  const getBgColor = () => {
+    switch (currentPopup % 4) {
+      case 0: return "bg-accent-yellow";
+      case 1: return "bg-[#58CCDC]";
+      case 2: return "bg-accent-red";
+      case 3: return "bg-accent-green";
+      default: return "bg-accent-yellow";
+    }
+  };
+
   return (
-    <div className="fixed bottom-4 left-4 z-40 max-w-xs animate-slide-in-left">
-      <div className="bg-white border-2 border-neutral-dark shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] p-3 flex items-start">
-        <div className="bg-accent-yellow p-1 mr-3 flex-shrink-0 border border-neutral-dark">
-          <CheckCircle className="h-5 w-5 text-neutral-dark" />
-        </div>
-        <div>
-          <p className="text-sm font-medium text-neutral-dark">
-            <span className="font-bold">{action.name}</span> from <span className="font-bold">{action.location}</span> {action.action}
-          </p>
-          <p className="text-xs text-neutral-near-black">
-            {action.time}
-          </p>
+    <div className={cn(
+      "fixed z-[60]", // Higher z-index to ensure visibility
+      "w-full sm:w-auto", 
+      "sm:left-5 sm:bottom-5", // Bottom left on desktop
+      "top-16", // Below header on mobile
+      "transition-all duration-300 ease-out"
+    )}>
+      <div className={cn(
+        "bg-white border-4 border-neutral-dark",
+        "shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]",
+        "sm:max-w-[320px]",
+        "p-4",
+        "transform transition-transform hover:translate-y-[-2px]" // Subtle hover effect
+      )}>
+        {/* Top accent bar */}
+        <div className={cn(
+          "absolute top-0 left-0 right-0 h-[6px] -mt-[6px]",
+          getBgColor()
+        )}></div>
+        
+        {/* Close button */}
+        <button
+          onClick={handleDismiss}
+          className="absolute top-2 right-2 bg-white hover:bg-neutral-light border-2 border-neutral-dark text-neutral-dark hover:text-accent-red transition-colors w-7 h-7 flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+          aria-label="Dismiss notification"
+        >
+          <X className="h-4 w-4" />
+        </button>
+        
+        <div className="flex items-start">
+          {/* Icon box */}
+          <div className={cn(
+            "p-2 mr-4 flex-shrink-0 border-3 border-neutral-dark shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]",
+            getBgColor()
+          )}>
+            <CheckCircle className="h-5 w-5 text-neutral-dark" />
+          </div>
+          
+          {/* Content */}
+          <div className="flex-1 pr-5">
+            <p className="font-extrabold text-sm text-neutral-dark uppercase tracking-tight mb-1">
+              {action.name}
+            </p>
+            <p className="text-sm text-neutral-dark mb-1 line-clamp-2">
+              from <span className="font-bold">{action.location}</span> {action.action}
+            </p>
+            <p className="text-xs font-medium text-neutral-near-black">
+              {action.time}
+            </p>
+          </div>
         </div>
       </div>
     </div>

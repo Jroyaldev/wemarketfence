@@ -2,9 +2,10 @@
 
 import React, { forwardRef, ComponentPropsWithoutRef } from "react"
 import { cva, type VariantProps } from "class-variance-authority"
-import { cn } from "@/lib/utils"
+import { cn } from "../lib/utils"
 import { motion } from "framer-motion"
 
+// Refined section variants with more consistent styling options
 const sectionVariants = cva("relative w-full overflow-hidden", {
   variants: {
     background: {
@@ -12,31 +13,54 @@ const sectionVariants = cva("relative w-full overflow-hidden", {
       primary: "bg-primary",
       secondary: "bg-secondary",
       accent: "bg-accent",
-      sky: "bg-sky",
-      grass: "bg-grass",
+      light: "bg-neutral-light",
+      dark: "bg-neutral-dark text-white",
       white: "bg-white",
       rays: "bg-rays",
+      sky: "bg-sky",
+      grass: "bg-grass",
     },
-    withClouds: {
-      true: "",
-      false: "",
+    spacing: {
+      default: "py-16 sm:py-20 md:py-24",
+      compact: "py-10 sm:py-12 md:py-16",
+      large: "py-20 sm:py-24 md:py-32",
     },
+    border: {
+      none: "",
+      top: "border-t-4 border-neutral-dark",
+      bottom: "border-b-4 border-neutral-dark",
+      both: "border-y-4 border-neutral-dark",
+      full: "border-4 border-neutral-dark",
+    }
   },
   defaultVariants: {
     background: "default",
-    withClouds: false,
+    spacing: "default",
+    border: "none",
   },
 })
 
 export interface RetroSectionProps
   extends ComponentPropsWithoutRef<"section">,
-    VariantProps<typeof sectionVariants> {}
+    VariantProps<typeof sectionVariants> {
+    withContainer?: boolean;
+    withClouds?: boolean;
+}
 
 const RetroSection = forwardRef<HTMLElement, RetroSectionProps>(
-  ({ className, background, withClouds, children, ...props }, ref) => {
+  ({ 
+    className, 
+    background, 
+    spacing,
+    border,
+    withContainer = true,
+    withClouds = false,
+    children, 
+    ...props 
+  }, ref) => {
     return (
       <section
-        className={cn(sectionVariants({ background, withClouds, className }))}
+        className={cn(sectionVariants({ background, spacing, border, className }))}
         ref={ref}
         {...props}
       >
@@ -73,7 +97,13 @@ const RetroSection = forwardRef<HTMLElement, RetroSectionProps>(
           </>
         )}
 
-        <div className="container mx-auto px-4 relative z-10">{children}</div>
+        {withContainer ? (
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            {children}
+          </div>
+        ) : (
+          children
+        )}
       </section>
     )
   }

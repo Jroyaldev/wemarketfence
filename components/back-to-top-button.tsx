@@ -1,35 +1,85 @@
 "use client"
 
-import React, { useState, useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import { ChevronUp } from "lucide-react"
 
 export function BackToTopButton() {
   const [visible, setVisible] = useState(false)
+  const [scrollProgress, setScrollProgress] = useState(0)
 
   useEffect(() => {
-    const toggleVisibility = () => {
-      if (window.pageYOffset > 300) {
-        setVisible(true)
-      } else {
-        setVisible(false)
+    // Function to update scroll progress
+    const handleScroll = () => {
+      // Get scroll position
+      const scrollTop = window.scrollY
+      
+      // Calculate document height
+      const docHeight = Math.max(
+        document.body.scrollHeight, 
+        document.documentElement.scrollHeight
+      )
+      
+      // Calculate viewport height
+      const windowHeight = window.innerHeight
+      
+      // Calculate scrollable area
+      const scrollableHeight = docHeight - windowHeight
+      
+      if (scrollableHeight > 0) {
+        // Calculate scroll percentage (0-100)
+        const percentage = Math.min(100, (scrollTop / scrollableHeight) * 100)
+        
+        // Update state
+        setScrollProgress(percentage)
+        setVisible(scrollTop > 300)
       }
     }
-
-    window.addEventListener("scroll", toggleVisibility)
-    return () => window.removeEventListener("scroll", toggleVisibility)
+    
+    // Initial call
+    handleScroll()
+    
+    // Add event listener
+    window.addEventListener("scroll", handleScroll, { passive: true })
+    
+    // Cleanup
+    return () => {
+      window.removeEventListener("scroll", handleScroll)
+    }
   }, [])
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" })
   }
 
+  // Don't render if not visible
+  if (!visible) return null
+
   return (
-    <button 
-      onClick={scrollToTop}
-      className={`fixed right-6 bottom-24 md:bottom-6 z-30 bg-accent-yellow border-4 border-neutral-dark text-neutral-dark font-bold p-3 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:bg-accent-red hover:text-white transition-all duration-300 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transform ${visible ? 'opacity-100 scale-100' : 'opacity-0 scale-90 pointer-events-none'}`}
-      aria-label="Back to top"
-    >
-      <ChevronUp className="h-6 w-6" />
-    </button>
+    <div className="fixed right-6 bottom-24 md:bottom-6 z-[999]">
+      <div className="relative">
+        {/* Outer container with shadow - matches the retro design language */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 border-4 border-neutral-dark rounded-full overflow-hidden shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] bg-white">
+          {/* Progress fill - absolutely positioned at bottom */}
+          <div 
+            className="absolute bottom-0 left-0 right-0 bg-accent-red"
+            style={{ height: `${scrollProgress}%` }}
+          ></div>
+        </div>
+
+        {/* Button - slightly smaller than container and positioned on top */}
+        <button
+          onClick={scrollToTop}
+          className="relative w-12 h-12 bg-accent-yellow border-4 border-neutral-dark rounded-full 
+            flex items-center justify-center z-10
+            hover:bg-accent-red hover:text-white
+            hover:-translate-y-0.5
+            active:translate-y-1
+            transition-all duration-200"
+          aria-label="Back to top"
+        >
+          <ChevronUp size={24} />
+        </button>
+      </div>
+    </div>
   )
 }

@@ -1,42 +1,83 @@
 "use client"
 
-import React, { useState, useEffect } from 'react'
-import Link from "next/link"
-import { RetroButton } from "./retro-button"
+import React, { useEffect, useRef } from 'react'
+import { cn } from "../lib/utils"
+
+// Declare fbq for TypeScript
+declare global {
+  interface Window {
+    fbq: any;
+  }
+}
 
 export function StickyCTA() {
-  const [isVisible, setIsVisible] = useState(false)
-
+  const ctaRef = useRef<HTMLDivElement>(null)
+  
+  // Use direct DOM manipulation to ensure visibility
   useEffect(() => {
-    const handleScroll = () => {
-      // Show sticky CTA after scrolling 500px
-      const scrollPosition = window.scrollY
-      if (scrollPosition > 500) {
-        setIsVisible(true)
-      } else {
-        setIsVisible(false)
+    // Add global styles to ensure CTA visibility
+    const style = document.createElement('style')
+    style.innerHTML = `
+      @keyframes mobileCTAPulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.05); }
       }
+      
+      .mobile-sticky-cta {
+        position: fixed !important;
+        bottom: 16px !important;
+        left: 16px !important;
+        right: 16px !important;
+        z-index: 10000 !important;
+        animation: mobileCTAPulse 2s infinite !important;
+        box-shadow: 6px 6px 0px 0px rgba(0,0,0,1) !important;
+      }
+      
+      @media (min-width: 768px) {
+        .mobile-sticky-cta {
+          display: none !important;
+        }
+      }
+    `
+    document.head.appendChild(style)
+    
+    // Track impression with Meta Pixel
+    if (typeof window !== 'undefined' && window.fbq) {
+      window.fbq('trackCustom', 'StickyCTAImpression')
     }
-
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
+    
+    // Remove style when component unmounts
+    return () => {
+      document.head.removeChild(style)
+    }
   }, [])
 
-  if (!isVisible) return null
+  const handleClick = () => {
+    // Track click with Meta Pixel
+    if (typeof window !== 'undefined' && window.fbq) {
+      window.fbq('trackCustom', 'StickyCTAClick')
+    }
+    
+    // Scroll to contact section smoothly
+    document.querySelector('#contact')?.scrollIntoView({ 
+      behavior: 'smooth' 
+    })
+  }
 
   return (
-    <div className="fixed bottom-4 inset-x-0 z-40 px-4 md:hidden animate-fade-in">
-      <Link href="/#contact" className="block">
-        <RetroButton
-          size="md"
-          variant="primary"
-          className="w-full shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] group"
-        >
-          <span className="group-hover:translate-x-1 transition-transform inline-block">
-            GET YOUR FREE QUOTE NOW →
-          </span>
-        </RetroButton>
-      </Link>
+    <div 
+      ref={ctaRef}
+      className="mobile-sticky-cta"
+    >
+      <button
+        onClick={handleClick}
+        className={cn(
+          "w-full px-4 py-3 bg-accent-red text-white font-extrabold",
+          "border-4 border-neutral-dark text-center uppercase"
+        )}
+      >
+        Get Your Free Quote Now
+      </button>
     </div>
   )
 }

@@ -1,8 +1,16 @@
 "use client"
 
 import React, { useState, useEffect, useCallback } from 'react'
-import { ArrowDown } from 'lucide-react'
+import { ArrowDown, X } from 'lucide-react'
 import { RetroButton } from './retro-button'
+import { cn } from '../lib/utils'
+
+// Declare fbq for TypeScript
+declare global {
+  interface Window {
+    fbq: any;
+  }
+}
 
 type TriggerType = 'services' | 'testimonials' | 'final' | null;
 
@@ -63,6 +71,13 @@ export function ScrollTriggerCTA() {
       // Only set active trigger if it hasn't been dismissed and it's different from current
       if (newTrigger && !dismissedTriggers[newTrigger] && newTrigger !== activeTrigger) {
         setActiveTrigger(newTrigger)
+        
+        // Track impressions with Meta Pixel
+        if (typeof window !== 'undefined' && window.fbq) {
+          window.fbq('trackCustom', 'ScrollCTAImpression', {
+            trigger_type: newTrigger
+          });
+        }
       } else if (!newTrigger && activeTrigger) {
         setActiveTrigger(null)
       }
@@ -80,57 +95,79 @@ export function ScrollTriggerCTA() {
         return {
           message: "Still exploring? Book a free 15-minute consultation!",
           buttonText: "Book Now",
-          href: "#contact"
+          href: "#contact",
+          color: "accent-yellow"
         }
       case 'testimonials':
         return {
           message: "Join 150+ fence companies we've helped grow!",
           buttonText: "Get Started",
-          href: "#contact"
+          href: "#contact",
+          color: "[#58CCDC]"
         }
       case 'final':
         return {
           message: "Ready to boost your fence business?",
           buttonText: "Contact Us Today",
-          href: "#contact"
+          href: "#contact",
+          color: "accent-red"
         }
       default:
         return {
           message: "Learn how we can help your fence business",
           buttonText: "Let's Talk",
-          href: "#contact"
+          href: "#contact",
+          color: "accent-yellow"
         }
     }
   }
   
   const content = getTriggerContent()
+  const handleClick = () => {
+    document.querySelector(content.href)?.scrollIntoView({ behavior: 'smooth' });
+    
+    // Track click with Meta Pixel
+    if (typeof window !== 'undefined' && window.fbq) {
+      window.fbq('trackCustom', 'ScrollCTAClick', {
+        trigger_type: activeTrigger
+      });
+    }
+    
+    // Dismiss after click
+    if (activeTrigger) dismissTrigger(activeTrigger);
+  };
   
   return (
-    <div className="fixed bottom-24 md:bottom-4 right-4 z-40 max-w-xs animate-fade-in">
-      <div className="bg-white border-2 border-neutral-dark shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] p-4">
-        <p className="text-sm font-bold text-neutral-dark mb-3">{content.message}</p>
-        <div className="flex justify-between items-center">
-          <RetroButton
-            size="sm"
-            variant="primary"
-            onClick={() => {
-              document.querySelector(content.href)?.scrollIntoView({ behavior: 'smooth' })
-              // Also dismiss after click
-              if (activeTrigger) dismissTrigger(activeTrigger)
-            }}
-            className="w-full text-center"
-          >
-            {content.buttonText} <ArrowDown className="ml-1 h-4 w-4 inline" />
-          </RetroButton>
-          <button 
-            onClick={() => {
-              if (activeTrigger) dismissTrigger(activeTrigger)
-            }}
-            className="ml-2 text-xs underline hover:text-accent-red"
-          >
-            Dismiss
-          </button>
+    <div className="fixed bottom-5 md:bottom-5 right-5 z-40 max-w-xs animate-fade-in">
+      <div className={cn(
+        "bg-white border-3 border-neutral-dark shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] p-4 relative",
+        "transition-all duration-300 hover:-translate-y-1"
+      )}>
+        <button 
+          onClick={() => {
+            if (activeTrigger) dismissTrigger(activeTrigger)
+          }}
+          className="absolute top-1 right-1 text-neutral-dark hover:text-accent-red transition-colors"
+          aria-label="Dismiss notification"
+        >
+          <X className="h-3.5 w-3.5" />
+        </button>
+        
+        <div className={`absolute -top-2 -right-2 bg-${content.color} px-2 py-1 border-2 border-neutral-dark text-xs font-bold`}>
+          {activeTrigger === 'final' ? 'LIMITED TIME' : 'FREE'}
         </div>
+        
+        <p className="text-base font-bold text-neutral-dark mb-3 pr-3">{content.message}</p>
+        
+        <RetroButton
+          size="sm"
+          variant="primary"
+          onClick={handleClick}
+          className="w-full text-center"
+          icon={<ArrowDown className="h-4 w-4 ml-1" />}
+        >
+          {content.buttonText}
+        </RetroButton>
       </div>
     </div>
   )

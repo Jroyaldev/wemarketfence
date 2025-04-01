@@ -19,18 +19,21 @@ export function RetroButton({
   icon,
   ...props
 }: RetroButtonProps) {
-  const baseStyle = "bg-neutral-dark text-neutral-light border-2 border-neutral-dark uppercase font-bold tracking-wide";
-  const hoverStyle = "hover:bg-neutral-light hover:text-neutral-dark";
+  // Base styles for all buttons
+  const baseStyle = "border-4 border-neutral-dark font-bold tracking-wide shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]";
+  
+  // Variant specific styles with more refined hover states
   const variantClasses = {
-    primary: "bg-accent-red text-neutral-dark hover:bg-neutral-dark hover:text-accent-red",
-    secondary: "bg-neutral-dark text-neutral-light hover:bg-neutral-light hover:text-neutral-dark",
-    accent: "bg-accent-green text-neutral-dark hover:bg-neutral-dark hover:text-accent-green",
+    primary: "bg-accent-red text-neutral-dark hover:bg-accent-red/90 active:shadow-none active:translate-y-1 active:translate-x-1",
+    secondary: "bg-neutral-dark text-neutral-light hover:bg-neutral-dark/90 active:shadow-none active:translate-y-1 active:translate-x-1",
+    accent: "bg-[#58CCDC] text-neutral-dark hover:bg-[#58CCDC]/90 active:shadow-none active:translate-y-1 active:translate-x-1",
   }
 
+  // Refined size classes for better consistency
   const sizeClasses = {
-    sm: "text-xs px-4 py-2",
-    md: "text-sm px-6 py-3",
-    lg: "text-base px-8 py-4",
+    sm: "text-sm px-4 py-2",
+    md: "text-base px-6 py-3",
+    lg: "text-lg px-8 py-4",
   }
 
   return (
@@ -38,16 +41,15 @@ export function RetroButton({
       className={cn(
         "inline-flex items-center justify-center gap-2",
         baseStyle,
-        hoverStyle,
         variantClasses[variant],
         sizeClasses[size],
         "min-h-[44px]",
-        "transition-colors duration-150 ease-in-out",
+        "transition-all duration-150 ease-in-out transform",
         className,
       )}
       {...props}
     >
-      {icon && <span>{icon}</span>}
+      {icon && <span className="flex-shrink-0">{icon}</span>}
       <span>{children}</span>
     </button>
   )

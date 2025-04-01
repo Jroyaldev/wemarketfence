@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import Link from "next/link"
-import { Menu, Phone } from "lucide-react"
+import { Menu, Phone, X } from "lucide-react"
 import Image from "next/image"
 
 import { cn } from "../lib/utils" 
@@ -11,6 +11,8 @@ import {
   Sheet,
   SheetContent,
   SheetTrigger,
+  SheetClose,
+  SheetTitle
 } from "./ui/sheet" 
 
 // Define nav items directly here since siteConfig is missing
@@ -18,6 +20,7 @@ const navItems = [
   { title: "Services", href: "/#services" },
   { title: "Our Work", href: "/our-work" }, 
   { title: "About", href: "/#about" },
+  { title: "Process", href: "/process" },
   { title: "Contact", href: "/#contact" },
 ]
 
@@ -41,7 +44,12 @@ export function SiteHeader() {
   }, []);
 
   return (
-    <header className={`sticky top-0 z-50 w-full border-b-4 border-neutral-dark bg-white transition-all duration-300 ${scrolled ? 'shadow-[0px_4px_0px_0px_rgba(0,0,0,1)]' : ''}`}>
+    <header 
+      className={cn(
+        "sticky top-0 z-50 w-full border-b-4 border-neutral-dark bg-white transition-all duration-300", 
+        scrolled ? "shadow-[0px_4px_0px_0px_rgba(0,0,0,1)]" : ""
+      )}
+    >
       <div className="container flex h-16 items-center sm:h-20 px-4 sm:px-6">
         {/* Logo */}
         <Link href="/" className="mr-6 flex items-center space-x-2">
@@ -51,19 +59,20 @@ export function SiteHeader() {
             width={180} 
             height={72} 
             className="h-14 w-auto" 
+            priority
           />
         </Link>
 
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex flex-1 items-center space-x-8 text-sm font-medium">
+        <nav className="hidden md:flex flex-1 items-center justify-center space-x-10 text-sm font-medium">
           {navItems.map((item, index) => (
             <Link
               key={index}
               href={item.href}
-              className="flex items-center text-lg font-semibold text-neutral-dark transition-colors hover:text-accent-red relative group"
+              className="flex items-center text-lg font-bold text-neutral-dark transition-colors hover:text-accent-red relative group uppercase tracking-wide"
             >
               {item.title}
-              <span className="absolute -bottom-1 left-0 w-0 h-1 bg-accent-red transition-all duration-300 group-hover:w-full"></span>
+              <span className="absolute -bottom-1 left-0 w-0 h-1.5 bg-accent-red transition-all duration-200 group-hover:w-full"></span>
             </Link>
           ))}
         </nav>
@@ -72,19 +81,19 @@ export function SiteHeader() {
         <div className="hidden md:flex flex-1 items-center justify-end space-x-6">
           {/* Phone number for desktop */}
           <a href="tel:6155610502" className="flex items-center text-neutral-dark hover:text-accent-red transition-colors">
-            <div className="bg-accent-yellow p-1 border-2 border-neutral-dark rounded-full mr-2 flex-shrink-0">
+            <div className="bg-accent-green p-1.5 border-3 border-neutral-dark rounded-full mr-2 flex-shrink-0 group-hover:bg-accent-red transition-colors">
               <Phone className="h-4 w-4 text-neutral-dark" />
             </div>
-            <span className="font-semibold">(615) 561-0502</span>
+            <span className="font-bold">(615) 561-0502</span>
           </a>
           
           <Link href="/#contact" legacyBehavior passHref>
             <RetroButton
               size="sm"
               variant="primary"
-              className="shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-[2px] hover:-translate-y-[2px] transition-all duration-200"
+              className="min-w-[120px] text-center"
             >
-              [ FREE QUOTE ]
+              FREE QUOTE
             </RetroButton>
           </Link>
         </div>
@@ -93,55 +102,69 @@ export function SiteHeader() {
         <div className="flex md:hidden flex-1 justify-end">
           <Sheet>
             <SheetTrigger asChild>
-              <button className="p-2 text-neutral-dark hover:text-accent-red border-2 border-neutral-dark hover:border-accent-red rounded-none transition-colors">
-                <Menu className="h-8 w-8" />
+              <button className="flex items-center justify-center w-12 h-12 text-neutral-dark border-4 border-neutral-dark hover:bg-accent-red hover:text-neutral-dark transition-colors shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                <Menu className="h-6 w-6" />
                 <span className="sr-only">Open menu</span>
               </button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-full max-w-xs bg-neutral-light border-l-4 border-neutral-dark p-6">
-              <div className="mb-8">
-                <Link href="/" className="flex items-center">
-                  <Image 
-                    src="/images/wmf.png" 
-                    alt="We Market Fence Logo" 
-                    width={220} 
-                    height={88} 
-                    className="h-18 w-auto" 
-                  />
-                </Link>
-              </div>
-              <nav className="flex flex-col space-y-5">
-                {navItems.map((item, index) => (
-                  <Link
-                    key={index}
-                    href={item.href}
-                    className="text-lg font-semibold text-neutral-dark hover:text-accent-red uppercase group flex items-center"
-                  >
-                    <span className="opacity-0 group-hover:opacity-100 mr-1 transition-opacity">→</span>
-                    {item.title}
+            <SheetContent side="right" className="w-full max-w-sm bg-neutral-light border-l-4 border-neutral-dark p-0">
+              <div className="flex flex-col h-full">
+                {/* Adding SheetTitle for accessibility - visually hidden */}
+                <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
+                <div className="flex items-center justify-between p-6 border-b-4 border-neutral-dark">
+                  <Link href="/" className="flex items-center">
+                    <Image 
+                      src="/images/wmf.png" 
+                      alt="We Market Fence Logo" 
+                      width={150} 
+                      height={60} 
+                      className="h-12 w-auto" 
+                    />
                   </Link>
-                ))}
+                  <SheetClose className="flex items-center justify-center w-10 h-10 border-4 border-neutral-dark bg-white hover:bg-accent-red transition-colors">
+                    <X className="h-5 w-5" />
+                    <span className="sr-only">Close menu</span>
+                  </SheetClose>
+                </div>
                 
-                <div className="pt-4 border-t-2 border-dashed border-neutral-dark mt-2">
+                <nav className="flex flex-col p-6">
+                  {navItems.map((item, index) => (
+                    <SheetClose asChild key={index}>
+                      <Link
+                        href={item.href}
+                        className="text-xl font-bold text-neutral-dark hover:text-accent-red uppercase py-3 border-b-2 border-dashed border-neutral-dark/30 flex items-center group"
+                      >
+                        <span className="opacity-0 group-hover:opacity-100 mr-2 transition-opacity">→</span>
+                        {item.title}
+                      </Link>
+                    </SheetClose>
+                  ))}
+                </nav>
+                
+                <div className="mt-auto p-6 bg-white border-t-4 border-neutral-dark">
                   <a 
                     href="tel:6155610502" 
-                    className="flex items-center text-neutral-dark hover:text-accent-red transition-colors my-4"
+                    className="flex items-center text-neutral-dark font-bold hover:text-accent-red transition-colors mb-4"
                   >
-                    <Phone className="h-5 w-5 mr-2 text-accent-red" />
-                    <span className="font-bold">(615) 561-0502</span>
+                    <div className="flex items-center justify-center border-4 border-neutral-dark bg-accent-green p-2 mr-3 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                      <Phone className="h-5 w-5 text-neutral-dark" />
+                    </div>
+                    <span>(615) 561-0502</span>
                   </a>
                   
-                  <Link href="/#contact" legacyBehavior passHref>
-                    <RetroButton
-                      size="md"
-                      variant="primary"
-                      className="mt-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-[2px] hover:-translate-y-[2px] transition-all duration-200 w-full"
-                    >
-                      GET FREE QUOTE
-                    </RetroButton>
-                  </Link>
+                  <SheetClose asChild>
+                    <Link href="/#contact" className="block w-full">
+                      <RetroButton
+                        size="md"
+                        variant="primary"
+                        className="w-full justify-center"
+                      >
+                        GET FREE QUOTE
+                      </RetroButton>
+                    </Link>
+                  </SheetClose>
                 </div>
-              </nav>
+              </div>
             </SheetContent>
           </Sheet>
         </div>

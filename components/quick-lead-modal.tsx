@@ -1,8 +1,9 @@
 "use client"
 
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { X } from "lucide-react"
 import { ContactForm } from "./contact-form"
+import { cn } from "../lib/utils"
 
 interface QuickLeadModalProps {
   isOpen: boolean
@@ -11,7 +12,16 @@ interface QuickLeadModalProps {
 
 export function QuickLeadModal({ isOpen, onClose }: QuickLeadModalProps) {
   const [step, setStep] = useState(1)
-  const totalSteps = 2
+
+  // Track modal opening with Meta Pixel
+  useEffect(() => {
+    if (isOpen && typeof window !== 'undefined' && window.fbq) {
+      window.fbq('track', 'ViewContent', {
+        content_name: 'Quick Lead Modal',
+        content_category: 'Lead Generation',
+      });
+    }
+  }, [isOpen]);
   
   const handleSubmitSuccess = () => {
     // Reset step when form is closed
@@ -23,65 +33,51 @@ export function QuickLeadModal({ isOpen, onClose }: QuickLeadModalProps) {
   if (!isOpen) return null
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center px-4 bg-black/60 backdrop-blur-sm animate-fade-in">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-6 bg-black/70 backdrop-blur-sm animate-fade-in">
       <div 
-        className="bg-white border-4 border-neutral-dark shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] 
-        w-full max-w-md relative max-h-[90vh] overflow-auto"
+        className="bg-white border-4 border-neutral-dark shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] 
+        w-full max-w-lg relative p-6 pt-10"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Progress indicator */}
-        <div className="absolute top-0 left-0 right-0 h-2 bg-neutral-light">
-          <div 
-            className="h-full bg-accent-red transition-all duration-300"
-            style={{ width: `${(step / totalSteps) * 100}%` }}
-          ></div>
+        {/* Decorative design elements */}
+        <div className="absolute top-0 left-0 w-full h-2 bg-accent-yellow"></div>
+        <div className="absolute top-0 right-0 transform translate-x-1 -translate-y-1/2 bg-accent-red p-2 border-3 border-neutral-dark z-10 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+          <p className="text-white font-bold text-xs uppercase">FREE QUOTE</p>
         </div>
         
-        {/* Close button */}
+        {/* Close button - updated styling */}
         <button 
           onClick={onClose}
-          className="absolute top-4 right-4 bg-white border-2 border-neutral-dark p-1
+          className="absolute top-3 right-3 bg-white border-2 border-neutral-dark p-1.5
           hover:bg-accent-red hover:text-white transition-colors z-10"
           aria-label="Close modal"
         >
-          <X className="h-5 w-5" />
+          <X className="h-4 w-4" />
         </button>
         
-        {/* Modal content */}
-        <div className="p-6 pt-10">
-          <div className="relative inline-block mb-6">
-            <h2 className="text-3xl font-extrabold text-neutral-dark uppercase relative z-10">
-              GET YOUR FREE QUOTE
-            </h2>
-            <div className="absolute -bottom-2 -left-2 w-full h-4 bg-accent-yellow z-0"></div>
-          </div>
-          
-          <p className="text-lg mb-6 text-neutral-near-black">
-            Complete this quick form to get your <span className="font-bold text-accent-red">FREE marketing consultation</span> and see how we can boost your fence business!
-          </p>
-          
-          <div className="flex items-center mb-6 justify-between">
-            <div className="flex">
-              {Array.from({ length: totalSteps }).map((_, index) => (
-                <div 
-                  key={index}
-                  className={`w-4 h-4 rounded-full mr-2 border-2 border-neutral-dark ${
-                    index + 1 <= step ? 'bg-accent-yellow' : 'bg-white'
-                  }`}
-                />
-              ))}
-            </div>
-            <span className="text-sm font-bold text-neutral-dark">Step {step} of {totalSteps}</span>
-          </div>
-          
-          <ContactForm 
-            quickMode={true} 
-            onSubmitSuccess={() => {
-              handleSubmitSuccess()
-              onClose()
-            }} 
-          />
+        <div className="mb-4">
+          <h2 className="text-2xl font-bold text-neutral-dark">
+            GET YOUR FREE QUOTE
+            <div className="h-1 bg-accent-red w-24 mt-2"></div>
+          </h2>
         </div>
+        
+        <p className="text-base mb-6 text-neutral-near-black">
+          Complete this quick form to get your <span className="font-bold text-accent-red">FREE marketing consultation</span>.
+        </p>
+        
+        <ContactForm 
+          quickMode={true}
+          onStepChange={(newStep) => setStep(newStep)}
+          onSubmitSuccess={() => {
+            // Only close when the form is fully submitted
+            handleSubmitSuccess()
+            onClose()
+          }}
+          privacyPolicy={<div className="mt-3 text-center text-xs text-neutral-mid">
+            By submitting, you agree to our <a href="/privacy" className="underline hover:text-accent-red">Privacy Policy</a>
+          </div>}
+        />
       </div>
     </div>
   )
