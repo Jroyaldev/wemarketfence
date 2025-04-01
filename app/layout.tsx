@@ -13,28 +13,10 @@ import { StickyCTA } from "../components/sticky-cta"
 import { ExitIntentPopup } from "../components/exit-intent-popup"
 import { SocialProofPopups } from "../components/social-proof-popups"
 import { GuaranteedMobileCTA } from "../components/guaranteed-mobile-cta"
+import { LocalBusinessJsonLd } from "../components/json-ld"
+import { defaultMetadata } from "./metadata"
 
-export const metadata: Metadata = {
-  title: "We Market Fence! | Marketing for Fencing Companies",
-  description:
-    "Get more fence jobs, faster. Websites & marketing built for fence professionals.",
-  keywords: "fence marketing, fence company website, fence contractor marketing, fence business leads",
-  openGraph: {
-    type: "website",
-    locale: "en_US",
-    url: "https://wemarketfence.com",
-    title: "We Market Fence! | Marketing for Fencing Companies",
-    description: "Get more fence jobs, faster. Websites & marketing built for fence professionals.",
-    images: [
-      {
-        url: "/images/wmf-og-image.png",
-        width: 1200,
-        height: 630,
-        alt: "We Market Fence",
-      },
-    ],
-  },
-}
+export const metadata: Metadata = defaultMetadata;
 
 export default function RootLayout({
   children,
@@ -47,6 +29,18 @@ export default function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
           <MetaPixel />
           <GoogleTag />
+          <LocalBusinessJsonLd 
+            name="We Market Fence"
+            description="Marketing agency specialized in helping fence companies grow their business with websites and digital marketing."
+            url="https://wemarketfence.com"
+            telephone="+1-800-123-4567"
+            priceRange="$$"
+            sameAs={[
+              "https://www.facebook.com/profile.php?id=61574417921000",
+              "https://twitter.com/wemarketfence",
+              "https://instagram.com/wemarketfence"
+            ]}
+          />
           <SiteHeader />
           <div className="flex flex-col min-h-screen">
             <main className="flex-grow">{children}</main>
