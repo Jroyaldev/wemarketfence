@@ -12,6 +12,6 @@ export default function robots(): MetadataRoute.Robots {
         '/private/',
       ],
     },
-    sitemap: 'https://wemarketfence.com/sitemap.xml',
+    sitemap: 'https://www.wemarketfence.com/sitemap.xml',
   }
 }
