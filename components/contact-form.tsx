@@ -1,11 +1,11 @@
 "use client"
 
-import React, { useState, useEffect } from "react"
-import { useForm } from "react-hook-form"
-import emailjs from "@emailjs/browser"
-import { Loader2, Send, CheckCircle, Phone, Mail, User, Building, ArrowRight, ArrowLeft } from "lucide-react"
-import { RetroButton } from "./retro-button"
-import { cn } from "../lib/utils"
+import React, { useState } from "react";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { Loader2, Send, CheckCircle, Phone, Mail, User, Building, ArrowRight, ArrowLeft } from "lucide-react";
+import { RetroButton } from "./retro-button";
+import { cn } from "../lib/utils";
 
 // Add Facebook Pixel type declaration for TypeScript
 declare global {
@@ -14,137 +14,141 @@ declare global {
   }
 }
 
-// Initialize EmailJS with your public key
-emailjs.init("VzrPaSgxUjIM0hI3n")
-
 type FormData = {
-  name: string
-  email: string
-  phone: string
-  companyName: string
-  message: string
-}
+  name: string;
+  email: string;
+  phone: string;
+  company: string;
+  message: string;
+};
 
 interface ContactFormProps {
-  quickMode?: boolean
-  onSubmitSuccess?: () => void
-  onStepChange?: (step: number) => void
-  privacyPolicy?: React.ReactNode
+  quickMode?: boolean;
+  onSubmitSuccess?: () => void;
+  onStepChange?: (step: number) => void;
+  privacyPolicy?: React.ReactNode;
 }
 
 export function ContactForm({ quickMode = false, onSubmitSuccess, onStepChange, privacyPolicy }: ContactFormProps) {
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [isSubmitted, setIsSubmitted] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [formStep, setFormStep] = useState(1)
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [formStep, setFormStep] = useState(1);
   
-  const {
-    register,
-    handleSubmit,
-    reset,
-    watch,
-    formState: { errors, isValid },
-  } = useForm<FormData>({
-    mode: "onChange",
-  })
-
-  const emailValue = watch("email")
-  const nameValue = watch("name")
-  const phoneValue = watch("phone")
-
-  const goToNextStep = async () => {
-    if (formStep === 1 && nameValue && emailValue && !errors.email) {
-      // Send the partial form data on step 1 completion
+  // Validation schema
+  const validationSchema = Yup.object({
+    name: Yup.string().required("Name is required"),
+    email: Yup.string().email("Invalid email address").required("Email is required"),
+  });
+  
+  // Initialize formik
+  const formik = useFormik({
+    initialValues: {
+      name: "",
+      email: "",
+      phone: "",
+      company: "",
+      message: "",
+    },
+    validationSchema,
+    validateOnChange: true,
+    validateOnBlur: true,
+    onSubmit: async (values) => {
+      setIsSubmitting(true);
+      setError(null);
+      
       try {
-        // Track first-step submission with Meta Pixel
-        if (typeof window !== 'undefined' && window.fbq) {
-          window.fbq('track', 'InitiateCheckout', {
-            content_name: quickMode ? 'Quick Lead Form - Step 1' : 'Contact Form - Step 1',
-            content_category: 'Fence Marketing Lead',
-          });
+        console.log("Form submission started with data:", JSON.stringify(values, null, 2));
+        
+        // Send form data to API route
+        const response = await fetch('/api/contact', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            ...values,
+            formType: quickMode ? "Quick Lead Form" : "Contact Form",
+          }),
+        });
+
+        const result = await response.json();
+        console.log("API response:", result);
+        
+        if (!response.ok) {
+          throw new Error(result.error || 'Failed to submit form');
         }
 
-        // Send the partial data via EmailJS
-        await emailjs.send(
-          "service_f0gmg4e", // Your EmailJS Service ID
-          "template_d197j7a", // Your EmailJS Template ID
-          {
-            name: nameValue,
-            email: emailValue,
-            phone: "Not provided yet",
-            company: "Not provided yet",
-            message: "Initial contact - Form step 1 completed",
-            time: new Date().toLocaleString(),
-            form_stage: "Step 1 - Initial Contact",
-          },
-          "VzrPaSgxUjIM0hI3n" // Your EmailJS Public Key
-        );
-        
-        console.log("Step 1 form data sent successfully");
-      } catch (err) {
-        console.error("Error sending step 1 data:", err);
-        // Don't show error to user, still proceed to next step
-      }
+        console.log("Form submitted successfully!", result);
 
+        // Track form submission with Meta Pixel
+        if (typeof window !== 'undefined' && window.fbq) {
+          window.fbq('track', 'Lead', {
+            content_name: quickMode ? 'Quick Lead Form - Complete' : 'Contact Form - Complete',
+            content_category: 'Fence Marketing Lead',
+          });
+          console.log("Meta Pixel conversion tracked");
+        }
+
+        setIsSubmitted(true);
+        if (onSubmitSuccess) {
+          onSubmitSuccess();
+        }
+      } catch (err) {
+        console.error("Form submission error:", err);
+        
+        let errorMessage = "There was an error sending your message. Please try again.";
+        
+        if (err instanceof Error) {
+          console.error("Error details:", err.message);
+          errorMessage = `Error: ${err.message}`;
+        }
+        
+        setError(errorMessage);
+      } finally {
+        setIsSubmitting(false);
+      }
+    },
+  });
+
+  // Handle next step button click with direct validation check
+  const handleNextStep = () => {
+    console.log("Next button clicked");
+    
+    // Focus form fields to trigger validation
+    formik.setFieldTouched('name', true);
+    formik.setFieldTouched('email', true);
+    
+    // Check values and errors directly
+    if (formik.values.name && formik.values.email && !formik.errors.name && !formik.errors.email) {
+      console.log("Step 1 validation passed, proceeding to step 2");
+      
+      // Track first-step with Meta Pixel
+      if (typeof window !== 'undefined' && window.fbq) {
+        window.fbq('track', 'InitiateCheckout', {
+          content_name: quickMode ? 'Quick Lead Form - Step 1' : 'Contact Form - Step 1',
+          content_category: 'Fence Marketing Lead',
+        });
+        console.log("First step pixel tracked");
+      }
+      
       // Move to step 2
       setFormStep(2);
-      // Notify parent component of step change
       if (onStepChange) {
         onStepChange(2);
       }
+    } else {
+      console.log("Cannot proceed to step 2 - validation errors", formik.errors);
     }
-  }
-
-  const onSubmit = async (data: FormData) => {
-    setIsSubmitting(true)
-    setError(null)
-
-    try {
-      // Service ID and Template ID from EmailJS dashboard
-      const result = await emailjs.send(
-        "service_f0gmg4e", // Your EmailJS Service ID
-        "template_d197j7a", // Your EmailJS Template ID
-        {
-          name: data.name,
-          email: data.email,
-          phone: data.phone || "Not provided",
-          company: data.companyName || "Not provided",
-          message: data.message || "No specific message",
-          time: new Date().toLocaleString(),
-          form_stage: "Step 2 - Complete Submission",
-        },
-        "VzrPaSgxUjIM0hI3n" // Your EmailJS Public Key
-      )
-
-      // Track form submission with Meta Pixel
-      if (typeof window !== 'undefined' && window.fbq) {
-        window.fbq('track', 'Lead', {
-          content_name: quickMode ? 'Quick Lead Form - Complete' : 'Contact Form - Complete',
-          content_category: 'Fence Marketing Lead',
-        });
-      }
-
-      setIsSubmitted(true)
-      reset()
-      if (onSubmitSuccess) {
-        onSubmitSuccess()
-      }
-    } catch (err) {
-      console.error(err)
-      setError("There was an error sending your message. Please try again.")
-    } finally {
-      setIsSubmitting(false)
+  };
+  
+  // Handle previous step button click
+  const handlePreviousStep = () => {
+    setFormStep(1);
+    if (onStepChange) {
+      onStepChange(1);
     }
-  }
-
-  const goToPreviousStep = () => {
-    if (formStep === 2) {
-      setFormStep(1);
-      if (onStepChange) {
-        onStepChange(1);
-      }
-    }
-  }
+  };
 
   return (
     <div className={cn(
@@ -152,7 +156,6 @@ export function ContactForm({ quickMode = false, onSubmitSuccess, onStepChange, 
       !quickMode ? 'w-full' : '', 
       "shadow-sm transition-all duration-300 relative"
     )}>
-      {/* Decorative elements - modernized */}
       {!quickMode && formStep === 1 && !isSubmitted && (
         <div className="absolute -top-3 -right-3 bg-accent-red p-3 rounded-md border border-accent-red/20 z-10 shadow-sm">
           <p className="text-white font-medium text-sm">FREE QUOTE</p>
@@ -167,7 +170,6 @@ export function ContactForm({ quickMode = false, onSubmitSuccess, onStepChange, 
           <h3 className="text-2xl font-bold mb-4 text-neutral-dark">Thanks for reaching out!</h3>
           <p className="text-neutral-near-black/80 mb-8">We'll get back to you within 24 hours.</p>
           
-          {/* Social sharing buttons - modernized */}
           <div className="mb-8">
             <p className="text-neutral-dark font-medium mb-4">Know a fence contractor who needs help with marketing?</p>
             <div className="flex justify-center space-x-4">
@@ -201,284 +203,220 @@ export function ContactForm({ quickMode = false, onSubmitSuccess, onStepChange, 
               />
             </div>
           )}
-          <RetroButton
-            onClick={() => setIsSubmitted(false)}
-            variant="secondary"
-            size="md"
+          
+          <RetroButton 
+            variant="primary" 
+            className="mx-auto" 
+            onClick={() => window.location.href = "/"}
           >
-            Send Another Message
+            Back to Home
           </RetroButton>
         </div>
       ) : (
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          {!quickMode && (
-            <div className="mb-6">
-              <h3 className="text-2xl font-bold text-neutral-dark">
-                GET IN TOUCH
-                <div className="h-0.5 bg-accent-red w-16 mt-2"></div>
-              </h3>
-              <p className="text-neutral-dark/80 mt-3">Fill out this form for a <span className="font-medium text-accent-red">free marketing consultation</span></p>
-            </div>
-          )}
+        <>
+          <div className="mb-6">
+            <h3 className="text-2xl font-bold text-neutral-dark">
+              {quickMode ? "Quick Contact" : "Let's Talk About Your Fence Business"}
+            </h3>
+            <p className="text-neutral-dark/70">
+              {quickMode ? "Fill out this form for a quick response." : "Fill out the form below to get started with your free consultation."}
+            </p>
+          </div>
           
           {error && (
-            <div className="bg-red-50 border-l-4 border-accent-red p-4 rounded-r-md">
-              <p className="text-accent-red">{error}</p>
-            </div>
-          )}
-
-          {/* Step indicator - modernized */}
-          {!quickMode && (
-            <div className="flex items-center mb-6 justify-center">
-              <div className="flex items-center">
-                <div className={cn(
-                  "w-8 h-8 rounded-full flex items-center justify-center border transition-colors",
-                  formStep === 1 ? 'bg-accent-yellow/20 border-accent-yellow text-neutral-dark' : 'bg-neutral-50 border-neutral-200 text-neutral-400'
-                )}>1</div>
-                <div className={cn(
-                  "w-12 sm:w-16 h-0.5 transition-colors",
-                  formStep === 2 ? 'bg-accent-yellow' : 'bg-neutral-200'
-                )}></div>
-                <div className={cn(
-                  "w-8 h-8 rounded-full flex items-center justify-center border transition-colors",
-                  formStep === 2 ? 'bg-accent-yellow/20 border-accent-yellow text-neutral-dark' : 'bg-neutral-50 border-neutral-200 text-neutral-400'
-                )}>2</div>
-              </div>
+            <div className="mb-4 p-3 bg-red-50 border border-red-100 text-red-700 rounded-md">
+              {error}
             </div>
           )}
           
-          {formStep === 1 && (
-            <div className="space-y-5">
-              <div>
-                <label htmlFor="name" className="block text-neutral-dark font-medium mb-2 flex items-center">
-                  <User className="h-4 w-4 mr-2 text-neutral-dark/70" />
-                  Name
-                </label>
-                <input
-                  id="name"
-                  type="text"
+          {/* Form progress indicator */}
+          {!quickMode && (
+            <div className="mb-6 relative">
+              <div className="h-2 w-full bg-neutral-100 rounded-full overflow-hidden">
+                <div 
                   className={cn(
-                    "w-full border p-2 sm:p-3 bg-white text-neutral-dark rounded-md transition-all duration-200",
-                    errors.name 
-                      ? "border-accent-red focus:border-accent-red focus:ring-1 focus:ring-accent-red/30" 
-                      : "border-neutral-200 focus:border-accent-yellow focus:ring-1 focus:ring-accent-yellow/30"
+                    "h-full bg-accent-yellow transition-all duration-300",
+                    formStep === 1 ? "w-1/2" : "w-full"
                   )}
-                  placeholder="Your name"
-                  {...register("name", { required: "Name is required" })}
-                />
-                {errors.name && (
-                  <p className="text-accent-red mt-1 text-sm">{errors.name.message}</p>
-                )}
+                ></div>
               </div>
-              
-              <div>
-                <label htmlFor="email" className="block text-neutral-dark font-medium mb-2 flex items-center">
-                  <Mail className="h-4 w-4 mr-2 text-neutral-dark/70" />
-                  Email
-                </label>
-                <input
-                  id="email"
-                  type="email"
-                  className={cn(
-                    "w-full border p-2 sm:p-3 bg-white text-neutral-dark rounded-md transition-all duration-200",
-                    errors.email 
-                      ? "border-accent-red focus:border-accent-red focus:ring-1 focus:ring-accent-red/30" 
-                      : "border-neutral-200 focus:border-accent-yellow focus:ring-1 focus:ring-accent-yellow/30"
-                  )}
-                  placeholder="your@email.com"
-                  {...register("email", { 
-                    required: "Email is required",
-                    pattern: {
-                      value: /\S+@\S+\.\S+/,
-                      message: "Please enter a valid email"
-                    }
-                  })}
-                />
-                {errors.email && (
-                  <p className="text-accent-red mt-1 text-sm">{errors.email.message}</p>
-                )}
+              <div className="flex justify-between text-xs text-neutral-dark/60 mt-1">
+                <span className={formStep === 1 ? "font-medium text-accent-yellow" : ""}>Basic Info</span>
+                <span className={formStep === 2 ? "font-medium text-accent-yellow" : ""}>Additional Details</span>
               </div>
+            </div>
+          )}
 
-              {/* Social proof element - modernized */}
-              <div className="bg-neutral-50 border border-neutral-200 p-4 mt-4 rounded-md">
-                <p className="text-neutral-dark/80 flex items-center">
-                  <CheckCircle className="h-4 w-4 text-green-600 mr-2 flex-shrink-0" />
-                  <span>Join <strong>150+ fence contractors</strong> who grew their business with our help</span>
-                </p>
-              </div>
-              
-              {!quickMode ? (
-                <div className="pt-4">
-                  <RetroButton
-                    type="button"
-                    onClick={goToNextStep}
-                    disabled={!nameValue || !emailValue || !!errors.email}
+          <form onSubmit={formik.handleSubmit} className="space-y-4">
+            {formStep === 1 ? (
+              // Step 1 Fields
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <label htmlFor="name" className="block text-sm font-medium text-neutral-dark">
+                    Your Name <span className="text-accent-red">*</span>
+                  </label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                      <User className="w-5 h-5 text-neutral-300" />
+                    </div>
+                    <input
+                      id="name"
+                      name="name" 
+                      type="text"
+                      value={formik.values.name}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      className={cn(
+                        "block w-full pl-10 border border-neutral-200 rounded-md p-3 shadow-sm",
+                        formik.touched.name && formik.errors.name ? "border-red-300 focus:ring-red-500" : ""  
+                      )}
+                      placeholder="John Smith"
+                    />
+                  </div>
+                  {formik.touched.name && formik.errors.name && (
+                    <span className="text-xs text-accent-red">{formik.errors.name}</span>
+                  )}
+                </div>
+                
+                <div className="space-y-2">
+                  <label htmlFor="email" className="block text-sm font-medium text-neutral-dark">
+                    Email Address <span className="text-accent-red">*</span>
+                  </label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                      <Mail className="w-5 h-5 text-neutral-300" />
+                    </div>
+                    <input
+                      id="email"
+                      name="email"
+                      type="email"
+                      value={formik.values.email}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      className={cn(
+                        "block w-full pl-10 border border-neutral-200 rounded-md p-3 shadow-sm",
+                        formik.touched.email && formik.errors.email ? "border-red-300 focus:ring-red-500" : ""  
+                      )}
+                      placeholder="john@example.com"
+                    />
+                  </div>
+                  {formik.touched.email && formik.errors.email && (
+                    <span className="text-xs text-accent-red">{formik.errors.email}</span>
+                  )}
+                </div>
+                
+                <div className="pt-2">
+                  <RetroButton 
+                    type="button" 
+                    onClick={handleNextStep}
+                    className="w-full justify-center"
                     variant="primary"
-                    className="w-full"
-                    icon={<ArrowRight className="h-4 w-4 ml-2" />}
                   >
-                    Continue
+                    Next Step <ArrowRight className="ml-2 h-4 w-4" />
                   </RetroButton>
                 </div>
-              ) : (
-                <>
-                  <div>
-                    <label htmlFor="phone" className="block text-neutral-dark font-medium mb-2 flex items-center">
-                      <Phone className="h-4 w-4 mr-2 text-neutral-dark/70" />
-                      Phone
+              </div>
+            ) : (
+              // Step 2 Fields
+              <div>
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <label htmlFor="phone" className="block text-sm font-medium text-neutral-dark">
+                      Phone Number
                     </label>
-                    <input
-                      id="phone"
-                      type="tel"
-                      className={cn(
-                        "w-full border p-2 sm:p-3 bg-white text-neutral-dark rounded-md transition-all duration-200",
-                        errors.phone 
-                          ? "border-accent-red focus:border-accent-red focus:ring-1 focus:ring-accent-red/30" 
-                          : "border-neutral-200 focus:border-accent-yellow focus:ring-1 focus:ring-accent-yellow/30"
-                      )}
-                      placeholder="(555) 123-4567"
-                      {...register("phone", { required: "Phone number is required" })}
+                    <div className="relative">
+                      <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                        <Phone className="w-5 h-5 text-neutral-300" />
+                      </div>
+                      <input
+                        id="phone"
+                        name="phone"
+                        type="tel"
+                        value={formik.values.phone}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        className="block w-full pl-10 border border-neutral-200 rounded-md p-3 shadow-sm"
+                        placeholder="(123) 456-7890"
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <label htmlFor="company" className="block text-sm font-medium text-neutral-dark">
+                      Company Name
+                    </label>
+                    <div className="relative">
+                      <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                        <Building className="w-5 h-5 text-neutral-300" />
+                      </div>
+                      <input
+                        id="company"
+                        name="company"
+                        type="text"
+                        value={formik.values.company}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        className="block w-full pl-10 border border-neutral-200 rounded-md p-3 shadow-sm"
+                        placeholder="Your Fence Company"
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <label htmlFor="message" className="block text-sm font-medium text-neutral-dark">
+                      Message
+                    </label>
+                    <textarea
+                      id="message"
+                      name="message"
+                      rows={4}
+                      value={formik.values.message}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      className="block w-full border border-neutral-200 rounded-md p-3 shadow-sm"
+                      placeholder="Tell us about your fence business and what you're looking for..."
                     />
-                    {errors.phone && (
-                      <p className="text-accent-red mt-1 text-sm">{errors.phone.message}</p>
-                    )}
                   </div>
+                </div>
                 
-                  <div className="pt-4">
-                    <RetroButton
-                      type="submit"
-                      disabled={isSubmitting}
-                      variant="primary"
-                      className="w-full"
-                    >
-                      {isSubmitting ? (
-                        <Loader2 className="h-5 w-5 animate-spin" />
-                      ) : (
-                        <>Get Your Free Quote</>
-                      )}
-                    </RetroButton>
-                  </div>
-                </>
-              )}
-            </div>
-          )}
-          
-          {formStep === 2 && (
-            <div className="space-y-5">
-              <div>
-                <label htmlFor="phone" className="block text-neutral-dark font-medium mb-2 flex items-center">
-                  <Phone className="h-4 w-4 mr-2 text-neutral-dark/70" />
-                  Phone
-                </label>
-                <input
-                  id="phone"
-                  type="tel"
-                  className={cn(
-                    "w-full border p-2 sm:p-3 bg-white text-neutral-dark rounded-md transition-all duration-200",
-                    errors.phone 
-                      ? "border-accent-red focus:border-accent-red focus:ring-1 focus:ring-accent-red/30" 
-                      : "border-neutral-200 focus:border-accent-yellow focus:ring-1 focus:ring-accent-yellow/30"
-                  )}
-                  placeholder="(555) 123-4567"
-                  {...register("phone", { required: "Phone number is required" })}
-                />
-                {errors.phone && (
-                  <p className="text-accent-red mt-1 text-sm">{errors.phone.message}</p>
-                )}
-              </div>
-              
-              <div>
-                <label htmlFor="companyName" className="block text-neutral-dark font-medium mb-2 flex items-center">
-                  <Building className="h-4 w-4 mr-2 text-neutral-dark/70" />
-                  Company Name
-                </label>
-                <input
-                  id="companyName"
-                  type="text"
-                  className="w-full border border-neutral-200 p-2 sm:p-3 bg-white text-neutral-dark rounded-md focus:border-accent-yellow focus:ring-1 focus:ring-accent-yellow/30 focus:outline-none transition-all duration-200"
-                  placeholder="Your fence company"
-                  {...register("companyName")}
-                />
-              </div>
-              
-              <div>
-                <label htmlFor="message" className="block text-neutral-dark font-medium mb-2">
-                  Tell us about your goals
-                </label>
-                <select
-                  id="message"
-                  className="w-full border border-neutral-200 p-2 sm:p-3 bg-white text-neutral-dark rounded-md focus:border-accent-yellow focus:ring-1 focus:ring-accent-yellow/30 focus:outline-none transition-all duration-200"
-                  {...register("message")}
-                >
-                  <option value="">Select your primary goal...</option>
-                  <option value="I need more leads for my fence business">I need more leads for my fence business</option>
-                  <option value="I need a new website for my fence company">I need a new website for my fence company</option>
-                  <option value="I want to improve my online presence">I want to improve my online presence</option>
-                  <option value="I need help with social media marketing">I need help with social media marketing</option>
-                  <option value="I'm just exploring options">I'm just exploring options</option>
-                </select>
-              </div>
-              
-              {/* Trust indicators - modernized */}
-              <div className="bg-neutral-50 border border-neutral-200 p-4 mt-2 rounded-md">
-                <div className="flex items-center mb-3">
-                  <CheckCircle className="h-4 w-4 text-green-600 mr-2 flex-shrink-0" />
-                  <span className="text-neutral-dark/80 text-sm">Your information is secure and never shared</span>
-                </div>
-                <div className="flex items-center">
-                  <CheckCircle className="h-4 w-4 text-green-600 mr-2 flex-shrink-0" />
-                  <span className="text-neutral-dark/80 text-sm">No obligation, 100% free consultation</span>
+                <div className="flex gap-4 pt-4">
+                  <RetroButton
+                    type="button"
+                    onClick={handlePreviousStep}
+                    variant="secondary"
+                    size="md"
+                    className="flex-1"
+                  >
+                    <ArrowLeft className="h-4 w-4 mr-2" /> Back
+                  </RetroButton>
+                  <RetroButton
+                    type="submit"
+                    disabled={isSubmitting}
+                    variant="primary"
+                    size="md"
+                    className="flex-1"
+                  >
+                    {isSubmitting ? (
+                      <Loader2 className="h-5 w-5 animate-spin" />
+                    ) : (
+                      <>
+                        <Send className="h-4 w-4 mr-2" /> Submit
+                      </>
+                    )}
+                  </RetroButton>
                 </div>
               </div>
-              
-              <div className="flex gap-4 pt-4">
-                <RetroButton
-                  type="button"
-                  onClick={goToPreviousStep}
-                  variant="secondary"
-                  size="md"
-                  className="flex-1"
-                  icon={<ArrowLeft className="h-4 w-4 mr-2" />}
-                >
-                  Back
-                </RetroButton>
-                <RetroButton
-                  type="submit"
-                  disabled={isSubmitting}
-                  variant="primary"
-                  size="md"
-                  className="flex-1"
-                  icon={!isSubmitting && <Send className="h-4 w-4 mr-2" />}
-                >
-                  {isSubmitting ? (
-                    <Loader2 className="h-5 w-5 animate-spin" />
-                  ) : (
-                    "Submit"
-                  )}
-                </RetroButton>
-              </div>
+            )}
+          </form>
+
+          {/* Privacy policy notice */}
+          {privacyPolicy && (
+            <div className="mt-6 text-sm text-neutral-dark/60">
+              {privacyPolicy}
             </div>
           )}
-          
-          {!isSubmitted ? (
-            <RetroButton
-              type="submit"
-              disabled={isSubmitting}
-              variant="primary"
-              className="w-full"
-              size="lg"
-            >
-              {isSubmitting ? (
-                <Loader2 className="h-5 w-5 animate-spin" />
-              ) : (
-                <>Send Message</>
-              )}
-            </RetroButton>
-          ) : null}
-          
-          {privacyPolicy}
-        </form>
+        </>
       )}
     </div>
-  )
+  );
 }
