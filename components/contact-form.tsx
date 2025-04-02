@@ -148,34 +148,34 @@ export function ContactForm({ quickMode = false, onSubmitSuccess, onStepChange, 
 
   return (
     <div className={cn(
-      "bg-white border-4 border-neutral-dark p-6 md:p-8 w-full", 
-      !quickMode ? 'max-w-lg mx-auto' : '', 
-      "shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 relative"
+      "bg-white border border-neutral-100 p-5 sm:p-6 md:p-8 w-full rounded-lg", 
+      !quickMode ? 'w-full' : '', 
+      "shadow-sm transition-all duration-300 relative"
     )}>
-      {/* Decorative elements - simplified and reduced */}
+      {/* Decorative elements - modernized */}
       {!quickMode && formStep === 1 && !isSubmitted && (
-        <div className="absolute -top-5 -right-5 bg-accent-red p-3 border-4 border-neutral-dark z-10 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
-          <p className="text-white font-bold text-sm uppercase">FREE QUOTE</p>
+        <div className="absolute -top-3 -right-3 bg-accent-red p-3 rounded-md border border-accent-red/20 z-10 shadow-sm">
+          <p className="text-white font-medium text-sm">FREE QUOTE</p>
         </div>
       )}
       
       {isSubmitted ? (
         <div className="text-center py-8">
-          <div className="w-16 h-16 mx-auto mb-6 bg-accent-green rounded-full flex items-center justify-center border-4 border-neutral-dark">
-            <CheckCircle className="h-8 w-8 text-neutral-dark" />
+          <div className="w-16 h-16 mx-auto mb-6 bg-green-100 rounded-full flex items-center justify-center">
+            <CheckCircle className="h-8 w-8 text-green-600" />
           </div>
           <h3 className="text-2xl font-bold mb-4 text-neutral-dark">Thanks for reaching out!</h3>
-          <p className="font-medium mb-8 text-neutral-near-black">We'll get back to you within 24 hours.</p>
+          <p className="text-neutral-near-black/80 mb-8">We'll get back to you within 24 hours.</p>
           
-          {/* Social sharing buttons - simplified */}
+          {/* Social sharing buttons - modernized */}
           <div className="mb-8">
-            <p className="text-neutral-dark font-bold mb-4">Know a fence contractor who needs help with marketing?</p>
+            <p className="text-neutral-dark font-medium mb-4">Know a fence contractor who needs help with marketing?</p>
             <div className="flex justify-center space-x-4">
               <a 
                 href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent('https://wemarketfence.com')}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-[#3b5998] text-white p-3 border-2 border-neutral-dark hover:brightness-110 transition-all"
+                className="bg-[#3b5998] text-white p-3 rounded-md hover:opacity-90 transition-all"
                 aria-label="Share on Facebook"
               >
                 Share on Facebook
@@ -184,7 +184,7 @@ export function ContactForm({ quickMode = false, onSubmitSuccess, onStepChange, 
                 href={`https://twitter.com/intent/tweet?text=${encodeURIComponent('I just found an awesome marketing service for fence contractors! Check them out:')}&url=${encodeURIComponent('https://wemarketfence.com')}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-[#1da1f2] text-white p-3 border-2 border-neutral-dark hover:brightness-110 transition-all"
+                className="bg-[#1da1f2] text-white p-3 rounded-md hover:opacity-90 transition-all"
                 aria-label="Share on Twitter"
               >
                 Share on Twitter
@@ -215,33 +215,33 @@ export function ContactForm({ quickMode = false, onSubmitSuccess, onStepChange, 
             <div className="mb-6">
               <h3 className="text-2xl font-bold text-neutral-dark">
                 GET IN TOUCH
-                <div className="h-1 bg-accent-red w-16 mt-2"></div>
+                <div className="h-0.5 bg-accent-red w-16 mt-2"></div>
               </h3>
-              <p className="text-neutral-near-black mt-3 font-medium">Fill out this form for a <span className="font-bold text-accent-red">free marketing consultation</span></p>
+              <p className="text-neutral-dark/80 mt-3">Fill out this form for a <span className="font-medium text-accent-red">free marketing consultation</span></p>
             </div>
           )}
           
           {error && (
-            <div className="bg-red-50 border-l-4 border-accent-red p-4">
-              <p className="font-bold text-accent-red">{error}</p>
+            <div className="bg-red-50 border-l-4 border-accent-red p-4 rounded-r-md">
+              <p className="text-accent-red">{error}</p>
             </div>
           )}
 
-          {/* Step indicator - cleaner design */}
+          {/* Step indicator - modernized */}
           {!quickMode && (
             <div className="flex items-center mb-6 justify-center">
               <div className="flex items-center">
                 <div className={cn(
-                  "w-8 h-8 rounded-full flex items-center justify-center border-2 border-neutral-dark font-bold transition-colors",
-                  formStep === 1 ? 'bg-accent-yellow text-neutral-dark' : 'bg-neutral-light'
+                  "w-8 h-8 rounded-full flex items-center justify-center border transition-colors",
+                  formStep === 1 ? 'bg-accent-yellow/20 border-accent-yellow text-neutral-dark' : 'bg-neutral-50 border-neutral-200 text-neutral-400'
                 )}>1</div>
                 <div className={cn(
-                  "w-16 h-1 transition-colors",
-                  formStep === 2 ? 'bg-accent-yellow' : 'bg-neutral-light'
+                  "w-12 sm:w-16 h-0.5 transition-colors",
+                  formStep === 2 ? 'bg-accent-yellow' : 'bg-neutral-200'
                 )}></div>
                 <div className={cn(
-                  "w-8 h-8 rounded-full flex items-center justify-center border-2 border-neutral-dark font-bold transition-colors",
-                  formStep === 2 ? 'bg-accent-yellow text-neutral-dark' : 'bg-neutral-light'
+                  "w-8 h-8 rounded-full flex items-center justify-center border transition-colors",
+                  formStep === 2 ? 'bg-accent-yellow/20 border-accent-yellow text-neutral-dark' : 'bg-neutral-50 border-neutral-200 text-neutral-400'
                 )}>2</div>
               </div>
             </div>
@@ -250,40 +250,40 @@ export function ContactForm({ quickMode = false, onSubmitSuccess, onStepChange, 
           {formStep === 1 && (
             <div className="space-y-5">
               <div>
-                <label htmlFor="name" className="block text-neutral-dark font-bold mb-2 flex items-center">
-                  <User className="h-4 w-4 mr-2" />
+                <label htmlFor="name" className="block text-neutral-dark font-medium mb-2 flex items-center">
+                  <User className="h-4 w-4 mr-2 text-neutral-dark/70" />
                   Name
                 </label>
                 <input
                   id="name"
                   type="text"
                   className={cn(
-                    "w-full border-3 p-3 bg-white text-neutral-dark transition-all duration-200",
+                    "w-full border p-2 sm:p-3 bg-white text-neutral-dark rounded-md transition-all duration-200",
                     errors.name 
-                      ? "border-accent-red focus:border-accent-red" 
-                      : "border-neutral-dark focus:border-accent-yellow"
+                      ? "border-accent-red focus:border-accent-red focus:ring-1 focus:ring-accent-red/30" 
+                      : "border-neutral-200 focus:border-accent-yellow focus:ring-1 focus:ring-accent-yellow/30"
                   )}
                   placeholder="Your name"
                   {...register("name", { required: "Name is required" })}
                 />
                 {errors.name && (
-                  <p className="text-accent-red font-medium mt-1 text-sm">{errors.name.message}</p>
+                  <p className="text-accent-red mt-1 text-sm">{errors.name.message}</p>
                 )}
               </div>
               
               <div>
-                <label htmlFor="email" className="block text-neutral-dark font-bold mb-2 flex items-center">
-                  <Mail className="h-4 w-4 mr-2" />
+                <label htmlFor="email" className="block text-neutral-dark font-medium mb-2 flex items-center">
+                  <Mail className="h-4 w-4 mr-2 text-neutral-dark/70" />
                   Email
                 </label>
                 <input
                   id="email"
                   type="email"
                   className={cn(
-                    "w-full border-3 p-3 bg-white text-neutral-dark transition-all duration-200",
+                    "w-full border p-2 sm:p-3 bg-white text-neutral-dark rounded-md transition-all duration-200",
                     errors.email 
-                      ? "border-accent-red focus:border-accent-red" 
-                      : "border-neutral-dark focus:border-accent-yellow"
+                      ? "border-accent-red focus:border-accent-red focus:ring-1 focus:ring-accent-red/30" 
+                      : "border-neutral-200 focus:border-accent-yellow focus:ring-1 focus:ring-accent-yellow/30"
                   )}
                   placeholder="your@email.com"
                   {...register("email", { 
@@ -295,14 +295,14 @@ export function ContactForm({ quickMode = false, onSubmitSuccess, onStepChange, 
                   })}
                 />
                 {errors.email && (
-                  <p className="text-accent-red font-medium mt-1 text-sm">{errors.email.message}</p>
+                  <p className="text-accent-red mt-1 text-sm">{errors.email.message}</p>
                 )}
               </div>
 
-              {/* Social proof element - cleaner style */}
-              <div className="bg-neutral-light border-2 border-neutral-dark p-4 mt-4">
-                <p className="font-medium text-neutral-dark flex items-center">
-                  <CheckCircle className="h-4 w-4 text-accent-green mr-2 flex-shrink-0" />
+              {/* Social proof element - modernized */}
+              <div className="bg-neutral-50 border border-neutral-200 p-4 mt-4 rounded-md">
+                <p className="text-neutral-dark/80 flex items-center">
+                  <CheckCircle className="h-4 w-4 text-green-600 mr-2 flex-shrink-0" />
                   <span>Join <strong>150+ fence contractors</strong> who grew their business with our help</span>
                 </p>
               </div>
@@ -323,24 +323,24 @@ export function ContactForm({ quickMode = false, onSubmitSuccess, onStepChange, 
               ) : (
                 <>
                   <div>
-                    <label htmlFor="phone" className="block text-neutral-dark font-bold mb-2 flex items-center">
-                      <Phone className="h-4 w-4 mr-2" />
+                    <label htmlFor="phone" className="block text-neutral-dark font-medium mb-2 flex items-center">
+                      <Phone className="h-4 w-4 mr-2 text-neutral-dark/70" />
                       Phone
                     </label>
                     <input
                       id="phone"
                       type="tel"
                       className={cn(
-                        "w-full border-3 p-3 bg-white text-neutral-dark transition-all duration-200",
+                        "w-full border p-2 sm:p-3 bg-white text-neutral-dark rounded-md transition-all duration-200",
                         errors.phone 
-                          ? "border-accent-red focus:border-accent-red" 
-                          : "border-neutral-dark focus:border-accent-yellow"
+                          ? "border-accent-red focus:border-accent-red focus:ring-1 focus:ring-accent-red/30" 
+                          : "border-neutral-200 focus:border-accent-yellow focus:ring-1 focus:ring-accent-yellow/30"
                       )}
                       placeholder="(555) 123-4567"
                       {...register("phone", { required: "Phone number is required" })}
                     />
                     {errors.phone && (
-                      <p className="text-accent-red font-medium mt-1 text-sm">{errors.phone.message}</p>
+                      <p className="text-accent-red mt-1 text-sm">{errors.phone.message}</p>
                     )}
                   </div>
                 
@@ -366,48 +366,48 @@ export function ContactForm({ quickMode = false, onSubmitSuccess, onStepChange, 
           {formStep === 2 && (
             <div className="space-y-5">
               <div>
-                <label htmlFor="phone" className="block text-neutral-dark font-bold mb-2 flex items-center">
-                  <Phone className="h-4 w-4 mr-2" />
+                <label htmlFor="phone" className="block text-neutral-dark font-medium mb-2 flex items-center">
+                  <Phone className="h-4 w-4 mr-2 text-neutral-dark/70" />
                   Phone
                 </label>
                 <input
                   id="phone"
                   type="tel"
                   className={cn(
-                    "w-full border-3 p-3 bg-white text-neutral-dark transition-all duration-200",
+                    "w-full border p-2 sm:p-3 bg-white text-neutral-dark rounded-md transition-all duration-200",
                     errors.phone 
-                      ? "border-accent-red focus:border-accent-red" 
-                      : "border-neutral-dark focus:border-accent-yellow"
+                      ? "border-accent-red focus:border-accent-red focus:ring-1 focus:ring-accent-red/30" 
+                      : "border-neutral-200 focus:border-accent-yellow focus:ring-1 focus:ring-accent-yellow/30"
                   )}
                   placeholder="(555) 123-4567"
                   {...register("phone", { required: "Phone number is required" })}
                 />
                 {errors.phone && (
-                  <p className="text-accent-red font-medium mt-1 text-sm">{errors.phone.message}</p>
+                  <p className="text-accent-red mt-1 text-sm">{errors.phone.message}</p>
                 )}
               </div>
               
               <div>
-                <label htmlFor="companyName" className="block text-neutral-dark font-bold mb-2 flex items-center">
-                  <Building className="h-4 w-4 mr-2" />
+                <label htmlFor="companyName" className="block text-neutral-dark font-medium mb-2 flex items-center">
+                  <Building className="h-4 w-4 mr-2 text-neutral-dark/70" />
                   Company Name
                 </label>
                 <input
                   id="companyName"
                   type="text"
-                  className="w-full border-3 border-neutral-dark p-3 bg-white text-neutral-dark focus:border-accent-yellow focus:outline-none transition-all duration-200"
+                  className="w-full border border-neutral-200 p-2 sm:p-3 bg-white text-neutral-dark rounded-md focus:border-accent-yellow focus:ring-1 focus:ring-accent-yellow/30 focus:outline-none transition-all duration-200"
                   placeholder="Your fence company"
                   {...register("companyName")}
                 />
               </div>
               
               <div>
-                <label htmlFor="message" className="block text-neutral-dark font-bold mb-2">
+                <label htmlFor="message" className="block text-neutral-dark font-medium mb-2">
                   Tell us about your goals
                 </label>
                 <select
                   id="message"
-                  className="w-full border-3 border-neutral-dark p-3 bg-white text-neutral-dark focus:border-accent-yellow focus:outline-none transition-all duration-200"
+                  className="w-full border border-neutral-200 p-2 sm:p-3 bg-white text-neutral-dark rounded-md focus:border-accent-yellow focus:ring-1 focus:ring-accent-yellow/30 focus:outline-none transition-all duration-200"
                   {...register("message")}
                 >
                   <option value="">Select your primary goal...</option>
@@ -419,15 +419,15 @@ export function ContactForm({ quickMode = false, onSubmitSuccess, onStepChange, 
                 </select>
               </div>
               
-              {/* Trust indicators - cleaner design */}
-              <div className="bg-neutral-light border-2 border-neutral-dark p-4 mt-2">
+              {/* Trust indicators - modernized */}
+              <div className="bg-neutral-50 border border-neutral-200 p-4 mt-2 rounded-md">
                 <div className="flex items-center mb-3">
-                  <CheckCircle className="h-4 w-4 text-accent-green mr-2 flex-shrink-0" />
-                  <span className="text-neutral-dark font-medium text-sm">Your information is secure and never shared</span>
+                  <CheckCircle className="h-4 w-4 text-green-600 mr-2 flex-shrink-0" />
+                  <span className="text-neutral-dark/80 text-sm">Your information is secure and never shared</span>
                 </div>
                 <div className="flex items-center">
-                  <CheckCircle className="h-4 w-4 text-accent-green mr-2 flex-shrink-0" />
-                  <span className="text-neutral-dark font-medium text-sm">No obligation, 100% free consultation</span>
+                  <CheckCircle className="h-4 w-4 text-green-600 mr-2 flex-shrink-0" />
+                  <span className="text-neutral-dark/80 text-sm">No obligation, 100% free consultation</span>
                 </div>
               </div>
               

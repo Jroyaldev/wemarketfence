@@ -9,12 +9,12 @@ import { ThemeProvider } from "../components/theme-provider"
 import { BackToTopButton } from "../components/back-to-top-button"
 import MetaPixel from "../components/meta-pixel"
 import GoogleTag from "../components/google-tag"
-import { StickyCTA } from "../components/sticky-cta"
 import { ExitIntentPopup } from "../components/exit-intent-popup"
 import { SocialProofPopups } from "../components/social-proof-popups"
-import { GuaranteedMobileCTA } from "../components/guaranteed-mobile-cta"
+import { ModernizedMobileCTA } from "../components/modernized-mobile-cta"
 import { LocalBusinessJsonLd } from "../components/json-ld"
 import { defaultMetadata } from "./metadata"
+// import { StickyCTA } from "../components/sticky-cta"
 
 export const metadata: Metadata = defaultMetadata;
 
@@ -209,10 +209,10 @@ export default function RootLayout({
               </div>
             </footer>
           </div>
-          <StickyCTA />
+          {/* <StickyCTA /> */}
           <ExitIntentPopup />
           <SocialProofPopups />
-          <GuaranteedMobileCTA />
+          <ModernizedMobileCTA />
           <BackToTopButton />
         </ThemeProvider>
       </body>

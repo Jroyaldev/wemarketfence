@@ -107,22 +107,22 @@ export function SocialProofPopups() {
       "transition-all duration-300 ease-out"
     )}>
       <div className={cn(
-        "bg-white border-4 border-neutral-dark",
-        "shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]",
+        "bg-white border border-neutral-200",
+        "shadow-sm rounded-lg",
         "sm:max-w-[320px]",
         "p-4",
-        "transform transition-transform hover:translate-y-[-2px]" // Subtle hover effect
+        "transform transition-transform hover:translate-y-[-2px] hover:shadow-md" // Subtle hover effect
       )}>
         {/* Top accent bar */}
         <div className={cn(
-          "absolute top-0 left-0 right-0 h-[6px] -mt-[6px]",
+          "absolute top-0 left-0 right-0 h-1 rounded-t-lg",
           getBgColor()
         )}></div>
         
         {/* Close button */}
         <button
           onClick={handleDismiss}
-          className="absolute top-2 right-2 bg-white hover:bg-neutral-light border-2 border-neutral-dark text-neutral-dark hover:text-accent-red transition-colors w-7 h-7 flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+          className="absolute top-2 right-2 bg-white hover:bg-neutral-50 text-neutral-400 hover:text-accent-red transition-colors w-6 h-6 rounded-full flex items-center justify-center"
           aria-label="Dismiss notification"
         >
           <X className="h-4 w-4" />
@@ -131,21 +131,26 @@ export function SocialProofPopups() {
         <div className="flex items-start">
           {/* Icon box */}
           <div className={cn(
-            "p-2 mr-4 flex-shrink-0 border-3 border-neutral-dark shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]",
-            getBgColor()
+            "p-2 mr-4 flex-shrink-0 rounded-full",
+            getBgColor() + "/10" 
           )}>
-            <CheckCircle className="h-5 w-5 text-neutral-dark" />
+            <CheckCircle className={cn(
+              "h-5 w-5",
+              currentPopup % 4 === 0 ? "text-accent-yellow" :
+              currentPopup % 4 === 1 ? "text-[#58CCDC]" :
+              currentPopup % 4 === 2 ? "text-accent-red" : "text-accent-green"
+            )} />
           </div>
           
           {/* Content */}
           <div className="flex-1 pr-5">
-            <p className="font-extrabold text-sm text-neutral-dark uppercase tracking-tight mb-1">
+            <p className="font-medium text-sm text-neutral-dark mb-1">
               {action.name}
             </p>
             <p className="text-sm text-neutral-dark mb-1 line-clamp-2">
-              from <span className="font-bold">{action.location}</span> {action.action}
+              from <span className="font-medium">{action.location}</span> {action.action}
             </p>
-            <p className="text-xs font-medium text-neutral-near-black">
+            <p className="text-xs font-medium text-neutral-near-black/70">
               {action.time}
             </p>
           </div>

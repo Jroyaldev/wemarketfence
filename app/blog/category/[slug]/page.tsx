@@ -11,11 +11,27 @@ import { getAllCategories, getPostsByCategory } from "../../../../lib/api";
 
 // Generate static params for all categories
 export async function generateStaticParams() {
-  const categories = await getAllCategories();
+  // Check if Contentful environment variables are configured
+  const hasContentfulConfig = 
+    process.env.CONTENTFUL_SPACE_ID && 
+    process.env.CONTENTFUL_ACCESS_TOKEN;
+
+  if (!hasContentfulConfig) {
+    console.warn('Contentful environment variables are missing. Static category paths will be empty.');
+    return [];
+  }
   
-  return categories.map(category => ({
-    slug: category.fields.slug,
-  }));
+  try {
+    const categories = await getAllCategories();
+    
+    return categories.map(category => ({
+      slug: category.fields.slug,
+    }));
+  } catch (error) {
+    console.error('Error generating static params for categories:', error);
+    // Return empty array to prevent build failure
+    return [];
+  }
 }
 
 export default async function CategoryPage({ params }: { params: { slug: string } }) {
@@ -75,7 +91,9 @@ export default async function CategoryPage({ params }: { params: { slug: string 
                         {post.fields.category?.fields.name || "Uncategorized"}
                       </span>
                       <span className="text-sm text-neutral-dark">
-                        {formatDate(post.fields.publishDate)}
+                        {post.fields.publishedDate 
+                          ? formatDate(post.fields.publishedDate) 
+                          : "Unpublished"}
                       </span>
                     </div>
                     
@@ -92,7 +110,7 @@ export default async function CategoryPage({ params }: { params: { slug: string 
                     )}
                     
                     <h2 className="text-2xl font-extrabold mb-4 uppercase">{post.fields.title}</h2>
-                    <p className="mb-6">{post.fields.excerpt}</p>
+                    <p className="mb-6">{post.fields.shortDescription}</p>
                     <Link href={`/blog/${post.fields.slug}`}>
                       <RetroButton variant="primary" className="w-full">
                         Read More <ArrowRight className="ml-2 h-4 w-4" />

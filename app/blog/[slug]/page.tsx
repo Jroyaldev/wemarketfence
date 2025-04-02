@@ -63,11 +63,27 @@ const richTextOptions = {
 
 // Generate static params for all blog posts
 export async function generateStaticParams() {
-  const posts = await getAllBlogPosts();
+  // Check if Contentful environment variables are configured
+  const hasContentfulConfig = 
+    process.env.CONTENTFUL_SPACE_ID && 
+    process.env.CONTENTFUL_ACCESS_TOKEN;
+
+  if (!hasContentfulConfig) {
+    console.warn('Contentful environment variables are missing. Static paths will be empty.');
+    return [];
+  }
   
-  return posts.map(post => ({
-    slug: post.fields.slug,
-  }));
+  try {
+    const posts = await getAllBlogPosts();
+    
+    return posts.map(post => ({
+      slug: post.fields.slug,
+    }));
+  } catch (error) {
+    console.error('Error generating static params:', error);
+    // Return empty array to prevent build failure
+    return [];
+  }
 }
 
 export default async function BlogPostPage({ params }: { params: { slug: string } }) {

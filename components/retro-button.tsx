@@ -19,21 +19,21 @@ export function RetroButton({
   icon,
   ...props
 }: RetroButtonProps) {
-  // Base styles for all buttons
-  const baseStyle = "border-4 border-neutral-dark font-bold tracking-wide shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]";
+  // Base styles for all buttons - modernized with lighter borders & shadows
+  const baseStyle = "rounded-md font-medium shadow-sm";
   
-  // Variant specific styles with more refined hover states
+  // Variant specific styles with softer transitions
   const variantClasses = {
-    primary: "bg-accent-red text-neutral-dark hover:bg-accent-red/90 active:shadow-none active:translate-y-1 active:translate-x-1",
-    secondary: "bg-neutral-dark text-neutral-light hover:bg-neutral-dark/90 active:shadow-none active:translate-y-1 active:translate-x-1",
-    accent: "bg-[#58CCDC] text-neutral-dark hover:bg-[#58CCDC]/90 active:shadow-none active:translate-y-1 active:translate-x-1",
+    primary: "bg-accent-red text-white hover:bg-accent-red/90 active:translate-y-0.5",
+    secondary: "bg-neutral-dark text-neutral-light hover:bg-neutral-dark/90 active:translate-y-0.5",
+    accent: "bg-[#58CCDC] text-neutral-dark hover:bg-[#58CCDC]/90 active:translate-y-0.5",
   }
 
   // Refined size classes for better consistency
   const sizeClasses = {
     sm: "text-sm px-4 py-2",
-    md: "text-base px-6 py-3",
-    lg: "text-lg px-8 py-4",
+    md: "text-base px-5 py-2.5",
+    lg: "text-lg px-6 py-3",
   }
 
   return (
@@ -44,7 +44,7 @@ export function RetroButton({
         variantClasses[variant],
         sizeClasses[size],
         "min-h-[44px]",
-        "transition-all duration-150 ease-in-out transform",
+        "transition-all duration-200 ease-in-out transform",
         className,
       )}
       {...props}

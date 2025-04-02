@@ -3,7 +3,7 @@ import React, { forwardRef, ComponentPropsWithoutRef } from "react"
 import { cn } from "../lib/utils"
 
 const cardVariants = cva(
-  "p-5 sm:p-6 border-4 border-black transition-all duration-200 rounded-none",
+  "p-5 sm:p-6 bg-white rounded-lg shadow-sm transition-all duration-200",
   {
     variants: {
       variant: {
@@ -16,7 +16,7 @@ const cardVariants = cva(
         white: "bg-white text-black",
       },
       hover: {
-        true: "hover:-translate-y-2 hover:shadow-[4px_4px_0px_#000000]",
+        true: "hover:-translate-y-1 hover:shadow-md",
         false: "",
       },
       rotate: {

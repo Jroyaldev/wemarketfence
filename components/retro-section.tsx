@@ -5,7 +5,7 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "../lib/utils"
 import { motion } from "framer-motion"
 
-// Refined section variants with more consistent styling options
+// Modernized section variants with cleaner styling options
 const sectionVariants = cva("relative w-full overflow-hidden", {
   variants: {
     background: {
@@ -27,10 +27,10 @@ const sectionVariants = cva("relative w-full overflow-hidden", {
     },
     border: {
       none: "",
-      top: "border-t-4 border-neutral-dark",
-      bottom: "border-b-4 border-neutral-dark",
-      both: "border-y-4 border-neutral-dark",
-      full: "border-4 border-neutral-dark",
+      top: "border-t border-neutral-200",
+      bottom: "border-b border-neutral-200",
+      both: "border-y border-neutral-200",
+      full: "border border-neutral-200 rounded-lg",
     }
   },
   defaultVariants: {
@@ -65,13 +65,13 @@ const RetroSection = forwardRef<HTMLElement, RetroSectionProps>(
         {...props}
       >
         {background === "rays" && (
-          <div className="absolute inset-0 bg-rays opacity-70 z-0"></div>
+          <div className="absolute inset-0 bg-rays opacity-40 z-0"></div>
         )}
 
         {withClouds && (
           <>
             <motion.div
-              className="absolute top-10 left-[10%] w-48 h-20 bg-white rounded-full opacity-70"
+              className="absolute top-10 left-[10%] w-48 h-20 bg-white rounded-full opacity-50"
               animate={{
                 x: [0, 10, 0],
                 y: [0, -5, 0],
@@ -83,7 +83,7 @@ const RetroSection = forwardRef<HTMLElement, RetroSectionProps>(
               }}
             />
             <motion.div
-              className="absolute top-20 right-[20%] w-32 h-16 bg-white rounded-full opacity-70"
+              className="absolute top-20 right-[20%] w-32 h-16 bg-white rounded-full opacity-50"
               animate={{
                 x: [0, -15, 0],
                 y: [0, 5, 0],

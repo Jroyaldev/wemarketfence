@@ -57,11 +57,11 @@ export function BackToTopButton() {
   return (
     <div className="fixed right-6 bottom-24 md:bottom-6 z-[999]">
       <div className="relative">
-        {/* Outer container with shadow - matches the retro design language */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 border-4 border-neutral-dark rounded-full overflow-hidden shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] bg-white">
+        {/* Outer container with shadow - modernized design */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 border border-neutral-200 rounded-full overflow-hidden shadow-sm bg-white">
           {/* Progress fill - absolutely positioned at bottom */}
           <div 
-            className="absolute bottom-0 left-0 right-0 bg-accent-red"
+            className="absolute bottom-0 left-0 right-0 bg-accent-red/80"
             style={{ height: `${scrollProgress}%` }}
           ></div>
         </div>
@@ -69,15 +69,15 @@ export function BackToTopButton() {
         {/* Button - slightly smaller than container and positioned on top */}
         <button
           onClick={scrollToTop}
-          className="relative w-12 h-12 bg-accent-yellow border-4 border-neutral-dark rounded-full 
+          className="relative w-12 h-12 bg-white border border-neutral-200 rounded-full 
             flex items-center justify-center z-10
-            hover:bg-accent-red hover:text-white
-            hover:-translate-y-0.5
-            active:translate-y-1
+            hover:bg-accent-yellow hover:text-neutral-dark
+            hover:-translate-y-0.5 hover:shadow-md
+            active:translate-y-0.5
             transition-all duration-200"
           aria-label="Back to top"
         >
-          <ChevronUp size={24} />
+          <ChevronUp size={20} />
         </button>
       </div>
     </div>
