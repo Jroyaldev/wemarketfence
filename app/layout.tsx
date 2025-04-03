@@ -9,6 +9,7 @@ import { ThemeProvider } from "../components/theme-provider"
 import { BackToTopButton } from "../components/back-to-top-button"
 import MetaPixel from "../components/meta-pixel"
 import GoogleTag from "../components/google-tag"
+import OttoPixel from "../components/otto-pixel"
 import { ExitIntentPopup } from "../components/exit-intent-popup"
 import { SocialProofPopups } from "../components/social-proof-popups"
 import { ModernizedMobileCTA } from "../components/modernized-mobile-cta"
@@ -29,6 +30,7 @@ export default function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
           <MetaPixel />
           <GoogleTag />
+          <OttoPixel />
           <LocalBusinessJsonLd 
             name="We Market Fence"
             description="Marketing agency specialized in helping fence companies grow their business with websites and digital marketing."
