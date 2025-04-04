@@ -3,7 +3,7 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
 import { draftMode } from 'next/headers';
-import { ArrowRight, EyeIcon } from 'lucide-react';
+import { ArrowRight, Calendar, Tag, User, EyeIcon } from 'lucide-react';
 import { RetroSection } from '../../components/retro-section';
 import { RetroButton } from '../../components/retro-button';
 import { Breadcrumb } from '../../components/breadcrumb';
@@ -74,102 +74,147 @@ export default async function BlogPage() {
     return (
       <>
         <Breadcrumb />
-        <RetroSection className="py-12">
-          <div className="max-w-6xl mx-auto">
-            <h1 className="text-5xl font-extrabold mb-8 uppercase text-center">Blog</h1>
-            <p className="text-xl mb-12 text-center max-w-3xl mx-auto">
-              Expert advice, industry insights, and proven strategies to help fence companies attract more customers.
-            </p>
-            
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-              <div className="lg:col-span-2">
+        <RetroSection className="py-12 md:py-16">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6">
+            {/* Page Header with accent badge */}
+            <div className="text-center mb-12">
+              <span className="inline-block text-sm font-medium bg-accent-yellow text-neutral-dark px-3 py-1 rounded-md uppercase mb-4">
+                INSIGHTS & STRATEGIES
+              </span>
+              <h1 className="text-4xl md:text-5xl font-extrabold mb-4 uppercase">
+                <span className="text-neutral-dark">FENCE MARKETING</span>{' '}
+                <span className="text-accent-red">BLOG</span>
+              </h1>
+              <p className="text-lg md:text-xl mb-6 max-w-3xl mx-auto">
+                Expert advice, industry insights, and proven strategies to help fence companies attract more customers.
+              </p>
+              <div className="hidden md:block">
+                <div className="flex gap-2 justify-center mb-6">
+                  {categories.slice(0, 5).map((category) => (
+                    <Link 
+                      key={category.sys.id}
+                      href={`/blog/category/${category.fields.slug}`}
+                      className="inline-flex items-center px-3 py-1 bg-white text-sm font-medium border border-neutral-200 rounded-md hover:bg-neutral-100 transition-colors"
+                    >
+                      <Tag className="w-3 h-3 mr-1" />
+                      {category.fields.name}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+              <div className="lg:col-span-8">
                 {posts.length > 0 ? (
-                  <div className="grid grid-cols-1 gap-8">
-                    {posts.map((post) => {
-                      // Safely access nested fields with optional chaining, using the correct field names
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+                    {posts.map((post, index) => {
+                      // Safely access nested fields with optional chaining
                       const title = post.fields?.title || 'Untitled Post';
                       const slug = post.fields?.slug || '';
                       const excerpt = post.fields?.shortDescription || ''; 
                       const publishDate = post.fields?.publishedDate || ''; 
                       const authorName = post.fields?.author?.fields?.name;
+                      const categoryName = post.fields?.category?.fields?.name;
                       
                       // Get image URL with fallback
-                      const hasImage = post.fields?.featuredImage?.fields?.file?.url;
-                      const imageUrl = hasImage ? `https:${post.fields.featuredImage.fields.file.url}` : null;
-                      const imageAlt = post.fields?.featuredImage?.fields?.title || title;
+                      const imageUrl = post.fields?.featuredImage?.fields?.file?.url 
+                        ? `https:${post.fields.featuredImage.fields.file.url}`
+                        : '/images/placeholder-blog.jpg';
+
+                      // Alternate card styles for visual interest
+                      const isFeatureCard = index === 0;
                       
-                      return (
-                        <article 
-                          key={post.sys?.id || Math.random().toString()} 
-                          className="bg-white border-4 border-neutral-dark shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[2px] hover:translate-x-[2px]"
-                        >
-                          <div className="p-6">
-                            <div className="flex justify-between items-center mb-4">
-                              <div className="flex items-center space-x-2">
-                                <span className="text-sm font-bold bg-accent-yellow px-3 py-1 uppercase">
-                                  {post.fields?.category?.fields?.name || "Uncategorized"}
-                                </span>
-                                {isInPreviewMode && !publishDate && (
-                                  <span className="text-xs font-bold bg-accent-red text-white px-2 py-1 uppercase">
-                                    Draft
+                      return isFeatureCard ? (
+                        // Feature card (first post)
+                        <article key={post.sys.id} className="md:col-span-2 group">
+                          <Link href={`/blog/${slug}`} className="block">
+                            <div className="bg-white border border-neutral-200 rounded-lg overflow-hidden shadow-sm hover:shadow transition-all duration-300">
+                              <div className="aspect-video overflow-hidden relative">
+                                <Image 
+                                  src={imageUrl} 
+                                  alt={title}
+                                  fill
+                                  sizes="(max-width: 768px) 100vw, 800px"
+                                  className="object-cover group-hover:scale-105 transition-transform duration-500"
+                                />
+                                {categoryName && (
+                                  <span className="absolute top-4 left-4 bg-accent-yellow text-neutral-dark text-xs font-medium px-2 py-1 rounded z-10">
+                                    {categoryName}
                                   </span>
                                 )}
                               </div>
-                              <span className="text-sm text-neutral-dark">
-                                {publishDate ? formatDate(publishDate) : "Unpublished"}
-                              </span>
-                            </div>
-                            
-                            {/* Featured Image */}
-                            {imageUrl ? (
-                              <div className="mb-4 border-3 border-neutral-dark shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] overflow-hidden">
-                                <Image
-                                  src={imageUrl}
-                                  alt={imageAlt}
-                                  width={600}
-                                  height={300}
-                                  className="w-full h-64 object-cover"
-                                />
-                              </div>
-                            ) : (
-                              <div className="mb-4 border-3 border-neutral-dark shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] h-64 bg-gray-200 flex items-center justify-center">
-                                <p className="text-gray-500">No image available</p>
-                              </div>
-                            )}
-                            
-                            <h2 className="text-2xl font-extrabold mb-4 uppercase">{title}</h2>
-                            <p className="mb-6">{excerpt}</p>
-                            
-                            <div className="flex justify-between items-center">
-                              <Link href={`/blog/${slug}`}>
-                                <RetroButton size="sm" className="text-sm">
-                                  Read more <ArrowRight className="ml-1 w-4 h-4" />
-                                </RetroButton>
-                              </Link>
-                              
-                              {isInPreviewMode && (
-                                <Link href={`/api/exit-preview?redirect=/blog/${slug}`} className="flex items-center text-gray-500 hover:text-gray-700 transition-colors">
-                                  <EyeIcon className="w-4 h-4 mr-1" /> Preview Mode
-                                </Link>
-                              )}
-                            </div>
-                            
-                            {authorName && (
-                              <div className="mt-4 pt-4 border-t border-gray-200 flex items-center">
-                                <div className="w-8 h-8 rounded-full bg-gray-300 mr-2 flex items-center justify-center">
-                                  <span className="text-xs text-gray-600">{authorName.charAt(0)}</span>
+                              <div className="p-6">
+                                <h2 className="text-2xl font-bold hover:text-accent-red transition-colors mb-3">
+                                  {title}
+                                </h2>
+                                <div className="flex items-center text-sm text-neutral-600 mb-4 gap-4">
+                                  {publishDate && (
+                                    <span className="flex items-center">
+                                      <Calendar className="w-4 h-4 mr-1" /> 
+                                      {formatDate(publishDate)}
+                                    </span>
+                                  )}
+                                  {authorName && (
+                                    <span className="flex items-center">
+                                      <User className="w-4 h-4 mr-1" /> 
+                                      {authorName}
+                                    </span>
+                                  )}
                                 </div>
-                                <span className="text-sm font-medium">{authorName}</span>
+                                <p className="text-neutral-700 mb-4">{excerpt}</p>
+                                <div className="flex items-center font-medium text-accent-red">
+                                  Read Article <ArrowRight className="w-4 h-4 ml-1" />
+                                </div>
                               </div>
-                            )}
-                          </div>
+                            </div>
+                          </Link>
+                        </article>
+                      ) : (
+                        // Regular cards
+                        <article key={post.sys.id} className="group">
+                          <Link href={`/blog/${slug}`} className="block">
+                            <div className="bg-white border border-neutral-200 rounded-lg overflow-hidden shadow-sm hover:shadow transition-all duration-300 h-full flex flex-col">
+                              <div className="aspect-video overflow-hidden relative">
+                                <Image 
+                                  src={imageUrl} 
+                                  alt={title}
+                                  fill
+                                  sizes="(max-width: 768px) 100vw, 400px"
+                                  className="object-cover group-hover:scale-105 transition-transform duration-500"
+                                />
+                                {categoryName && (
+                                  <span className="absolute top-3 left-3 bg-accent-yellow text-neutral-dark text-xs font-medium px-2 py-1 rounded z-10">
+                                    {categoryName}
+                                  </span>
+                                )}
+                              </div>
+                              <div className="p-5 flex-grow flex flex-col">
+                                <h2 className="text-lg font-bold hover:text-accent-red transition-colors mb-3">
+                                  {title}
+                                </h2>
+                                <div className="flex items-center text-xs text-neutral-600 mb-3 gap-3">
+                                  {publishDate && (
+                                    <span className="flex items-center">
+                                      <Calendar className="w-3 h-3 mr-1" /> 
+                                      {formatDate(publishDate)}
+                                    </span>
+                                  )}
+                                </div>
+                                <p className="text-sm text-neutral-700 mb-3 line-clamp-2">{excerpt}</p>
+                                <div className="mt-auto pt-3 text-sm flex items-center font-medium text-accent-red">
+                                  Read More <ArrowRight className="w-3 h-3 ml-1" />
+                                </div>
+                              </div>
+                            </div>
+                          </Link>
                         </article>
                       );
                     })}
                   </div>
                 ) : (
-                  <div className="bg-white border-4 border-neutral-dark p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
-                    <h2 className="text-2xl font-bold mb-4">No posts found</h2>
+                  <div className="bg-white border border-neutral-200 rounded-lg p-6 shadow-sm">
+                    <h2 className="text-xl font-bold mb-4">No posts found</h2>
                     <p>
                       We haven't published any blog posts yet. Check back soon for new content!
                     </p>
@@ -178,27 +223,33 @@ export default async function BlogPage() {
               </div>
               
               {/* Sidebar */}
-              <div>
+              <div className="lg:col-span-4">
                 {/* Categories Widget */}
-                <div className="bg-white border-4 border-neutral-dark shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] p-6 mb-8">
-                  <h2 className="text-xl font-extrabold mb-6 uppercase">Categories</h2>
-                  <ul className="space-y-4">
+                <div className="bg-white border border-neutral-200 rounded-lg shadow-sm p-6 mb-8 sticky top-24">
+                  <h2 className="text-xl font-bold mb-6 uppercase flex items-center">
+                    <Tag className="w-5 h-5 mr-2 text-accent-yellow" />
+                    Categories
+                  </h2>
+                  <ul className="space-y-3">
                     <li>
                       <Link 
                         href="/blog" 
-                        className="font-bold hover:text-accent-red transition-colors"
+                        className="flex items-center font-medium hover:text-accent-red transition-colors py-1"
                       >
                         All Posts
+                        <span className="ml-auto bg-neutral-100 px-2 py-0.5 rounded-md text-sm">
+                          {posts.length}
+                        </span>
                       </Link>
                     </li>
                     {categories.map((category) => (
                       <li key={category.sys.id}>
                         <Link 
                           href={`/blog/category/${category.fields.slug}`}
-                          className="hover:text-accent-red transition-colors flex justify-between"
+                          className="flex items-center hover:text-accent-red transition-colors py-1"
                         >
-                          <span>{category.fields.name}</span>
-                          <span className="bg-neutral-light px-2 rounded-md text-sm">
+                          {category.fields.name}
+                          <span className="ml-auto bg-neutral-100 px-2 py-0.5 rounded-md text-sm">
                             {category.count || 0}
                           </span>
                         </Link>
@@ -208,12 +259,15 @@ export default async function BlogPage() {
                 </div>
                 
                 {/* Newsletter Widget */}
-                <div className="bg-white border-4 border-neutral-dark shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] p-6">
-                  <h2 className="text-xl font-extrabold mb-4 uppercase">Stay Updated</h2>
+                <div className="bg-accent-yellow border border-neutral-200 rounded-lg shadow-sm p-6">
+                  <h2 className="text-xl font-bold mb-4 uppercase flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5 mr-2"><rect width="20" height="16" x="2" y="4" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg>
+                    Stay Updated
+                  </h2>
                   <p className="mb-4">Subscribe to our newsletter for the latest fence marketing tips and strategies.</p>
                   <Link href="/contact">
-                    <RetroButton variant="accent" className="w-full">
-                      Subscribe Now
+                    <RetroButton variant="accent" className="w-full group">
+                      Subscribe Now <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
                     </RetroButton>
                   </Link>
                 </div>
@@ -222,7 +276,7 @@ export default async function BlogPage() {
           </div>
         </RetroSection>
         
-        {/* FAQ Section */}
+        {/* FAQ Section - Maintained but with updated styling */}
         <FAQSection items={[
           {
             question: 'What is the purpose of this blog?',
@@ -245,7 +299,7 @@ export default async function BlogPage() {
       <RetroSection className="py-12">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl font-extrabold mb-6">Error Loading Blog</h2>
-          <div className="mb-8 border-4 border-neutral-dark p-6 bg-white shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+          <div className="mb-8 border border-neutral-200 rounded-lg p-6 bg-white shadow-sm">
             <p className="mb-4">
               There was an error loading the blog content. Please try again later.
             </p>

@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState } from 'react';
-import { ChevronDown, ChevronUp } from 'lucide-react';
+import { ChevronDown, ChevronUp, Plus, Minus } from 'lucide-react';
 import { FAQPageJsonLd } from './json-ld';
 import { RetroSection } from './retro-section';
 
@@ -17,7 +17,7 @@ interface FAQSectionProps {
 }
 
 export const FAQSection = ({ 
-  title = "FREQUENTLY ASKED QUESTIONS",
+  title = "Frequently Asked Questions",
   items,
   className = "" 
 }: FAQSectionProps) => {
@@ -31,44 +31,44 @@ export const FAQSection = ({
     <RetroSection className={`py-16 ${className}`}>
       <div className="container px-4 sm:px-6">
         {/* Title */}
-        <div className="flex flex-col items-center mb-10">
-          <span className="text-sm font-bold text-accent-yellow uppercase tracking-widest mb-2">
-            GET ANSWERS
+        <div className="flex flex-col items-center mb-12">
+          <span className="inline-flex items-center justify-center px-3 py-1 text-xs font-medium rounded-full bg-accent-yellow/20 text-accent-yellow mb-4">
+            FAQ
           </span>
-          <h2 className="text-3xl md:text-4xl font-extrabold text-center uppercase mb-4">
+          <h2 className="text-3xl md:text-4xl font-extrabold text-center mb-4">
             {title}
           </h2>
-          <div className="w-24 h-2 bg-accent-red"></div>
+          <div className="w-16 h-1 bg-accent-red rounded-full"></div>
         </div>
 
         {/* FAQ Items */}
-        <div className="max-w-3xl mx-auto">
+        <div className="max-w-3xl mx-auto space-y-4">
           {items.map((item, index) => (
             <div 
               key={index}
-              className="mb-4 border-4 border-neutral-dark shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] bg-white"
+              className="border border-neutral-200 rounded-lg shadow-sm bg-white overflow-hidden transition-all duration-200 hover:shadow-md"
             >
               <button
                 onClick={() => toggleQuestion(index)}
-                className="flex justify-between items-center w-full p-4 text-left font-bold text-lg"
+                className="flex justify-between items-center w-full p-5 text-left font-medium text-lg transition-colors hover:bg-neutral-50"
                 aria-expanded={openIndex === index}
                 aria-controls={`faq-answer-${index}`}
               >
                 <span>{item.question}</span>
-                {openIndex === index ? (
-                  <ChevronUp className="h-5 w-5 flex-shrink-0" />
-                ) : (
-                  <ChevronDown className="h-5 w-5 flex-shrink-0" />
-                )}
+                <div className="h-6 w-6 rounded-full flex items-center justify-center flex-shrink-0 bg-accent-red/10 text-accent-red">
+                  {openIndex === index ? (
+                    <Minus className="h-4 w-4" />
+                  ) : (
+                    <Plus className="h-4 w-4" />
+                  )}
+                </div>
               </button>
               
               <div 
                 id={`faq-answer-${index}`}
-                className={`px-4 pb-4 transition-all duration-200 ease-in-out ${
-                  openIndex === index ? 'block' : 'hidden'
-                }`}
+                className={`transition-all duration-300 ease-in-out overflow-hidden ${openIndex === index ? 'max-h-96' : 'max-h-0'}`}
               >
-                <div className="prose prose-lg max-w-none">
+                <div className="prose prose-lg max-w-none p-5 pt-0 text-neutral-700">
                   {item.answer}
                 </div>
               </div>
