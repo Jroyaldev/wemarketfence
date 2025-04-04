@@ -15,7 +15,6 @@ import { SocialProofPopups } from "../components/social-proof-popups"
 import { ModernizedMobileCTA } from "../components/modernized-mobile-cta"
 import { LocalBusinessJsonLd } from "../components/json-ld"
 import { defaultMetadata } from "./metadata"
-// import { StickyCTA } from "../components/sticky-cta"
 
 export const metadata: Metadata = defaultMetadata;
 
@@ -211,7 +210,6 @@ export default function RootLayout({
               </div>
             </footer>
           </div>
-          {/* <StickyCTA /> */}
           <ExitIntentPopup />
           <SocialProofPopups />
           <ModernizedMobileCTA />
