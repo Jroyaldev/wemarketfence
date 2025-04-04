@@ -6,6 +6,13 @@ import { ArrowRight, CheckCircle, AlertCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 
+// Add TypeScript declaration for gtag_report_conversion
+declare global {
+  interface Window {
+    gtag_report_conversion: (url?: string) => boolean;
+  }
+}
+
 type FormData = {
   name: string;
   email: string;
@@ -272,6 +279,11 @@ export default function LandingPage() {
         throw new Error('Failed to submit form');
       }
 
+      // Track conversion with Google Ads after successful submission
+      if (typeof window !== 'undefined' && window.gtag_report_conversion) {
+        window.gtag_report_conversion();
+      }
+      
       setSubmitSuccess(true);
     } catch (error) {
       setSubmitError('There was an error submitting your form. Please try again.');
