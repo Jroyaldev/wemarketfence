@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
     sgMail.setApiKey(SENDGRID_API_KEY);
 
     // Parse the request body
-    const { name, email, phone, company, message, formType } = body;
+    const { name, email, phone, company, zipCode, message, formType } = body;
 
     // Validate required fields
     if (!name || !email) {
@@ -49,6 +49,7 @@ export async function POST(req: NextRequest) {
         Email: ${email}
         Phone: ${phone || 'Not provided'}
         Company: ${company || 'Not provided'}
+        Zip Code: ${zipCode || 'Not provided'}
         Message: ${message || 'No message'}
         Submitted at: ${new Date().toLocaleString()}
         Form Type: ${formType || 'Contact Form'}
@@ -58,6 +59,7 @@ export async function POST(req: NextRequest) {
         <p><strong>Email:</strong> ${email}</p>
         <p><strong>Phone:</strong> ${phone || 'Not provided'}</p>
         <p><strong>Company:</strong> ${company || 'Not provided'}</p>
+        <p><strong>Zip Code:</strong> ${zipCode || 'Not provided'}</p>
         <p><strong>Message:</strong> ${message || 'No message'}</p>
         <p><strong>Submitted at:</strong> ${new Date().toLocaleString()}</p>
         <p><strong>Form Type:</strong> ${formType || 'Contact Form'}</p>
