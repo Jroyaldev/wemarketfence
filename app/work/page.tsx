@@ -116,13 +116,14 @@ export default function Work() {
           </div>
 
           <div className="text-center mt-16 md:mt-20">
-            <Link href="/#contact">
+            <Link href="/landing">
               <RetroButton 
-                variant="primary" 
-                size="lg" 
-                className="border-4 border-black text-white font-extrabold py-3 px-6 text-lg shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-y-1 hover:translate-x-1 transition-all duration-200"
+                size="lg"
+                variant="primary"
+                className="rounded-md shadow-sm transition-all hover:translate-y-[-2px]"
+                icon={<ArrowUpRight className="ml-2 h-5 w-5" />}
               >
-                Ready to be our next success story?
+                GET STARTED
               </RetroButton>
             </Link>
           </div>

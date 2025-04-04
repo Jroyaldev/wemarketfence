@@ -273,7 +273,7 @@ export default function PricingPage() {
                       
                       {/* CTA Button */}
                       <div className="mt-auto">
-                        <Link href="/#contact">
+                        <Link href="/landing">
                           <RetroButton
                             variant={plan.mostPopular ? "primary" : "secondary"}
                             size="lg"
@@ -375,7 +375,7 @@ export default function PricingPage() {
               Schedule a free discovery call to discuss your goals and see how we can help you get more fence jobs.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link href="/#contact">
+              <Link href="/landing">
                 <RetroButton
                   variant="primary"
                   size="lg"

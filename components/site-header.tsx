@@ -22,7 +22,7 @@ const navItems = [
   { title: "About", href: "/#about" },
   { title: "Pricing", href: "/pricing" },
   { title: "Process", href: "/process" },
-  { title: "Contact", href: "/#contact" },
+  { title: "Contact", href: "/landing" },
 ]
 
 export function SiteHeader() {
@@ -88,7 +88,7 @@ export function SiteHeader() {
             <span className="font-medium">(615) 561-0502</span>
           </a>
           
-          <Link href="/#contact" legacyBehavior passHref>
+          <Link href="/landing" legacyBehavior passHref>
             <RetroButton
               size="sm"
               variant="primary"
@@ -154,7 +154,7 @@ export function SiteHeader() {
                   </a>
                   
                   <SheetClose asChild>
-                    <Link href="/#contact" className="block w-full">
+                    <Link href="/landing" className="block w-full">
                       <RetroButton
                         size="md"
                         variant="primary"

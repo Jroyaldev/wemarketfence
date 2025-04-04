@@ -10,13 +10,11 @@ import { RetroButton } from "../components/retro-button"
 import { RetroCard } from "../components/retro-card"
 import { RetroSection } from "../components/retro-section"
 import { ContactForm } from "../components/contact-form"
-import { QuickLeadModal } from "../components/quick-lead-modal"
 import { ExitIntentPopup } from "../components/exit-intent-popup"
 import { cn } from "../lib/utils"
 
 // SEO-focused page component
 export default function Home() {
-  const [isQuickLeadModalOpen, setIsQuickLeadModalOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
 
   // Track scroll position for animations
@@ -209,15 +207,15 @@ export default function Home() {
                 </div>
                 
                 <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-                  <RetroButton 
-                    size="lg" 
-                    variant="primary" 
-                    onClick={() => setIsQuickLeadModalOpen(true)}
-                    className="shadow-sm rounded-md w-full sm:w-auto px-8 font-medium transition-all hover:translate-y-[-2px]"
-                    aria-label="Get started with fence marketing"
-                  >
-                    GET STARTED
-                  </RetroButton>
+                  <Link href="/landing" aria-label="Get started with fence marketing">
+                    <RetroButton 
+                      size="lg" 
+                      variant="primary" 
+                      className="shadow-sm rounded-md w-full sm:w-auto px-8 font-medium transition-all hover:translate-y-[-2px]"
+                    >
+                      GET STARTED
+                    </RetroButton>
+                  </Link>
                   
                   <Link href="/our-work" aria-label="See our fence marketing portfolio">
                     <RetroButton 
@@ -302,15 +300,15 @@ export default function Home() {
             </div>
             
             <div className="mt-12 flex justify-center">
-              <RetroButton 
-                size="lg" 
-                variant="primary" 
-                onClick={() => setIsQuickLeadModalOpen(true)}
-                className="shadow-sm rounded-md px-6 font-medium transition-all hover:translate-y-[-2px]"
-                aria-label="Get a custom fence marketing plan"
-              >
-                GET YOUR CUSTOM MARKETING PLAN
-              </RetroButton>
+              <Link href="/landing" aria-label="Get a custom fence marketing plan">
+                <RetroButton 
+                  size="lg" 
+                  variant="primary" 
+                  className="shadow-sm rounded-md px-6 font-medium transition-all hover:translate-y-[-2px]"
+                >
+                  GET YOUR CUSTOM MARKETING PLAN
+                </RetroButton>
+              </Link>
             </div>
           </div>
         </section>
@@ -404,16 +402,16 @@ export default function Home() {
                   
                   {/* CTA Button - modern styling */}
                   <div className="mt-8 flex justify-center lg:justify-start">
-                    <RetroButton
-                      onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-                      variant="primary"
-                      size="lg"
-                      className="rounded-md shadow-sm font-medium transition-all hover:translate-y-[-2px]"
-                      icon={<ArrowRight className="ml-2 h-5 w-5" />}
-                      aria-label="Speak with a fence marketing specialist"
-                    >
-                      SPEAK WITH A SPECIALIST
-                    </RetroButton>
+                    <Link href="/landing" aria-label="Speak with a fence marketing specialist">
+                      <RetroButton
+                        variant="primary"
+                        size="lg"
+                        className="rounded-md shadow-sm font-medium transition-all hover:translate-y-[-2px]"
+                        icon={<ArrowRight className="ml-2 h-5 w-5" />}
+                      >
+                        SPEAK WITH A SPECIALIST
+                      </RetroButton>
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -564,12 +562,6 @@ export default function Home() {
             </div>
           </div>
         </section>
-
-        {/* QuickLeadModal */}
-        <QuickLeadModal 
-          isOpen={isQuickLeadModalOpen} 
-          onClose={() => setIsQuickLeadModalOpen(false)} 
-        />
       </main>
     </>
   )

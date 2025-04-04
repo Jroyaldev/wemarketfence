@@ -89,7 +89,9 @@ export function ModernizedMobileCTA() {
   }, [isVisible]);
 
   const handleClick = () => {
-    document.querySelector('#contact')?.scrollIntoView({behavior: 'smooth'});
+    // Redirect to landing page
+    window.location.href = '/landing';
+    
     // Track click with Meta Pixel
     if (typeof window !== 'undefined' && window.fbq) {
       window.fbq('trackCustom', 'MobileCTAClick');

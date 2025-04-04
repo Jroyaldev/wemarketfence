@@ -204,10 +204,14 @@ export default function OurWork() {
             Let's create a marketing strategy that builds your fence brand.
           </p>
           <div className="flex justify-center">
-            <Link href="/#contact">
-              <RetroButton variant="primary" size="lg">
-                Get a Free Consultation
-                <ArrowRight className="ml-2 h-5 w-5" />
+            <Link href="/landing">
+              <RetroButton
+                size="lg"
+                variant="primary"
+                className="rounded-md shadow-sm transition-all hover:translate-y-[-2px]"
+                icon={<ArrowRight className="ml-2 h-5 w-5" />}
+              >
+                GET STARTED
               </RetroButton>
             </Link>
           </div>
