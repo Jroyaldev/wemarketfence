@@ -1,6 +1,7 @@
 "use client"
 
 import React, { useEffect, useState } from "react"
+import { usePathname } from "next/navigation"
 
 // Declare fbq for TypeScript
 declare global {
@@ -12,8 +13,14 @@ declare global {
 export function ModernizedMobileCTA() {
   const [isVisible, setIsVisible] = useState(false);
   const [hasAnimated, setHasAnimated] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
+    // Don't execute the effect on landing page
+    if (pathname === "/landing") {
+      return;
+    }
+    
     // Check if the hero section has been scrolled past
     const handleScroll = () => {
       // Get the hero section height - assuming it's within the first 90vh
@@ -44,10 +51,15 @@ export function ModernizedMobileCTA() {
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, [isVisible, hasAnimated]);
+  }, [isVisible, hasAnimated, pathname]);
 
   // Add eye-catching animations
   useEffect(() => {
+    // Don't execute the effect on landing page
+    if (pathname === "/landing") {
+      return;
+    }
+    
     // Modern, eye-catching animation
     const style = document.createElement('style');
     style.innerHTML = `
@@ -86,7 +98,7 @@ export function ModernizedMobileCTA() {
     return () => {
       document.head.removeChild(style);
     };
-  }, [isVisible]);
+  }, [isVisible, pathname]);
 
   const handleClick = () => {
     // Redirect to landing page
@@ -98,8 +110,8 @@ export function ModernizedMobileCTA() {
     }
   };
 
-  // Don't render anything if not visible
-  if (!isVisible) {
+  // Don't render on landing page or if not visible
+  if (pathname === "/landing" || !isVisible) {
     return null;
   }
 

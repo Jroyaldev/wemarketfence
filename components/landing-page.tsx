@@ -1,9 +1,10 @@
 "use client"
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import Image from 'next/image';
 import { ArrowRight, CheckCircle, AlertCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useRouter } from 'next/navigation';
 
 type FormData = {
   name: string;
@@ -20,6 +21,7 @@ type FormData = {
 };
 
 export default function LandingPage() {
+  const router = useRouter();
   const [formStep, setFormStep] = useState(1);
   const [formData, setFormData] = useState<FormData>({
     name: '',
@@ -38,6 +40,74 @@ export default function LandingPage() {
   const [submitError, setSubmitError] = useState('');
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [partialSubmitted, setPartialSubmitted] = useState(false);
+  const [countdown, setCountdown] = useState(3);
+  const [redirectReady, setRedirectReady] = useState(false);
+
+  // Hide site footer, header, and navigation on this page using useEffect
+  useEffect(() => {
+    // Hide the footer, header, and nav when the component mounts
+    const footer = document.querySelector('footer');
+    const header = document.querySelector('header');
+    const nav = document.querySelector('nav');
+    
+    if (footer) footer.style.display = 'none';
+    if (header) header.style.display = 'none';
+    if (nav) nav.style.display = 'none';
+    
+    // Prevent zooming on mobile
+    const metaViewport = document.querySelector('meta[name="viewport"]');
+    const originalContent = metaViewport?.getAttribute('content') || '';
+    if (metaViewport) {
+      metaViewport.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no');
+    }
+    
+    // Prevent pinch zoom on mobile
+    const preventZoom = (e: TouchEvent) => {
+      if (e.touches.length > 1) {
+        e.preventDefault();
+      }
+    };
+    
+    document.addEventListener('touchmove', preventZoom as EventListener, { passive: false });
+    document.addEventListener('touchstart', preventZoom as EventListener, { passive: false });
+
+    // Set body height to viewport height on mobile to reduce scrolling
+    const setViewportHeight = () => {
+      // Only apply viewport height restriction on mobile devices
+      if (window.innerWidth < 768) {
+        document.body.style.height = '100vh';
+        document.body.style.overflow = 'hidden';
+      } else {
+        document.body.style.height = '';
+        document.body.style.overflow = '';
+      }
+    };
+    
+    // Set initial viewport height
+    setViewportHeight();
+    
+    // Update viewport height on resize
+    window.addEventListener('resize', setViewportHeight);
+    
+    // Restore the footer, header, nav, and body styles when the component unmounts
+    return () => {
+      if (footer) footer.style.display = '';
+      if (header) header.style.display = '';
+      if (nav) nav.style.display = '';
+      document.body.style.height = '';
+      document.body.style.overflow = '';
+      window.removeEventListener('resize', setViewportHeight);
+      
+      // Restore original meta viewport content
+      if (metaViewport) {
+        metaViewport.setAttribute('content', originalContent);
+      }
+      
+      // Remove event listeners
+      document.removeEventListener('touchmove', preventZoom as EventListener);
+      document.removeEventListener('touchstart', preventZoom as EventListener);
+    };
+  }, []);
 
   // Handle form field changes
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -211,132 +281,216 @@ export default function LandingPage() {
     }
   };
 
+  // Effect for redirect
+  useEffect(() => {
+    if (redirectReady) {
+      router.push('/');
+    }
+  }, [redirectReady, router]);
+  
+  // Countdown effect for thank you screen
+  useEffect(() => {
+    if (submitSuccess && countdown > 0) {
+      const timer = setTimeout(() => {
+        setCountdown(prev => prev - 1);
+      }, 1000);
+      
+      return () => clearTimeout(timer);
+    } else if (submitSuccess && countdown === 0) {
+      // Set redirect ready instead of directly redirecting
+      setRedirectReady(true);
+    }
+  }, [submitSuccess, countdown]);
+
   return (
-    <main className="min-h-screen bg-gradient-to-b from-white to-neutral-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <main className="min-h-screen bg-neutral-50 flex flex-col justify-center items-center px-4 py-4 sm:py-8">
       <div className="w-full max-w-lg">
-        <div className="bg-white shadow-xl rounded-xl overflow-hidden border border-neutral-200">
+        {/* Navigation bar with logo, brand name and back button */}
+        <div className="mb-1.5 flex items-center justify-between bg-white shadow-sm rounded-md px-2 py-1">
+          <div className="flex items-center">
+            <div className="h-5 w-auto mr-2">
+              <img src="/images/wmf.png" alt="WMF Logo" className="h-full w-auto object-contain" />
+            </div>
+            <span className="font-bold text-sm text-neutral-800">We Market Fence</span>
+          </div>
+          <a 
+            href="/" 
+            className="inline-flex items-center text-xs text-neutral-600 hover:text-accent-red transition-colors font-medium">
+            <span className="mr-1">←</span> Back
+          </a>
+        </div>
+        <div className="bg-white shadow-md rounded-xl overflow-hidden border border-neutral-100">
           {/* Form Header */}
-          <div className="bg-neutral-900 p-6 text-white">
-            <h1 className="text-2xl font-bold mb-2">Get Your Fence Marketing Strategy</h1>
-            <p className="text-neutral-300">Complete this quick form to see how we can help grow your fence business</p>
+          <div className="bg-neutral-900 p-3 sm:p-5 text-white">
+            <h1 className="text-lg font-bold">Fence Marketing Strategy</h1>
           </div>
 
           {/* Progress Steps */}
-          <div className="flex bg-neutral-50 border-b border-neutral-200">
+          <div className="bg-neutral-100 py-1.5 px-2 border-b border-neutral-100 flex justify-between items-center">
             <div 
-              className={`flex-1 text-center py-3 ${formStep === 1 ? 'text-accent-red font-bold' : 'text-neutral-500'}`}
+              className={`text-center mx-1 ${formStep === 1 ? 'text-accent-red font-bold' : 'text-neutral-500'} text-xs`}
             >
-              <span className={`inline-flex items-center justify-center w-6 h-6 rounded-full mr-2 ${formStep === 1 ? 'bg-accent-red text-white' : 'bg-neutral-200'}`}>
-                1
-              </span>
-              Contact Info
+              <span>Contact Info</span>
+              {formStep > 1 && <span className="ml-0.5 inline-block text-green-500">✓</span>}
             </div>
+            <div className="border-t border-neutral-200 w-1.5 sm:w-4"></div>
             <div 
-              className={`flex-1 text-center py-3 ${formStep === 2 ? 'text-accent-red font-bold' : 'text-neutral-500'}`}
+              className={`text-center mx-1 ${formStep === 2 ? 'text-accent-red font-bold' : 'text-neutral-500'} text-xs`}
             >
-              <span className={`inline-flex items-center justify-center w-6 h-6 rounded-full mr-2 ${formStep === 2 ? 'bg-accent-red text-white' : 'bg-neutral-200'}`}>
-                2
-              </span>
-              Services
+              <span>Services</span>
+              {formStep > 2 && <span className="ml-0.5 inline-block text-green-500">✓</span>}
             </div>
+            <div className="border-t border-neutral-200 w-1.5 sm:w-4"></div>
             <div 
-              className={`flex-1 text-center py-3 ${formStep === 3 ? 'text-accent-red font-bold' : 'text-neutral-500'}`}
+              className={`text-center mx-1 ${formStep === 3 ? 'text-accent-red font-bold' : 'text-neutral-500'} text-xs`}
             >
-              <span className={`inline-flex items-center justify-center w-6 h-6 rounded-full mr-2 ${formStep === 3 ? 'bg-accent-red text-white' : 'bg-neutral-200'}`}>
-                3
-              </span>
-              Details
+              <span>Details</span>
             </div>
           </div>
 
           {/* Form Content */}
-          <div className="p-6">
+          <div className="pt-3 px-5 pb-3 sm:px-6">
             <AnimatePresence mode="wait">
               {submitSuccess ? (
-                <motion.div
-                  key="success"
-                  initial={{ opacity: 0, y: 10 }}
+                <motion.div 
+                  initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.3 }}
-                  className="text-center py-8"
+                  className="py-6 px-4 sm:p-6 text-center"
                 >
-                  <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <CheckCircle className="h-8 w-8 text-green-600" />
-                  </div>
-                  <h3 className="text-xl font-bold text-neutral-900 mb-2">Thank You!</h3>
-                  <p className="mb-6 text-neutral-600">
+                  <motion.div 
+                    initial={{ scale: 0.8, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ 
+                      type: "spring", 
+                      stiffness: 200, 
+                      damping: 15,
+                      delay: 0.2
+                    }}
+                    className="w-24 h-24 mx-auto mb-5 relative"
+                  >
+                    <img 
+                      src="/images/wmf.png" 
+                      alt="WMF Logo" 
+                      className="w-full h-full object-contain" 
+                    />
+                    <motion.div 
+                      className="absolute inset-0 rounded-full border-2 border-accent-red"
+                      initial={{ scale: 0.6, opacity: 0 }}
+                      animate={{ scale: 1.2, opacity: 0 }}
+                      transition={{ 
+                        repeat: Infinity, 
+                        duration: 1.5,
+                        ease: "easeOut"
+                      }}
+                    />
+                  </motion.div>
+                  
+                  <motion.h3 
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3 }}
+                    className="text-xl font-bold text-neutral-900 mb-2"
+                  >
+                    Thank You!
+                  </motion.h3>
+                  
+                  <motion.p 
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.4 }}
+                    className="mb-5 text-neutral-600"
+                  >
                     Your information has been submitted successfully. We'll be in touch with you shortly.
-                  </p>
+                  </motion.p>
+                  
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.5 }}
+                  >
+                    <p className="text-sm text-neutral-500 mb-4">
+                      Redirecting to homepage in {countdown} second{countdown !== 1 ? 's' : ''}...
+                    </p>
+                    
+                    <motion.button
+                      type="button"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.98 }}
+                      className="px-5 py-2 bg-accent-red text-white font-medium rounded-lg shadow-sm hover:bg-red-700 transition-colors"
+                      onClick={() => setRedirectReady(true)}
+                    >
+                      Go to Homepage Now
+                    </motion.button>
+                  </motion.div>
                 </motion.div>
               ) : formStep === 1 ? (
-                <motion.form
-                  key="step1"
-                  initial={{ opacity: 0, x: -20 }}
+                <motion.form 
+                  initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -20 }}
                   transition={{ duration: 0.3 }}
+                  className="space-y-2.5 pb-1"
                   onSubmit={nextStep}
                 >
-                  <div className="mb-4">
-                    <label htmlFor="name" className="block text-sm font-medium text-neutral-700 mb-1">Full Name *</label>
+                  <div>
+                    <label htmlFor="name" className="block text-xs font-medium text-neutral-700 mb-0.5">Your Name*</label>
                     <input
-                      type="text"
                       id="name"
                       name="name"
+                      type="text"
                       value={formData.name}
                       onChange={handleChange}
-                      className="w-full px-3 py-2 border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent-red focus:border-transparent"
+                      className="w-full px-3 py-2 text-sm border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent-red focus:border-transparent"
                       required
                     />
                   </div>
-                  <div className="mb-4">
-                    <label htmlFor="email" className="block text-sm font-medium text-neutral-700 mb-1">Email Address *</label>
+                  <div>
+                    <label htmlFor="email" className="block text-xs font-medium text-neutral-700 mb-0.5">Email Address*</label>
                     <input
                       type="email"
                       id="email"
                       name="email"
                       value={formData.email}
                       onChange={handleChange}
-                      className="w-full px-3 py-2 border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent-red focus:border-transparent"
+                      className="w-full px-3 py-2 text-sm border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent-red focus:border-transparent"
                       required
                     />
                   </div>
-                  <div className="mb-4">
-                    <label htmlFor="phone" className="block text-sm font-medium text-neutral-700 mb-1">Phone Number *</label>
+                  <div>
+                    <label htmlFor="phone" className="block text-xs font-medium text-neutral-700 mb-0.5">Phone Number*</label>
                     <input
                       type="tel"
                       id="phone"
                       name="phone"
                       value={formData.phone}
                       onChange={handleChange}
-                      className="w-full px-3 py-2 border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent-red focus:border-transparent"
+                      className="w-full px-3 py-2 text-sm border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent-red focus:border-transparent"
                       required
                     />
                   </div>
-                  <div className="mb-4">
-                    <label htmlFor="zipCode" className="block text-sm font-medium text-neutral-700 mb-1">Zip Code *</label>
+                  <div>
+                    <label htmlFor="zipCode" className="block text-xs font-medium text-neutral-700 mb-0.5">Zip Code*</label>
                     <input
                       type="text"
                       id="zipCode"
                       name="zipCode"
                       value={formData.zipCode}
                       onChange={handleChange}
-                      className="w-full px-3 py-2 border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent-red focus:border-transparent"
+                      className="w-full px-3 py-2 text-sm border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent-red focus:border-transparent"
                       required
                       maxLength={10}
                       placeholder="e.g. 12345"
                     />
                   </div>
-                  <div className="mb-6">
-                    <label htmlFor="company" className="block text-sm font-medium text-neutral-700 mb-1">Company Name</label>
+                  <div>
+                    <label htmlFor="company" className="block text-xs font-medium text-neutral-700 mb-0.5">Company Name</label>
                     <input
                       type="text"
                       id="company"
                       name="company"
                       value={formData.company}
                       onChange={handleChange}
-                      className="w-full px-3 py-2 border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent-red focus:border-transparent"
+                      className="w-full px-3 py-2 text-sm border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent-red focus:border-transparent"
                     />
                   </div>
 
@@ -347,32 +501,31 @@ export default function LandingPage() {
                     </div>
                   )}
 
-                  <div className="flex justify-end">
+                  <div className="pt-1">
                     <button
                       type="submit"
-                      className="px-6 py-3 bg-accent-red hover:bg-accent-red/90 text-white font-bold rounded-md flex items-center transition-colors"
-                    >
-                      Continue <ArrowRight className="ml-2 h-4 w-4" />
+                      className="w-full px-4 py-2.5 bg-accent-red hover:bg-accent-red/90 text-white font-bold rounded-lg flex items-center justify-center transition-colors shadow-sm text-sm">
+                      Continue <ArrowRight className="ml-2 h-3.5 w-3.5" />
                     </button>
                   </div>
                 </motion.form>
               ) : formStep === 2 ? (
-                <motion.form
-                  key="step2"
+                <motion.form 
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: 20 }}
                   transition={{ duration: 0.3 }}
+                  className="space-y-2.5 pb-1"
                   onSubmit={nextStep}
                 >
-                  <div className="mb-5">
-                    <label htmlFor="serviceInterest" className="block text-sm font-medium text-neutral-700 mb-1">Which service are you most interested in? *</label>
+                  <div>
+                    <label htmlFor="serviceInterest" className="block text-xs font-medium text-neutral-700 mb-0.5">Which service are you most interested in? *</label>
                     <select
                       id="serviceInterest"
                       name="serviceInterest"
                       value={formData.serviceInterest}
                       onChange={handleChange}
-                      className="w-full px-3 py-2 border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent-red focus:border-transparent"
+                      className="w-full px-3 py-2 text-sm border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent-red focus:border-transparent"
                       required
                     >
                       <option value="" disabled>Select a service</option>
@@ -382,8 +535,8 @@ export default function LandingPage() {
                     </select>
                   </div>
 
-                  <div className="mb-5">
-                    <p className="block text-sm font-medium text-neutral-700 mb-2">Would you be interested in any add-ons?</p>
+                  <div>
+                    <p className="block text-xs font-medium text-neutral-700 mb-2">Would you be interested in any add-ons?</p>
                     <div className="space-y-2">
                       <div className="flex items-start">
                         <input
@@ -395,7 +548,7 @@ export default function LandingPage() {
                           className="mt-1 mr-3"
                         />
                         <div>
-                          <label htmlFor="extra-blog" className="block text-sm font-medium text-neutral-700">Extra Blog Content ($150/mo)</label>
+                          <label htmlFor="extra-blog" className="block text-xs font-medium text-neutral-700">Extra Blog Content ($150/mo)</label>
                           <p className="text-xs text-neutral-500">2 additional posts per month</p>
                         </div>
                       </div>
@@ -409,7 +562,7 @@ export default function LandingPage() {
                           className="mt-1 mr-3"
                         />
                         <div>
-                          <label htmlFor="social-media" className="block text-sm font-medium text-neutral-700">Social Media Management ($300/mo)</label>
+                          <label htmlFor="social-media" className="block text-xs font-medium text-neutral-700">Social Media Management ($300/mo)</label>
                           <p className="text-xs text-neutral-500">Content creation and posting</p>
                         </div>
                       </div>
@@ -423,21 +576,21 @@ export default function LandingPage() {
                           className="mt-1 mr-3"
                         />
                         <div>
-                          <label htmlFor="strategy-call" className="block text-sm font-medium text-neutral-700">Monthly Strategy Call ($125/mo)</label>
+                          <label htmlFor="strategy-call" className="block text-xs font-medium text-neutral-700">Monthly Strategy Call ($125/mo)</label>
                           <p className="text-xs text-neutral-500">30-minute consultation with marketing expert</p>
                         </div>
                       </div>
                     </div>
                   </div>
 
-                  <div className="mb-6">
-                    <label htmlFor="budget" className="block text-sm font-medium text-neutral-700 mb-1">What's your approximate monthly marketing budget? *</label>
+                  <div>
+                    <label htmlFor="budget" className="block text-xs font-medium text-neutral-700 mb-0.5">What's your approximate monthly marketing budget? *</label>
                     <select
                       id="budget"
                       name="budget"
                       value={formData.budget}
                       onChange={handleChange}
-                      className="w-full px-3 py-2 border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent-red focus:border-transparent"
+                      className="w-full px-3 py-2 text-sm border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent-red focus:border-transparent"
                       required
                     >
                       <option value="" disabled>Select budget range</option>
@@ -455,39 +608,37 @@ export default function LandingPage() {
                     </div>
                   )}
 
-                  <div className="flex justify-between">
+                  <div className="flex justify-between pt-1">
                     <button
                       type="button"
                       onClick={prevStep}
-                      className="px-6 py-3 bg-white border border-neutral-300 text-neutral-700 font-medium rounded-md hover:bg-neutral-50 transition-colors"
-                    >
+                      className="px-4 py-2 bg-white border border-neutral-300 text-neutral-700 font-medium rounded-lg hover:bg-neutral-50 transition-colors text-sm">
                       Back
                     </button>
                     <button
                       type="submit"
-                      className="px-6 py-3 bg-accent-red hover:bg-accent-red/90 text-white font-bold rounded-md flex items-center transition-colors"
-                    >
-                      Continue <ArrowRight className="ml-2 h-4 w-4" />
+                      className="px-4 py-2 bg-accent-red hover:bg-accent-red/90 text-white font-bold rounded-lg flex items-center transition-colors text-sm shadow-sm">
+                      Continue <ArrowRight className="ml-2 h-3.5 w-3.5" />
                     </button>
                   </div>
                 </motion.form>
               ) : (
-                <motion.form
-                  key="step3"
+                <motion.form 
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: 20 }}
                   transition={{ duration: 0.3 }}
+                  className="space-y-2.5 pb-1"
                   onSubmit={handleSubmit}
                 >
-                  <div className="mb-5">
-                    <label htmlFor="timeline" className="block text-sm font-medium text-neutral-700 mb-1">When are you looking to start? *</label>
+                  <div>
+                    <label htmlFor="timeline" className="block text-xs font-medium text-neutral-700 mb-0.5">When are you looking to start? *</label>
                     <select
                       id="timeline"
                       name="timeline"
                       value={formData.timeline}
                       onChange={handleChange}
-                      className="w-full px-3 py-2 border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent-red focus:border-transparent"
+                      className="w-full px-3 py-2 text-sm border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent-red focus:border-transparent"
                       required
                     >
                       <option value="" disabled>Select timeline</option>
@@ -498,14 +649,14 @@ export default function LandingPage() {
                     </select>
                   </div>
 
-                  <div className="mb-5">
-                    <label htmlFor="hearAbout" className="block text-sm font-medium text-neutral-700 mb-1">How did you hear about us?</label>
+                  <div>
+                    <label htmlFor="hearAbout" className="block text-xs font-medium text-neutral-700 mb-0.5">How did you hear about us?</label>
                     <select
                       id="hearAbout"
                       name="hearAbout"
                       value={formData.hearAbout}
                       onChange={handleChange}
-                      className="w-full px-3 py-2 border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent-red focus:border-transparent"
+                      className="w-full px-3 py-2 text-sm border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent-red focus:border-transparent"
                     >
                       <option value="" disabled>Select an option</option>
                       <option value="Google">Google Search</option>
@@ -516,15 +667,15 @@ export default function LandingPage() {
                     </select>
                   </div>
 
-                  <div className="mb-6">
-                    <label htmlFor="message" className="block text-sm font-medium text-neutral-700 mb-1">Anything else we should know?</label>
+                  <div>
+                    <label htmlFor="message" className="block text-xs font-medium text-neutral-700 mb-0.5">Anything else we should know?</label>
                     <textarea
                       id="message"
                       name="message"
                       value={formData.message}
                       onChange={handleChange}
                       rows={3}
-                      className="w-full px-3 py-2 border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent-red focus:border-transparent"
+                      className="w-full px-3 py-2 text-sm border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent-red focus:border-transparent"
                     ></textarea>
                   </div>
 
@@ -535,20 +686,18 @@ export default function LandingPage() {
                     </div>
                   )}
 
-                  <div className="flex justify-between">
+                  <div className="flex justify-between pt-1">
                     <button
                       type="button"
                       onClick={prevStep}
-                      className="px-6 py-3 bg-white border border-neutral-300 text-neutral-700 font-medium rounded-md hover:bg-neutral-50 transition-colors"
-                    >
+                      className="px-4 py-2 bg-white border border-neutral-300 text-neutral-700 font-medium rounded-lg hover:bg-neutral-50 transition-colors text-sm">
                       Back
                     </button>
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="px-6 py-3 bg-accent-red hover:bg-accent-red/90 text-white font-bold rounded-md flex items-center transition-colors disabled:opacity-70"
-                    >
-                      {isSubmitting ? 'Submitting...' : 'Get My Marketing Plan'}
+                      className="px-4 py-2 bg-accent-red hover:bg-accent-red/90 text-white font-bold rounded-lg flex items-center transition-colors disabled:opacity-70 shadow-sm text-sm">
+                      {isSubmitting ? 'Submitting...' : 'Get Plan'}
                     </button>
                   </div>
                 </motion.form>
@@ -557,8 +706,8 @@ export default function LandingPage() {
           </div>
 
           {/* Form Footer */}
-          <div className="bg-neutral-50 border-t border-neutral-200 p-4 text-xs text-neutral-500 text-center">
-            By submitting this form, you agree to our <a href="/privacy" className="text-accent-red hover:underline">Privacy Policy</a>. We'll never share your information.
+          <div className="bg-neutral-50 border-t border-neutral-100 py-2 px-3 text-xs text-neutral-500 text-center">
+            By submitting, you agree to our <a href="/privacy" className="text-accent-red hover:underline">Privacy Policy</a>
           </div>
         </div>
       </div>
