@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { Loader2, Send, CheckCircle, Phone, Mail, User, Building, ArrowRight, ArrowLeft } from "lucide-react";
+import { Loader2, Send, CheckCircle, Phone, Mail, User, Building, ArrowRight, ArrowLeft, MessageSquare } from "lucide-react";
 import { RetroButton } from "./retro-button";
 import { cn } from "../lib/utils";
 
@@ -255,9 +255,9 @@ export function ContactForm({ quickMode = false, onSubmitSuccess, onStepChange, 
                   <label htmlFor="name" className="block text-sm font-medium text-neutral-dark">
                     Your Name <span className="text-accent-red">*</span>
                   </label>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                      <User className="w-5 h-5 text-neutral-300" />
+                  <div className="flex items-center">
+                    <div className="p-3 bg-neutral-100 border border-neutral-200 rounded-l-md">
+                      <User className="w-5 h-5 text-neutral-500" />
                     </div>
                     <input
                       id="name"
@@ -267,7 +267,7 @@ export function ContactForm({ quickMode = false, onSubmitSuccess, onStepChange, 
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
                       className={cn(
-                        "block w-full pl-10 border border-neutral-200 rounded-md p-3 shadow-sm",
+                        "block w-full border border-neutral-200 border-l-0 rounded-r-md p-3 shadow-sm",
                         formik.touched.name && formik.errors.name ? "border-red-300 focus:ring-red-500" : ""  
                       )}
                       placeholder="John Smith"
@@ -282,9 +282,9 @@ export function ContactForm({ quickMode = false, onSubmitSuccess, onStepChange, 
                   <label htmlFor="email" className="block text-sm font-medium text-neutral-dark">
                     Email Address <span className="text-accent-red">*</span>
                   </label>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                      <Mail className="w-5 h-5 text-neutral-300" />
+                  <div className="flex items-center">
+                    <div className="p-3 bg-neutral-100 border border-neutral-200 rounded-l-md">
+                      <Mail className="w-5 h-5 text-neutral-500" />
                     </div>
                     <input
                       id="email"
@@ -294,8 +294,8 @@ export function ContactForm({ quickMode = false, onSubmitSuccess, onStepChange, 
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
                       className={cn(
-                        "block w-full pl-10 border border-neutral-200 rounded-md p-3 shadow-sm",
-                        formik.touched.email && formik.errors.email ? "border-red-300 focus:ring-red-500" : ""  
+                        "block w-full border border-neutral-200 border-l-0 rounded-r-md p-3 shadow-sm",
+                        formik.touched.email && formik.errors.email ? "border-red-300 focus:ring-red-500" : ""
                       )}
                       placeholder="john@example.com"
                     />
@@ -324,9 +324,9 @@ export function ContactForm({ quickMode = false, onSubmitSuccess, onStepChange, 
                     <label htmlFor="phone" className="block text-sm font-medium text-neutral-dark">
                       Phone Number
                     </label>
-                    <div className="relative">
-                      <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                        <Phone className="w-5 h-5 text-neutral-300" />
+                    <div className="flex items-center">
+                      <div className="p-3 bg-neutral-100 border border-neutral-200 rounded-l-md">
+                        <Phone className="w-5 h-5 text-neutral-500" />
                       </div>
                       <input
                         id="phone"
@@ -335,7 +335,7 @@ export function ContactForm({ quickMode = false, onSubmitSuccess, onStepChange, 
                         value={formik.values.phone}
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
-                        className="block w-full pl-10 border border-neutral-200 rounded-md p-3 shadow-sm"
+                        className="block w-full border border-neutral-200 border-l-0 rounded-r-md p-3 shadow-sm"
                         placeholder="(123) 456-7890"
                       />
                     </div>
@@ -345,9 +345,9 @@ export function ContactForm({ quickMode = false, onSubmitSuccess, onStepChange, 
                     <label htmlFor="company" className="block text-sm font-medium text-neutral-dark">
                       Company Name
                     </label>
-                    <div className="relative">
-                      <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                        <Building className="w-5 h-5 text-neutral-300" />
+                    <div className="flex items-center">
+                      <div className="p-3 bg-neutral-100 border border-neutral-200 rounded-l-md">
+                        <Building className="w-5 h-5 text-neutral-500" />
                       </div>
                       <input
                         id="company"
@@ -356,7 +356,7 @@ export function ContactForm({ quickMode = false, onSubmitSuccess, onStepChange, 
                         value={formik.values.company}
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
-                        className="block w-full pl-10 border border-neutral-200 rounded-md p-3 shadow-sm"
+                        className="block w-full border border-neutral-200 border-l-0 rounded-r-md p-3 shadow-sm"
                         placeholder="Your Fence Company"
                       />
                     </div>
@@ -366,16 +366,21 @@ export function ContactForm({ quickMode = false, onSubmitSuccess, onStepChange, 
                     <label htmlFor="message" className="block text-sm font-medium text-neutral-dark">
                       Message
                     </label>
-                    <textarea
-                      id="message"
-                      name="message"
-                      rows={4}
-                      value={formik.values.message}
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                      className="block w-full border border-neutral-200 rounded-md p-3 shadow-sm"
-                      placeholder="Tell us about your fence business and what you're looking for..."
-                    />
+                    <div className="flex">
+                      <div className="p-3 bg-neutral-100 border border-neutral-200 rounded-l-md self-start">
+                        <MessageSquare className="w-5 h-5 text-neutral-500" />
+                      </div>
+                      <textarea
+                        id="message"
+                        name="message"
+                        rows={4}
+                        value={formik.values.message}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        className="block w-full border border-neutral-200 border-l-0 rounded-r-md p-3 shadow-sm"
+                        placeholder="Tell us about your fence business and what you're looking for..."
+                      />
+                    </div>
                   </div>
                 </div>
                 
