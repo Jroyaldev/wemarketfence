@@ -3,6 +3,8 @@ import type { Metadata } from "next"
 import "./globals.css"
 import { Facebook } from "lucide-react"
 import Image from "next/image"
+import { Analytics } from "@vercel/analytics/react"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 import { SiteHeader } from "../components/site-header"
 import { ThemeProvider } from "../components/theme-provider"
@@ -214,6 +216,8 @@ export default function RootLayout({
           <SocialProofPopups />
           <ModernizedMobileCTA />
           <BackToTopButton />
+          <Analytics />
+          <SpeedInsights />
         </ThemeProvider>
       </body>
     </html>
