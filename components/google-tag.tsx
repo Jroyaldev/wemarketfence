@@ -26,7 +26,7 @@ export default function GoogleTag() {
               }
             };
             gtag('event', 'conversion', {
-                'send_to': 'AW-16964314941/J9W_CIbbmbQaEL3Om5k_',
+                'send_to': 'AW-16964314941/JXgPCN7e2bEaEL3Om5k_',
                 'event_callback': callback
             });
             return false;
