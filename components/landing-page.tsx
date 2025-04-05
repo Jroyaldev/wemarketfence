@@ -80,13 +80,14 @@ export default function LandingPage() {
 
     // Set body height to viewport height on mobile to reduce scrolling
     const setViewportHeight = () => {
-      // Only apply viewport height restriction on mobile devices
-      if (window.innerWidth < 768) {
-        document.body.style.height = '100vh';
-        document.body.style.overflow = 'hidden';
-      } else {
-        document.body.style.height = '';
-        document.body.style.overflow = '';
+      // Allow scrolling on all devices for better form accessibility
+      document.body.style.height = '';
+      document.body.style.overflow = '';
+      
+      // Set a minimum height for the container instead of restricting body
+      const formContainer = document.querySelector('.landing-form-container');
+      if (formContainer) {
+        (formContainer as HTMLElement).style.minHeight = '100vh';
       }
     };
     
@@ -102,7 +103,7 @@ export default function LandingPage() {
       if (header) header.style.display = '';
       if (nav) nav.style.display = '';
       document.body.style.height = '';
-      document.body.style.overflow = '';
+      document.body.style.overflow = 'auto'; // Changed to 'auto'
       window.removeEventListener('resize', setViewportHeight);
       
       // Restore original meta viewport content
@@ -316,7 +317,7 @@ export default function LandingPage() {
 
   return (
     <main className="min-h-screen bg-neutral-50 flex flex-col justify-center items-center px-4 py-4 sm:py-8">
-      <div className="w-full max-w-lg">
+      <div className="w-full max-w-lg landing-form-container">
         {/* Navigation bar with logo, brand name and back button */}
         <div className="mb-1.5 flex items-center justify-between bg-white shadow-sm rounded-md px-2 py-1">
           <div className="flex items-center">
