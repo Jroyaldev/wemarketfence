@@ -2,13 +2,6 @@
 
 import { useEffect } from "react";
 import Script from "next/script";
-import { Metadata } from "next";
-
-// Exports for metadata (static, can be accessed during server rendering)
-export const metadata: Metadata = {
-  title: "Perspective Funnel | We Market Fence",
-  description: "Complete our marketing assessment to help us understand your fence business needs.",
-};
 
 export default function PerspectiveFunnelPage() {
   return (
