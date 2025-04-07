@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import LandingPage from '@/components/landing-page';
+import { redirect } from 'next/navigation';
 
 export const metadata: Metadata = {
   title: 'Grow Your Fence Business | WeMarketFence',
@@ -11,6 +11,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default function Page() {
-  return <LandingPage />;
+// Redirect from old landing page to new funnel page
+export default function LandingPageRedirect() {
+  redirect('/funnel');
 }
