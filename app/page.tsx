@@ -207,7 +207,7 @@ export default function Home() {
                 </div>
                 
                 <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-                  <Link href="/landing" aria-label="Get started with fence marketing">
+                  <Link href="/funnel" aria-label="Get started with fence marketing">
                     <RetroButton 
                       size="lg" 
                       variant="primary" 
@@ -300,7 +300,7 @@ export default function Home() {
             </div>
             
             <div className="mt-12 flex justify-center">
-              <Link href="/landing" aria-label="Get a custom fence marketing plan">
+              <Link href="/funnel" aria-label="Get a custom fence marketing plan">
                 <RetroButton 
                   size="lg" 
                   variant="primary" 
@@ -402,7 +402,7 @@ export default function Home() {
                   
                   {/* CTA Button - modern styling */}
                   <div className="mt-8 flex justify-center lg:justify-start">
-                    <Link href="/landing" aria-label="Speak with a fence marketing specialist">
+                    <Link href="/funnel" aria-label="Speak with a fence marketing specialist">
                       <RetroButton
                         variant="primary"
                         size="lg"
@@ -466,41 +466,41 @@ export default function Home() {
                       <div className="w-12 h-12 bg-accent-red/10 rounded-full flex items-center justify-center flex-shrink-0">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-accent-red">
                           <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
-                        </svg>
-                      </div>
-                      <div>
-                        <h4 className="font-medium text-neutral-dark/70 text-sm">Phone</h4>
-                        <a href="tel:6155610502" className="text-lg text-neutral-dark hover:text-accent-red transition-colors">
-                          (615) 561-0502
-                        </a>
-                      </div>
+                      </svg>
                     </div>
-                    
-                    <div className="flex items-center space-x-4">
-                      <div className="w-12 h-12 bg-[#58CCDC]/10 rounded-full flex items-center justify-center flex-shrink-0">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#58CCDC]">
-                          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-                          <polyline points="22,6 12,13 2,6"></polyline>
-                        </svg>
-                      </div>
-                      <div>
-                        <h4 className="font-medium text-neutral-dark/70 text-sm">Email</h4>
-                        <a href="mailto:jonny@wemarketfence.com" className="text-lg text-neutral-dark hover:text-accent-red transition-colors">
-                          jonny@wemarketfence.com
-                        </a>
-                      </div>
+                    <div>
+                      <h4 className="font-medium text-neutral-dark/70 text-sm">Phone</h4>
+                      <a href="tel:6155610502" className="text-lg text-neutral-dark hover:text-accent-red transition-colors">
+                        (615) 561-0502
+                      </a>
                     </div>
                   </div>
-                  
-                  {/* Response time indicator */}
-                  <div className="bg-neutral-50 p-4 rounded-lg border border-neutral-100">
-                    <div className="flex items-center mb-2">
-                      <div className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></div>
-                      <span className="text-sm font-medium text-green-700">We're Available</span>
+                    
+                  <div className="flex items-center space-x-4">
+                    <div className="w-12 h-12 bg-[#58CCDC]/10 rounded-full flex items-center justify-center flex-shrink-0">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#58CCDC]">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                        <polyline points="22,6 12,13 2,6"></polyline>
+                      </svg>
                     </div>
-                    <p className="text-sm text-neutral-dark/80">We typically respond to all inquiries within 24 hours.</p>
+                    <div>
+                      <h4 className="font-medium text-neutral-dark/70 text-sm">Email</h4>
+                      <a href="mailto:jonny@wemarketfence.com" className="text-lg text-neutral-dark hover:text-accent-red transition-colors">
+                        jonny@wemarketfence.com
+                      </a>
+                    </div>
                   </div>
                 </div>
+                
+                {/* Response time indicator */}
+                <div className="bg-neutral-50 p-4 rounded-lg border border-neutral-100">
+                  <div className="flex items-center mb-2">
+                    <div className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></div>
+                    <span className="text-sm font-medium text-green-700">We're Available</span>
+                  </div>
+                  <p className="text-sm text-neutral-dark/80">We typically respond to all inquiries within 24 hours.</p>
+                </div>
+              </div>
                 
                 {/* Contact Form - Right side on desktop */}
                 <div className="bg-neutral-50 p-5 rounded-lg">
@@ -524,15 +524,15 @@ export default function Home() {
                     <div className="w-12 h-12 bg-accent-red/10 rounded-full flex items-center justify-center flex-shrink-0">
                       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-accent-red">
                         <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
-                      </svg>
-                    </div>
-                    <div>
-                      <h4 className="font-medium text-neutral-dark/70 text-sm">Phone</h4>
-                      <a href="tel:6155610502" className="text-lg text-neutral-dark hover:text-accent-red transition-colors">
-                        (615) 561-0502
-                      </a>
-                    </div>
+                    </svg>
                   </div>
+                  <div>
+                    <h4 className="font-medium text-neutral-dark/70 text-sm">Phone</h4>
+                    <a href="tel:6155610502" className="text-lg text-neutral-dark hover:text-accent-red transition-colors">
+                      (615) 561-0502
+                    </a>
+                  </div>
+                </div>
                   
                   <div className="flex items-center space-x-4">
                     <div className="w-12 h-12 bg-[#58CCDC]/10 rounded-full flex items-center justify-center flex-shrink-0">

@@ -62,7 +62,7 @@ export function SiteFooter() {
                 <Link href="/process" className="font-medium text-neutral-dark hover:text-accent-red transition-colors hover:translate-x-1 duration-200">
                   Our Process
                 </Link>
-                <Link href="/landing" className="font-medium text-neutral-dark hover:text-accent-red transition-colors hover:translate-x-1 duration-200">
+                <Link href="/funnel" className="font-medium text-neutral-dark hover:text-accent-red transition-colors hover:translate-x-1 duration-200">
                   Contact
                 </Link>
               </nav>

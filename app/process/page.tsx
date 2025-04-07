@@ -97,7 +97,7 @@ export default function ProcessPage() {
               A proven system that consistently delivers quality leads for fence companies across the country.
             </p>
             <div className="flex justify-center">
-              <Link href="/landing">
+              <Link href="/funnel">
                 <RetroButton 
                   variant="primary" 
                   size="lg"
@@ -226,7 +226,7 @@ export default function ProcessPage() {
               Let's work together to bring more qualified leads to your fence company.
             </p>
             <div className="flex justify-center">
-              <Link href="/landing">
+              <Link href="/funnel">
                 <RetroButton 
                   variant="primary" 
                   size="lg"

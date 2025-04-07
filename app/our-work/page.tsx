@@ -204,7 +204,7 @@ export default function OurWork() {
             Let's create a marketing strategy that builds your fence brand.
           </p>
           <div className="flex justify-center">
-            <Link href="/landing">
+            <Link href="/funnel">
               <RetroButton
                 size="lg"
                 variant="primary"

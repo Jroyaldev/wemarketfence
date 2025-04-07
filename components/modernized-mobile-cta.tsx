@@ -17,7 +17,7 @@ export function ModernizedMobileCTA() {
 
   useEffect(() => {
     // Don't execute the effect on landing page
-    if (pathname === "/landing") {
+    if (pathname === "/funnel") {
       return;
     }
     
@@ -56,7 +56,7 @@ export function ModernizedMobileCTA() {
   // Add eye-catching animations
   useEffect(() => {
     // Don't execute the effect on landing page
-    if (pathname === "/landing") {
+    if (pathname === "/funnel") {
       return;
     }
     
@@ -102,7 +102,7 @@ export function ModernizedMobileCTA() {
 
   const handleClick = () => {
     // Redirect to landing page
-    window.location.href = '/landing';
+    window.location.href = '/funnel';
     
     // Track click with Meta Pixel
     if (typeof window !== 'undefined' && window.fbq) {
@@ -111,7 +111,7 @@ export function ModernizedMobileCTA() {
   };
 
   // Don't render on landing page or if not visible
-  if (pathname === "/landing" || !isVisible) {
+  if (pathname === "/funnel" || !isVisible) {
     return null;
   }
 

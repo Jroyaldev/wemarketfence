@@ -116,7 +116,7 @@ export default function Work() {
           </div>
 
           <div className="text-center mt-16 md:mt-20">
-            <Link href="/landing">
+            <Link href="/funnel">
               <RetroButton 
                 size="lg"
                 variant="primary"
