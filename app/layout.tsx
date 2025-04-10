@@ -12,6 +12,7 @@ import { BackToTopButton } from "../components/back-to-top-button"
 import MetaPixel from "../components/meta-pixel"
 import GoogleTag from "../components/google-tag"
 import OttoPixel from "../components/otto-pixel"
+import RedditPixel from "../components/reddit-pixel"
 import { ExitIntentPopup } from "../components/exit-intent-popup"
 import { SocialProofPopups } from "../components/social-proof-popups"
 import { ModernizedMobileCTA } from "../components/modernized-mobile-cta"
@@ -32,6 +33,7 @@ export default function RootLayout({
           <MetaPixel />
           <GoogleTag />
           <OttoPixel />
+          <RedditPixel />
           <LocalBusinessJsonLd 
             name="We Market Fence"
             description="Marketing agency specialized in helping fence companies grow their business with websites and digital marketing."
