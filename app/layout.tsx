@@ -13,6 +13,7 @@ import MetaPixel from "../components/meta-pixel"
 import GoogleTag from "../components/google-tag"
 import OttoPixel from "../components/otto-pixel"
 import RedditPixel from "../components/reddit-pixel"
+import GoogleTagManager from "../components/google-tag-manager"
 import { ExitIntentPopup } from "../components/exit-intent-popup"
 import { SocialProofPopups } from "../components/social-proof-popups"
 import { ModernizedMobileCTA } from "../components/modernized-mobile-cta"
@@ -31,6 +32,7 @@ export default function RootLayout({
       <body className={`font-sans antialiased`}>
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
           <MetaPixel />
+          <GoogleTagManager />
           <GoogleTag />
           <OttoPixel />
           <RedditPixel />

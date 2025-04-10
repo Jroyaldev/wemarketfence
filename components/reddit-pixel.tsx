@@ -2,7 +2,7 @@
 
 import Script from 'next/script'
 import { usePathname, useSearchParams } from 'next/navigation'
-import { useEffect } from 'react'
+import { useEffect, Suspense } from 'react'
 
 export const REDDIT_PIXEL_ID = 'a2_gsk0teoaww4i'
 
@@ -12,7 +12,8 @@ declare global {
   }
 }
 
-export default function RedditPixel() {
+// Client component that uses search params
+function RedditPixelTracker() {
   const pathname = usePathname()
   const searchParams = useSearchParams()
 
@@ -22,6 +23,11 @@ export default function RedditPixel() {
     }
   }, [pathname, searchParams])
 
+  return null
+}
+
+// Main component with Suspense boundary
+export default function RedditPixel() {
   return (
     <>
       <Script
@@ -33,6 +39,9 @@ export default function RedditPixel() {
           `,
         }}
       />
+      <Suspense fallback={null}>
+        <RedditPixelTracker />
+      </Suspense>
     </>
   )
 }
