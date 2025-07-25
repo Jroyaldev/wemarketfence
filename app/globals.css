@@ -56,9 +56,31 @@
     @apply border-border;
   }
   body {
-    @apply bg-neutral-light text-neutral-dark; /* Updated base background and text color */
+    @apply bg-neutral-50 text-neutral-900;
     font-feature-settings: "rlig" 1, "calt" 1;
     font-family: 'Space Grotesk', sans-serif;
+    line-height: 1.6;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold tracking-tight;
+    line-height: 1.2;
+  }
+  
+  h1 {
+    @apply text-4xl md:text-5xl lg:text-6xl;
+  }
+  
+  h2 {
+    @apply text-3xl md:text-4xl;
+  }
+  
+  h3 {
+    @apply text-2xl md:text-3xl;
+  }
+  
+  p {
+    @apply text-neutral-600 leading-relaxed;
   }
 }
 

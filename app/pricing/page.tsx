@@ -1,66 +1,34 @@
 "use client"
 import React, { useState } from "react"
-import { ArrowRight, Check, Zap, Shield, Globe, Users, BarChart, Phone } from "lucide-react"
+import { ArrowRight, Check, Zap, Shield, Globe, Users, BarChart, Phone, Star, Clock } from "lucide-react"
 import Link from "next/link"
-import Image from "next/image"
-import { motion } from "framer-motion"
-
-import { RetroButton } from "../../components/retro-button"
-import { RetroCard } from "../../components/retro-card"
-import { RetroSection } from "../../components/retro-section"
-import { ExitIntentPopup } from "../../components/exit-intent-popup"
-import { cn } from "../../lib/utils"
-
-// Animation variants for staggered animation
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-    },
-  },
-}
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.5,
-    },
-  },
-}
 
 export default function PricingPage() {
-  const [billingCycle, setBillingCycle] = useState<"monthly" | "annually">("monthly")
-  
-  // Pricing plans with feature lists
+  // Pricing plans with modern design
   const pricingPlans = [
     {
-      name: "Conversion-Optimized Website",
-      description: "Perfect for fence pros who need a professional website without the tech headaches.",
+      name: "Website Essentials",
+      description: "Perfect for fence contractors who need a professional online presence without the tech headaches.",
       price: 250,
-      color: "bg-accent-yellow",
-      icon: <Shield className="h-6 w-6 text-neutral-dark" />,
+      color: "border-blue-200 hover:border-blue-300",
+      icon: <Shield className="h-6 w-6 text-blue-600" />,
       features: [
         "Custom-designed, mobile-friendly website",
         "Built to convert visitors into fence leads",
-        "Hosting, backups, SSL, and monthly updates included",
+        "Hosting, backups, SSL, and monthly updates included", 
         "Minor content changes (text, images) each month",
         "Fully managed (you never touch the backend)",
       ],
       mostPopular: false,
     },
     {
-      name: "Website + SEO",
-      description: "For contractors who want long-term local visibility and organic leads.",
+      name: "Website + Local SEO",
+      description: "For contractors who want long-term local visibility and organic lead generation.",
       price: 600,
-      color: "bg-[#58CCDC]",
-      icon: <Globe className="h-6 w-6 text-neutral-dark" />,
+      color: "border-emerald-200 hover:border-emerald-300",
+      icon: <Globe className="h-6 w-6 text-emerald-600" />,
       features: [
-        "All features from Tier 1",
+        "All features from Website Essentials",
         "Local SEO setup and monthly optimization",
         "Google Business Profile optimization",
         "1 fencing-specific blog per month (for ranking)",
@@ -69,13 +37,13 @@ export default function PricingPage() {
       mostPopular: true,
     },
     {
-      name: "Full-Service Lead Gen",
-      description: "For fence businesses that want leads fast and consistently.",
+      name: "Full Lead Generation",
+      description: "For fence businesses that want leads fast and consistently through paid advertising.",
       price: 1200,
-      color: "bg-accent-red",
-      icon: <Zap className="h-6 w-6 text-neutral-dark" />,
+      color: "border-amber-200 hover:border-amber-300",
+      icon: <Zap className="h-6 w-6 text-amber-600" />,
       features: [
-        "All features from Tier 2",
+        "All features from Website + Local SEO",
         "Google Ads & Facebook/Instagram Ads management",
         "Conversion tracking + monthly ad optimization",
         "Custom lead-tracking dashboard",
@@ -85,36 +53,36 @@ export default function PricingPage() {
     },
   ]
 
-  // Add-ons and upsells
+  // Add-ons
   const addOns = [
     {
       name: "Extra Blog Content",
-      description: "2 additional posts per month",
+      description: "2 additional posts per month for better SEO rankings",
       price: 150,
-      icon: <BarChart className="h-5 w-5 text-neutral-dark" />,
+      icon: <BarChart className="h-5 w-5 text-blue-600" />,
     },
     {
-      name: "Social Media Management",
-      description: "Content creation and posting",
+      name: "Social Media Management", 
+      description: "Content creation and posting across platforms",
       price: 300,
-      icon: <Users className="h-5 w-5 text-neutral-dark" />,
+      icon: <Users className="h-5 w-5 text-emerald-600" />,
     },
     {
       name: "Monthly Strategy Call",
       description: "30-minute consultation with marketing expert",
       price: 125,
-      icon: <Phone className="h-5 w-5 text-neutral-dark" />,
+      icon: <Phone className="h-5 w-5 text-amber-600" />,
     },
   ]
 
   // Common features included in all plans
   const commonFeatures = [
     "Month-to-month (no contracts)",
-    "Zero setup fees",
+    "Zero setup fees", 
     "Built exclusively for fencing contractors",
-    "Mobile-Friendly Design",
-    "SSL Security Certificate",
-    "Fast Loading Speed",
+    "Mobile-first responsive design",
+    "SSL security certificate",
+    "Fast loading speed optimization",
   ]
 
   // FAQ items
@@ -125,7 +93,7 @@ export default function PricingPage() {
     },
     {
       question: "Is there a setup fee?",
-      answer: "No, there are no setup fees.",
+      answer: "No, there are no setup fees for any of our plans. You pay only the monthly service fee.",
     },
     {
       question: "How long until I start seeing results?",
@@ -145,7 +113,7 @@ export default function PricingPage() {
     },
   ]
 
-  // Format price to show commas and currency symbol
+  // Format price to show currency
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
@@ -156,249 +124,209 @@ export default function PricingPage() {
   }
 
   return (
-    <main className="flex min-h-screen flex-col bg-neutral-light">
-      {/* Show exit intent popup for conversions */}
-      <ExitIntentPopup />
-      
+    <main className="flex min-h-screen flex-col bg-neutral-50">
       {/* Hero Section */}
-      <RetroSection 
-        className="bg-neutral-light pt-20 md:pt-28 pb-16 md:pb-24 relative overflow-hidden"
-        border="none"
-      >
-        {/* Background elements */}
-        <div className="absolute top-0 right-0 w-full h-full overflow-hidden pointer-events-none z-0">
-          <div className="absolute top-20 right-20 w-64 h-64 bg-accent-yellow opacity-10 rounded-full"></div>
-          <div className="absolute bottom-20 left-20 w-48 h-48 bg-accent-red opacity-10 rounded-full"></div>
-        </div>
-        
-        <div className="container px-6 sm:px-8 relative z-10">
-          <div className="max-w-4xl mx-auto text-center">
-            <div className="mb-6 relative">
-              <span className="inline-block text-sm font-medium bg-accent-yellow px-3 py-1 rounded-md mb-4 shadow-sm">
-                FENCE MARKETING PACKAGES
-              </span>
-              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-neutral-dark leading-tight">
-                SIMPLE <span className="text-accent-red">PRICING</span>
-              </h1>
+      <section className="bg-gradient-to-br from-neutral-50 to-blue-50/30 pt-20 md:pt-32 pb-16 md:pb-24">
+        <div className="container px-4 sm:px-6 max-w-7xl mx-auto">
+          <div className="text-center max-w-4xl mx-auto">
+            <div className="inline-flex items-center bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
+              <Star className="w-4 h-4 mr-2" />
+              Fence Marketing Packages
             </div>
-            <p className="text-xl md:text-2xl text-neutral-near-black mb-10 max-w-2xl mx-auto">
+            
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight mb-6">
+              Simple <span className="text-blue-600">Pricing</span>
+            </h1>
+            
+            <p className="text-xl text-neutral-600 max-w-3xl mx-auto leading-relaxed">
               Transparent pricing designed specifically for fence contractors. No hidden fees, just results.
             </p>
           </div>
           
-          {/* Billing toggle */}
-          <div className="flex justify-center mb-12">
-            <div className="bg-white p-3 rounded-lg shadow-sm inline-flex items-center">
-              <span className="text-sm font-medium text-neutral-dark px-3">Simple monthly pricing - no contracts</span>
+          {/* Trust indicator */}
+          <div className="flex justify-center mt-12">
+            <div className="bg-white px-6 py-3 rounded-full shadow-sm border border-neutral-200 inline-flex items-center">
+              <Clock className="h-4 w-4 text-blue-600 mr-2" />
+              <span className="text-sm font-medium text-neutral-700">Simple monthly pricing - no contracts</span>
             </div>
           </div>
         </div>
-      </RetroSection>
+      </section>
 
       {/* Pricing Section */}
-      <RetroSection className="bg-white py-16 md:py-24 border-t border-neutral-200 relative overflow-hidden">
-        {/* Background decorative elements */}
-        <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
-          <div className="absolute -top-10 -right-10 w-64 h-64 bg-accent-yellow opacity-5 rounded-full"></div>
-          <div className="absolute -bottom-20 -left-20 w-80 h-80 bg-accent-red opacity-5 rounded-full"></div>
-        </div>
-        
-        <div className="container px-6 sm:px-8 mx-auto relative z-10">
-          <div className="max-w-7xl mx-auto">
-            {/* Section header */}
-            <div className="flex justify-center mb-16">
-              <div className="inline-flex flex-row">
-                <div className="bg-[#58CCDC] border border-r-0 border-neutral-dark px-4 py-2 font-bold text-neutral-dark rounded-l-md">
-                  CHOOSE YOUR
-                </div>
-                <div className="bg-accent-red border border-neutral-dark px-4 py-2 font-bold text-neutral-dark rounded-r-md">
-                  PERFECT PLAN
-                </div>
-              </div>
+      <section className="bg-white py-16 md:py-24">
+        <div className="container px-4 sm:px-6 max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center bg-emerald-100 text-emerald-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
+              Choose Your Plan
             </div>
             
-            {/* Pricing Cards */}
-            <motion.div
-              className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10"
-              variants={containerVariants}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-50px" }}
-            >
-              {pricingPlans.map((plan) => (
-                <motion.div key={plan.name} variants={itemVariants}>
-                  <div className="relative h-full">
-                    {plan.mostPopular && (
-                      <div className="absolute -top-5 left-0 right-0 text-center z-10">
-                        <span className="inline-block bg-accent-red text-white text-sm font-medium px-6 py-1 rounded-full shadow-sm">
-                          Most Popular
-                        </span>
-                      </div>
-                    )}
+            <h2 className="text-3xl md:text-4xl font-bold text-neutral-900 mb-6">
+              Built for Fence Contractors
+            </h2>
+            
+            <p className="text-xl text-neutral-600 max-w-3xl mx-auto">
+              Each plan is designed to help fence companies grow their business at different stages.
+            </p>
+          </div>
+          
+          {/* Pricing Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10 max-w-7xl mx-auto">
+            {pricingPlans.map((plan) => (
+              <div key={plan.name} className="relative">
+                {plan.mostPopular && (
+                  <div className="absolute -top-5 left-0 right-0 text-center z-10">
+                    <span className="inline-block bg-blue-600 text-white text-sm font-medium px-6 py-1 rounded-full shadow-sm">
+                      Most Popular
+                    </span>
+                  </div>
+                )}
+                
+                <div className={`bg-white border-2 ${plan.color} rounded-xl p-8 h-full flex flex-col relative transition-all duration-300 hover:shadow-lg ${plan.mostPopular ? 'shadow-md' : 'shadow-sm'}`}>
+                  {/* Plan header */}
+                  <div className="mb-8">
+                    <div className="flex items-center mb-4">
+                      {plan.icon}
+                      <h3 className="text-2xl font-bold text-neutral-900 ml-3">{plan.name}</h3>
+                    </div>
+                    <p className="text-neutral-600 mb-6 leading-relaxed">{plan.description}</p>
                     
-                    <div 
-                      className={cn(
-                        "bg-white border border-neutral-dark rounded-lg p-6 md:p-8 h-full flex flex-col relative z-0",
-                        plan.mostPopular ? "shadow-md" : "shadow-sm",
-                        "transition-all duration-300 hover:translate-y-[-4px] hover:shadow-md"
-                      )}
-                    >
-                      {/* Plan header */}
-                      <div className="mb-6">
-                        <div className={`w-12 h-12 ${plan.color} rounded-full flex items-center justify-center mb-4 shadow-sm`}>
-                          {plan.icon}
-                        </div>
-                        <h3 className="text-2xl font-bold text-neutral-dark mb-2">{plan.name}</h3>
-                        <p className="text-neutral-near-black mb-4">{plan.description}</p>
-                        <div className="flex items-end mb-1">
-                          <span className="text-4xl font-bold text-neutral-dark">{formatPrice(plan.price)}</span>
-                          <span className="text-neutral-near-black ml-2 mb-1">/mo</span>
-                        </div>
-                        <div className="text-sm text-neutral-near-black mb-6">
-                          No setup fees
-                        </div>
-                      </div>
-                      
-                      {/* Feature list */}
-                      <div className="flex-grow mb-8">
-                        <ul className="space-y-3">
-                          {plan.features.map((feature, index) => (
-                            <li key={index} className="flex items-start">
-                              <Check className="h-5 w-5 text-accent-red mr-3 flex-shrink-0 mt-0.5" />
-                              <span className="text-neutral-near-black">{feature}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                      
-                      {/* CTA Button */}
-                      <div className="mt-auto">
-                        <Link href="/funnel">
-                          <RetroButton
-                            variant={plan.mostPopular ? "primary" : "secondary"}
-                            size="lg"
-                            className="w-full justify-center"
-                          >
-                            Get Started
-                            <ArrowRight className="ml-2 h-5 w-5" />
-                          </RetroButton>
-                        </Link>
-                      </div>
+                    <div className="flex items-end mb-2">
+                      <span className="text-4xl font-bold text-neutral-900">{formatPrice(plan.price)}</span>
+                      <span className="text-neutral-600 ml-2 mb-1">/month</span>
+                    </div>
+                    <div className="text-sm text-neutral-500">
+                      No setup fees • Cancel anytime
                     </div>
                   </div>
-                </motion.div>
-              ))}
-            </motion.div>
-            
-            {/* Included with all plans */}
-            <div className="mt-16 md:mt-20 bg-neutral-light rounded-lg p-6 md:p-8 border border-neutral-200 shadow-sm">
-              <h3 className="text-xl font-bold text-neutral-dark mb-6 text-center">All Plans Include</h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                {commonFeatures.map((feature, index) => (
-                  <div key={index} className="flex items-center">
-                    <Check className="h-5 w-5 text-accent-red mr-3 flex-shrink-0" />
-                    <span className="text-neutral-near-black">{feature}</span>
+                  
+                  {/* Feature list */}
+                  <div className="flex-grow mb-8">
+                    <ul className="space-y-4">
+                      {plan.features.map((feature, index) => (
+                        <li key={index} className="flex items-start">
+                          <Check className="h-5 w-5 text-blue-600 mr-3 flex-shrink-0 mt-0.5" />
+                          <span className="text-neutral-700">{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
-                ))}
+                  
+                  {/* CTA Button */}
+                  <div className="mt-auto">
+                    <Link href="/funnel">
+                      <button className={`w-full px-8 py-4 rounded-lg font-semibold transition-colors ${plan.mostPopular ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'border border-neutral-300 hover:border-blue-300 hover:bg-blue-50 text-neutral-700 hover:text-blue-600'} inline-flex items-center justify-center`}>
+                        Get Started
+                        <ArrowRight className="ml-2 h-5 w-5" />
+                      </button>
+                    </Link>
+                  </div>
+                </div>
               </div>
+            ))}
+          </div>
+          
+          {/* All plans include */}
+          <div className="mt-16 bg-gradient-to-br from-neutral-50 to-blue-50/30 rounded-xl p-8 border border-neutral-200">
+            <h3 className="text-xl font-bold text-neutral-900 mb-6 text-center">All Plans Include</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+              {commonFeatures.map((feature, index) => (
+                <div key={index} className="flex items-center">
+                  <Check className="h-5 w-5 text-blue-600 mr-3 flex-shrink-0" />
+                  <span className="text-neutral-700">{feature}</span>
+                </div>
+              ))}
             </div>
           </div>
         </div>
-      </RetroSection>
+      </section>
       
       {/* Add-ons Section */}
-      <div className="mt-16 md:mt-24">
-        <div className="flex justify-center mb-12">
-          <div className="inline-flex flex-row">
-            <div className="bg-[#58CCDC] border border-r-0 border-neutral-dark px-4 py-2 font-bold text-neutral-dark rounded-l-md">
-              POWER UP
+      <section className="py-16 md:py-24 bg-neutral-50">
+        <div className="container px-4 sm:px-6 max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center bg-amber-100 text-amber-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
+              Add-On Services
             </div>
-            <div className="bg-accent-red border border-neutral-dark px-4 py-2 font-bold text-neutral-dark rounded-r-md">
-              YOUR PLAN
-            </div>
+            
+            <h2 className="text-3xl md:text-4xl font-bold text-neutral-900 mb-6">
+              Power Up Your Marketing
+            </h2>
+            
+            <p className="text-xl text-neutral-600 max-w-3xl mx-auto">
+              Enhance any plan with these additional services for even better results.
+            </p>
           </div>
-        </div>
-        
-        <motion.div
-          className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto"
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-50px" }}
-        >
-          {addOns.map((addon, index) => (
-            <motion.div key={index} variants={itemVariants}>
-              <div className="bg-white border border-neutral-200 rounded-lg p-5 shadow-sm hover:shadow-md transition-all duration-300 hover:translate-y-[-4px]">
-                <div className="flex items-start">
-                  <div className="bg-neutral-light p-2 rounded-md mr-4">
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+            {addOns.map((addon, index) => (
+              <div key={index} className="bg-white rounded-xl p-6 border border-neutral-200 shadow-sm hover:shadow-md transition-all duration-300">
+                <div className="flex items-start mb-4">
+                  <div className="p-2 bg-neutral-50 rounded-lg mr-4">
                     {addon.icon}
                   </div>
-                  <div>
-                    <h3 className="text-lg font-bold text-neutral-dark">{addon.name}</h3>
-                    <p className="text-sm text-neutral-near-black mb-3">{addon.description}</p>
-                    <div className="text-accent-red font-bold">+{formatPrice(addon.price)}/mo</div>
+                  <div className="flex-1">
+                    <h3 className="text-lg font-bold text-neutral-900 mb-2">{addon.name}</h3>
+                    <p className="text-neutral-600 mb-4 text-sm leading-relaxed">{addon.description}</p>
+                    <div className="text-blue-600 font-bold">+{formatPrice(addon.price)}/month</div>
                   </div>
                 </div>
               </div>
-            </motion.div>
-          ))}
-        </motion.div>
-      </div>
+            ))}
+          </div>
+        </div>
+      </section>
       
       {/* FAQ Section */}
-      <RetroSection className="bg-neutral-light py-16 md:py-24 border-t border-neutral-200 relative overflow-hidden">
-        <div className="absolute top-20 right-10 w-32 h-32 bg-[#58CCDC] opacity-5 rounded-full"></div>
-        <div className="absolute bottom-10 left-20 w-48 h-48 bg-accent-yellow opacity-5 rounded-full"></div>
-        
-        <div className="container px-6 sm:px-8 mx-auto relative z-10">
+      <section className="bg-white py-16 md:py-24">
+        <div className="container px-4 sm:px-6 max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-neutral-900 mb-6">Frequently Asked Questions</h2>
+            <p className="text-xl text-neutral-600 max-w-3xl mx-auto">
+              Everything you need to know about our pricing and services.
+            </p>
+          </div>
+          
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold text-neutral-dark mb-12 text-center">Frequently Asked Questions</h2>
-            
             <div className="grid gap-6">
               {faqItems.map((item, index) => (
-                <div key={index} className="bg-white p-6 rounded-lg border border-neutral-200 shadow-sm">
-                  <h3 className="text-lg font-medium text-neutral-dark mb-3">{item.question}</h3>
-                  <p className="text-neutral-near-black">{item.answer}</p>
+                <div key={index} className="bg-gradient-to-br from-neutral-50 to-blue-50/30 p-8 rounded-xl border border-neutral-200">
+                  <h3 className="text-lg font-semibold text-neutral-900 mb-3">{item.question}</h3>
+                  <p className="text-neutral-600 leading-relaxed">{item.answer}</p>
                 </div>
               ))}
             </div>
           </div>
         </div>
-      </RetroSection>
+      </section>
       
       {/* CTA Section */}
-      <RetroSection className="bg-white py-16 md:py-20 border-t border-neutral-200">
-        <div className="container px-6 sm:px-8 mx-auto">
-          <div className="max-w-5xl mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl font-bold text-neutral-dark mb-6">Ready to Grow Your Fence Business?</h2>
-            <p className="text-xl text-neutral-near-black mb-8 max-w-2xl mx-auto">
-              Schedule a free discovery call to discuss your goals and see how we can help you get more fence jobs.
-            </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link href="/funnel">
-                <RetroButton
-                  variant="primary"
-                  size="lg"
-                  className="px-8"
-                  icon={<Phone className="h-5 w-5" />}
-                >
-                  Schedule Call
-                </RetroButton>
-              </Link>
-              <Link href="/process">
-                <RetroButton
-                  variant="secondary"
-                  size="lg"
-                  className="px-8"
-                >
-                  Learn More
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </RetroButton>
-              </Link>
-            </div>
+      <section className="bg-gradient-to-br from-blue-600 to-blue-700 py-16 md:py-24">
+        <div className="container px-4 sm:px-6 max-w-7xl mx-auto text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">Ready to Grow Your Fence Business?</h2>
+          <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
+            Schedule a free discovery call to discuss your goals and see how we can help you get more fence jobs.
+          </p>
+          
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link 
+              href="/funnel"
+              className="bg-white text-blue-600 hover:bg-blue-50 px-8 py-4 rounded-lg font-semibold transition-colors shadow-sm inline-flex items-center justify-center"
+            >
+              <Phone className="h-5 w-5 mr-2" />
+              Schedule Call
+            </Link>
+            
+            <Link 
+              href="/our-work"
+              className="border border-blue-300 text-white hover:bg-blue-600 px-8 py-4 rounded-lg font-semibold transition-colors inline-flex items-center justify-center"
+            >
+              Learn More
+              <ArrowRight className="ml-2 h-5 w-5" />
+            </Link>
           </div>
         </div>
-      </RetroSection>
+      </section>
     </main>
   )
 }
