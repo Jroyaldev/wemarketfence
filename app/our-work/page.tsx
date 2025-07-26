@@ -177,24 +177,24 @@ export default function OurWork() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {[
               {
-                metric: "150+",
-                label: "Happy Clients",
-                description: "Fence contractors we've helped grow"
+                metric: "2–10×",
+                label: "Traffic Increase",
+                description: "Average organic traffic growth"
               },
               {
-                metric: "30%",
-                label: "Average Growth",
-                description: "Increase in qualified leads"
+                metric: "99%",
+                label: "Client Renewal",
+                description: "Year-over-year partnership rate"
               },
               {
                 metric: "24hrs",
                 label: "Response Time",
-                description: "We're here when you need us"
+                description: "We are here for you"
               },
               {
-                metric: "5★",
-                label: "Client Rating",
-                description: "Consistent excellent service"
+                metric: "4.9★",
+                label: "Agency Rating",
+                description: "Based on client reviews"
               }
             ].map((stat, index) => (
               <div key={index} className="text-center p-6">
