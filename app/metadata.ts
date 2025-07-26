@@ -41,7 +41,16 @@ export const defaultMetadata: Metadata = {
     description: "Get more fence jobs, faster. Websites & marketing built for fence professionals.",
     images: ["/images/wmf-og-image.png"],
   },
+  icons: {
+    icon: [
+      {
+        url: "/images/wmf.png",
+        sizes: "32x32",
+        type: "image/png",
+      },
+    ],
+  },
   alternates: {
     canonical: 'https://wemarketfence.com',
-  },
+  }
 };
