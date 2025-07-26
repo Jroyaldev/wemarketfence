@@ -12,7 +12,7 @@ import { ThemeProvider } from "../components/theme-provider"
 import { BackToTopButton } from "../components/back-to-top-button"
 import MetaPixel from "../components/meta-pixel"
 import GoogleTag from "../components/google-tag"
-import OttoPixel from "../components/otto-pixel"
+
 import RedditPixel from "../components/reddit-pixel"
 import GoogleTagManager from "../components/google-tag-manager"
 import { LocalBusinessJsonLd } from "../components/json-ld"
@@ -32,7 +32,7 @@ export default function RootLayout({
           <MetaPixel />
           <GoogleTagManager />
           <GoogleTag />
-          <OttoPixel />
+
           <RedditPixel />
           <LocalBusinessJsonLd 
             name="We Market Fence"

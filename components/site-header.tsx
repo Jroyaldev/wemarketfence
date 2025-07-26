@@ -73,7 +73,7 @@ export function SiteHeader() {
             <Link
               key={index}
               href={item.href}
-              className="text-sm font-medium text-neutral-700 hover:text-blue-600 transition-colors relative group"
+              className="text-sm font-medium text-neutral-700 hover:text-blue-600 transition-colors relative group whitespace-nowrap"
             >
               {item.title}
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 transition-all duration-200 group-hover:w-full"></span>
@@ -86,14 +86,14 @@ export function SiteHeader() {
           {/* Phone number for desktop */}
           <a 
             href="tel:6155610502" 
-            className="flex items-center text-sm text-neutral-700 hover:text-blue-600 transition-colors px-3 py-2 rounded-md hover:bg-neutral-50"
+            className="flex items-center text-sm text-neutral-700 hover:text-blue-600 transition-colors px-3 py-2 rounded-md hover:bg-neutral-50 whitespace-nowrap"
           >
             <Phone className="h-4 w-4 mr-2" />
             <span className="font-medium">(615) 561-0502</span>
           </a>
           
           <Link href="/funnel">
-            <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-lg font-medium transition-colors shadow-sm">
+            <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-lg font-medium transition-colors shadow-sm whitespace-nowrap">
               Get Quote
             </button>
           </Link>

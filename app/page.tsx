@@ -142,14 +142,10 @@ export default function Home() {
                 </div>
                 
                 {/* Trust indicators - simplified */}
-                <div className="grid grid-cols-3 gap-6 py-6 border-y border-neutral-200">
+                <div className="flex justify-center gap-12 py-6 border-y border-neutral-200">
                   <div className="text-center">
-                    <div className="text-3xl font-bold text-blue-600">150+</div>
-                    <div className="text-sm text-neutral-600">Happy Clients</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-3xl font-bold text-blue-600">30%</div>
-                    <div className="text-sm text-neutral-600">Avg Growth</div>
+                    <div className="text-3xl font-bold text-blue-600">500,000+</div>
+                    <div className="text-sm text-neutral-600">Impressions</div>
                   </div>
                   <div className="text-center">
                     <div className="text-3xl font-bold text-blue-600">5★</div>

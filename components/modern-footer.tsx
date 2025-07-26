@@ -37,16 +37,16 @@ export function ModernFooter() {
               <div className="text-center">
                 <div className="flex items-center justify-center space-x-1 text-blue-400 mb-1">
                   <Users className="h-4 w-4" />
-                  <span className="font-bold text-lg">150+</span>
+                  <span className="font-bold text-lg">500,000+</span>
                 </div>
-                <p className="text-neutral-400 text-xs">Clients Served</p>
+                <p className="text-neutral-400 text-xs">Impressions</p>
               </div>
               <div className="text-center">
                 <div className="flex items-center justify-center space-x-1 text-emerald-400 mb-1">
                   <Award className="h-4 w-4" />
-                  <span className="font-bold text-lg">5+</span>
+                  <span className="font-bold text-lg">5+ Years</span>
                 </div>
-                <p className="text-neutral-400 text-xs">Years Experience</p>
+                <p className="text-neutral-400 text-xs">Fence Experience</p>
               </div>
               <div className="text-center">
                 <div className="flex items-center justify-center space-x-1 text-amber-400 mb-1">
