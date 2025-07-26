@@ -5,7 +5,6 @@ import Image from 'next/image';
 import { draftMode } from 'next/headers';
 import { ArrowRight, Calendar, Tag, User, EyeIcon } from 'lucide-react';
 import { RetroSection } from '../../components/retro-section';
-import { RetroButton } from '../../components/retro-button';
 import { Breadcrumb } from '../../components/breadcrumb';
 import { FAQSection } from '../../components/faq-section';
 import { getAllBlogPosts, getCategoriesWithCount } from '../../lib/api';
@@ -45,9 +44,9 @@ const ContentfulNotConfigured = () => (
         <p>Then restart the development server to apply the changes.</p>
       </div>
       <Link href="/">
-        <RetroButton className="mt-4">
+        <span className="inline-block bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors">
           Return to Home
-        </RetroButton>
+        </span>
       </Link>
     </div>
   </RetroSection>
@@ -78,12 +77,12 @@ export default async function BlogPage() {
           <div className="max-w-6xl mx-auto px-4 sm:px-6">
             {/* Page Header with accent badge */}
             <div className="text-center mb-12">
-              <span className="inline-block text-sm font-medium bg-accent-yellow text-neutral-dark px-3 py-1 rounded-md uppercase mb-4">
+              <span className="inline-block text-sm font-medium bg-blue-100 text-neutral-dark px-3 py-1 rounded-md uppercase mb-4">
                 INSIGHTS & STRATEGIES
               </span>
               <h1 className="text-4xl md:text-5xl font-extrabold mb-4 uppercase">
                 <span className="text-neutral-dark">FENCE MARKETING</span>{' '}
-                <span className="text-accent-red">BLOG</span>
+                <span className="text-blue-600">BLOG</span>
               </h1>
               <p className="text-lg md:text-xl mb-6 max-w-3xl mx-auto">
                 Expert advice, industry insights, and proven strategies to help fence companies attract more customers.
@@ -139,13 +138,13 @@ export default async function BlogPage() {
                                   className="object-cover group-hover:scale-105 transition-transform duration-500"
                                 />
                                 {categoryName && (
-                                  <span className="absolute top-4 left-4 bg-accent-yellow text-neutral-dark text-xs font-medium px-2 py-1 rounded z-10">
+                                  <span className="absolute top-4 left-4 bg-blue-100 text-neutral-dark text-xs font-medium px-2 py-1 rounded z-10">
                                     {categoryName}
                                   </span>
                                 )}
                               </div>
                               <div className="p-6">
-                                <h2 className="text-2xl font-bold hover:text-accent-red transition-colors mb-3">
+                                <h2 className="text-2xl font-bold hover:text-blue-600 transition-colors mb-3">
                                   {title}
                                 </h2>
                                 <div className="flex items-center text-sm text-neutral-600 mb-4 gap-4">
@@ -163,7 +162,7 @@ export default async function BlogPage() {
                                   )}
                                 </div>
                                 <p className="text-neutral-700 mb-4">{excerpt}</p>
-                                <div className="flex items-center font-medium text-accent-red">
+                                <div className="flex items-center font-medium text-blue-600">
                                   Read Article <ArrowRight className="w-4 h-4 ml-1" />
                                 </div>
                               </div>
@@ -184,13 +183,13 @@ export default async function BlogPage() {
                                   className="object-cover group-hover:scale-105 transition-transform duration-500"
                                 />
                                 {categoryName && (
-                                  <span className="absolute top-3 left-3 bg-accent-yellow text-neutral-dark text-xs font-medium px-2 py-1 rounded z-10">
+                                  <span className="absolute top-3 left-3 bg-blue-100 text-neutral-dark text-xs font-medium px-2 py-1 rounded z-10">
                                     {categoryName}
                                   </span>
                                 )}
                               </div>
                               <div className="p-5 flex-grow flex flex-col">
-                                <h2 className="text-lg font-bold hover:text-accent-red transition-colors mb-3">
+                                <h2 className="text-lg font-bold hover:text-blue-600 transition-colors mb-3">
                                   {title}
                                 </h2>
                                 <div className="flex items-center text-xs text-neutral-600 mb-3 gap-3">
@@ -202,7 +201,7 @@ export default async function BlogPage() {
                                   )}
                                 </div>
                                 <p className="text-sm text-neutral-700 mb-3 line-clamp-2">{excerpt}</p>
-                                <div className="mt-auto pt-3 text-sm flex items-center font-medium text-accent-red">
+                                <div className="mt-auto pt-3 text-sm flex items-center font-medium text-blue-600">
                                   Read More <ArrowRight className="w-3 h-3 ml-1" />
                                 </div>
                               </div>
@@ -227,14 +226,14 @@ export default async function BlogPage() {
                 {/* Categories Widget */}
                 <div className="bg-white border border-neutral-200 rounded-lg shadow-sm p-6 mb-8 sticky top-24">
                   <h2 className="text-xl font-bold mb-6 uppercase flex items-center">
-                    <Tag className="w-5 h-5 mr-2 text-accent-yellow" />
+                    <Tag className="w-5 h-5 mr-2 text-blue-600" />
                     Categories
                   </h2>
                   <ul className="space-y-3">
                     <li>
                       <Link 
                         href="/blog" 
-                        className="flex items-center font-medium hover:text-accent-red transition-colors py-1"
+                        className="flex items-center font-medium hover:text-blue-600 transition-colors py-1"
                       >
                         All Posts
                         <span className="ml-auto bg-neutral-100 px-2 py-0.5 rounded-md text-sm">
@@ -246,7 +245,7 @@ export default async function BlogPage() {
                       <li key={category.sys.id}>
                         <Link 
                           href={`/blog/category/${category.fields.slug}`}
-                          className="flex items-center hover:text-accent-red transition-colors py-1"
+                          className="flex items-center hover:text-blue-600 transition-colors py-1"
                         >
                           {category.fields.name}
                           <span className="ml-auto bg-neutral-100 px-2 py-0.5 rounded-md text-sm">
@@ -259,16 +258,16 @@ export default async function BlogPage() {
                 </div>
                 
                 {/* Newsletter Widget */}
-                <div className="bg-accent-yellow border border-neutral-200 rounded-lg shadow-sm p-6">
+                <div className="bg-blue-100 border border-neutral-200 rounded-lg shadow-sm p-6">
                   <h2 className="text-xl font-bold mb-4 uppercase flex items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5 mr-2"><rect width="20" height="16" x="2" y="4" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg>
                     Stay Updated
                   </h2>
                   <p className="mb-4">Subscribe to our newsletter for the latest fence marketing tips and strategies.</p>
                   <Link href="/contact">
-                    <RetroButton variant="accent" className="w-full group">
+                    <span className="inline-block w-full bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors group flex items-center justify-center">
                       Subscribe Now <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
-                    </RetroButton>
+                    </span>
                   </Link>
                 </div>
               </div>
@@ -305,9 +304,9 @@ export default async function BlogPage() {
             </p>
           </div>
           <Link href="/">
-            <RetroButton className="mt-4">
+            <span className="inline-block bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors">
               Return to Home
-            </RetroButton>
+            </span>
           </Link>
         </div>
       </RetroSection>
